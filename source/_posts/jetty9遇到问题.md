@@ -18,7 +18,7 @@ http.timeout=30000
 
 ## IllegalStateException: No LoginService
 
-因为在web.xml中添加了权限验证，所以在jetty中也需要相应的配置，在 **$JETTY_HOME/etc/jetty.xml** 中添加：
+因为在web.xml中添加了权限验证，所以在jetty中也需要相应的配置，在**$JETTY_HOME/etc/jetty.xml**中添加：
 ··· xml
     <Call name="addBean">
       <Arg>
