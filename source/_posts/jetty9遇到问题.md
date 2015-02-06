@@ -7,10 +7,10 @@ tags: jetty9 LoginService  port
     
 在jetty9中修改$JETTY_HOME/start.d/http.ini中修改
 
-··· bash
+``` bash
 jetty.port=9999
 http.timeout=30000
-··· 
+```
 
 ## jetty9中原来jar
 
@@ -19,7 +19,7 @@ http.timeout=30000
 ## IllegalStateException: No LoginService
 
 因为在web.xml中添加了权限验证，所以在jetty中也需要相应的配置，在**$JETTY_HOME/etc/jetty.xml**中添加：
-··· xml
+``` xml
     <Call name="addBean">
       <Arg>
         <New class="org.eclipse.jetty.security.HashLoginService">
@@ -29,7 +29,7 @@ http.timeout=30000
         </New>
       </Arg>
     </Call>
-···
+```
 
 注意：<Set name="name">Preauth Realm</Set>这个要和web.xml中<realm-name>配置一致
 
