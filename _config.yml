@@ -42,9 +42,6 @@ highlight:
 # Category & Tag
 default_category: uncategorized
 category_map:
-  编程: programming
-  生活: life
-  其他: other
 tag_map:
 
 # Archives
