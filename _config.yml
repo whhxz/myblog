@@ -12,8 +12,8 @@ language: ch-CN
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://whhxz.github.io/myblog/
-root: /
+url: http://whhxz.github.io/
+root: /myblog/
 permalink: :year/:month/:day/:title/
 tag_dir: tags
 archive_dir: archives
@@ -42,6 +42,9 @@ highlight:
 # Category & Tag
 default_category: uncategorized
 category_map:
+  编程: programming
+  生活: life
+  其他: other
 tag_map:
 
 # Archives
@@ -79,7 +82,7 @@ disqus_shortname:
 # Extensions
 ## Plugins: https://github.com/hexojs/hexo/wiki/Plugins
 ## Themes: https://github.com/hexojs/hexo/wiki/Themes
-theme: hexo-theme-kael
+theme: hexo-theme-yilia
 exclude_generator:
 
 # Deployment
