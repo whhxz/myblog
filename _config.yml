@@ -7,7 +7,7 @@ title: WHH
 subtitle: MY BLOG
 description: I BELIEVE I CAN DO
 author: WHH
-language: zh-CN
+language: zh-Hans
 timezone:
 
 # URL
@@ -63,8 +63,9 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: landscape
-
+theme: hexo-theme-next
+# 头像
+avatar: /images/avatar.bmp
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
