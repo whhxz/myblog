@@ -66,6 +66,8 @@ pagination_dir: page
 theme: hexo-theme-next
 # 头像
 avatar: /images/avatar.bmp
+# 站点建立时间
+since: 2014
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
