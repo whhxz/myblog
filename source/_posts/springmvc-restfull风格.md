@@ -1,7 +1,7 @@
-title: springmvc RESTful风格
+title: SpringMVC RESTful风格
 date: 2016-12-28 09:57:02
 tags: ['RESTfull','springMVC']
-categories: ['RESTfull','基本概念']
+categories: ['RESTfull']
 ---
 
 ## RESTfull简介
