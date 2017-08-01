@@ -2,7 +2,7 @@
 title: Storm学习（二）：安装使用Storm
 date: 2017-08-01 10:42:47
 categories: ['Storm学习']
-tags: ['Storm安装', 'Storm本地调用']
+tags: ['Storm安装', 'Storm本地调用', 'Storm']
 ---
 
 ## 系统环境需要
