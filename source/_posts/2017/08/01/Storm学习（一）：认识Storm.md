@@ -2,7 +2,7 @@
 title: Storm学习（一）：认识Storm
 date: 2017-08-01 08:58:28
 categories: ['Storm学习']
-tags: ['Stomr基本概念']
+tags: ['Stomr基本概念', 'Storm']
 ---
 
 ### 实时流计算
