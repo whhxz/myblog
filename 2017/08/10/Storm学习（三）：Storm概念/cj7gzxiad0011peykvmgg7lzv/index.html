@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Storm,Storm概念," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="对于Storm，其核心概念有包括：
+
+
+Stream 数据流
+Spout 数据流
+Bolt 处理数据
+Tuple 数据单元
+Task 运行Spout或Bolt中的线程
+Worker 是运行这些线程中的进程
+Stream Grouping 规定了Bolt接受何种数据类型作为输入
+Topology 是Stream Grouping连接起来的Spout和Bolt节点网络
+
+
+Tuple元组
+Tuple">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm学习（三）：Storm概念">
+<meta property="og:url" content="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7gzxiad0011peykvmgg7lzv/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="对于Storm，其核心概念有包括：
+
+
+Stream 数据流
+Spout 数据流
+Bolt 处理数据
+Tuple 数据单元
+Task 运行Spout或Bolt中的线程
+Worker 是运行这些线程中的进程
+Stream Grouping 规定了Bolt接受何种数据类型作为输入
+Topology 是Stream Grouping连接起来的Spout和Bolt节点网络
+
+
+Tuple元组
+Tuple">
+<meta property="og:updated_time" content="2017-08-10T10:23:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Storm学习（三）：Storm概念">
+<meta name="twitter:description" content="对于Storm，其核心概念有包括：
+
+
+Stream 数据流
+Spout 数据流
+Bolt 处理数据
+Tuple 数据单元
+Task 运行Spout或Bolt中的线程
+Worker 是运行这些线程中的进程
+Stream Grouping 规定了Bolt接受何种数据类型作为输入
+Topology 是Stream Grouping连接起来的Spout和Bolt节点网络
+
+
+Tuple元组
+Tuple">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7gzxiad0011peykvmgg7lzv/"/>
+
+
+
+
+
+  <title>Storm学习（三）：Storm概念 | WHH</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WHH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">MY BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7gzxiad0011peykvmgg7lzv/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Storm学习（三）：Storm概念</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T16:00:22+08:00">
+                2017-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
+                    <span itemprop="name">Storm学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>对于Storm，其核心概念有包括：</p>
+<blockquote>
+<ul>
+<li>Stream 数据流</li>
+<li>Spout 数据流</li>
+<li>Bolt 处理数据</li>
+<li>Tuple 数据单元</li>
+<li>Task 运行Spout或Bolt中的线程</li>
+<li>Worker 是运行这些线程中的进程</li>
+<li>Stream Grouping 规定了Bolt接受何种数据类型作为输入</li>
+<li>Topology 是Stream Grouping连接起来的Spout和Bolt节点网络</li>
+</ul>
+</blockquote>
+<h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><blockquote>
+<p>Tuple 是Storm中使用的最基本单元、数据模型和元组。Tuple就是一个值列表，Tuple默认值类型有：integer、float、double、long、short、string、byte、binary[byte[]]。如果需要使用其他类型，需要序列化该类型。</p>
+</blockquote>
+<p>Tuple可以理解为键值对，键为declareOutputFields中的Fields，值为emit发送的Values。<br>Tuple由Spout中的nextTuple来获取下一个Tuple，通过emit将生成的Tuple发送出去。</p>
+<h3 id="Spout数据源"><a href="#Spout数据源" class="headerlink" title="Spout数据源"></a>Spout数据源</h3><p>Spout最源头的接口为IComponent，由Spout发出的Tuple，可以是可靠的，可以是不可靠的。可靠的Tuple会保证被Storm成功处理。处理失败后会重新发送。一个Spout可以发射多个流。在使用Spout时可以实现IRichSpout或者继承BaseRichSpout。<br>在Spout.declareOutputFields声明发送的Tuple包含的字段。</p>
+<h3 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h3><p>Bolt属于被动处理，元组输入Bolt，然后产生新的Tuple。<br>Bolt流程如下：<br>创建Bolt -&gt; 序列化Bolt -&gt; 提交集群开启Worker进程处理 -&gt; 反序列化Bolt -&gt; 调用prepare处理Tuple</p>
+<p>在Bolt处理完成后，如果Tuple是可靠的，需要调用ack，反馈调用成功。在使用IBasicBolt时，会自动调用ack，在BasicBoltExecutor.execute中可以看到调用完成后会调用ack。</p>
+<p>在使用Bolt中，常用类为BaseRichBolt、BaseBasicBolt，对于BaseBasicBolt继承IBasicBolt，同样处理完成后会自动调ack。BaseRichBot在处理完成后，如果Tuple是可靠的，需要手动调用ack。在可靠Tuple中，如果不是调用ack，因为Storm会一直追踪每个Tuple，需要中内存，长时间运行会导致OOM。</p>
+<p>在方法declareOutputFields中声明当前Bolt发送的字段。同样使用declareStream方法来定义流，之后使用emit选择需要发送的流。</p>
+<p>在Bolt使用emit时，可以通过传递参数streamId，来控制新的Tuple是否后旧的Tuple属于同一颗Tuple树。</p>
+<h3 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h3><p>在Storm中Topology是指类似于网络拓扑图的一种虚拟结构。一个拓扑图有Spout和Bolt组成，Spout和Bolt之间通过流分组连接起来。在启动Topology时，TopologyBuilder实际上是封装了Topology的Thrift接口，Topology实际上是Thrift定义的一个结构，Nimbus实际上运行的是一个Thrift服务器，用于接受用户提交的结构。因为使用Thrift实现，用户可以使用其他语言建立Topology。在提交Topology给Nimbus时，也会提交Topology代码。Nimbus负责分发代码和给Topology分配工作进程.如果一个工作进程挂掉后,Nimbus节点会重新分配到其他节点。</p>
+<h4 id="Topology运行流程"><a href="#Topology运行流程" class="headerlink" title="Topology运行流程"></a>Topology运行流程</h4><p>1、提交Topology后，Storm会把代码存放发到Nimbus节点的inbox目录下；之后把当前配置生成stormconf.ser文件放到Nimbus节点的stormdis目录中，改目录中还有序列化后的Topology文件。<br>2、设定Topology关联的Spout和Bolt，可以同时随着Spout和Bolt的Executor和Task数量，一个默认Topology的Task总和与Executor一致。之后根据Worker的数量，将这些Task分配到不同的Worder上执行。<br>3、分配任务后，Nimbus节点将任务信息提交到ZooKeeper集群，同时在ZooKeeper集群中有Workerbeats，这里存储了当前Topology所有Worker心跳<br>4、Supervisor节点轮询ZooKeeper集群，在ZooKeeper中assignments中保存了所有Topology任务分配信息、代码存储目录、任务之间关联关系等，Supervisor通过轮询改节点领取自己任务，启动Worker进程运行<br>5、Topology运行后，不断通过Spout来发生流，除非手动结束Topology。</p>
+<h4 id="Topology方法调用流程"><a href="#Topology方法调用流程" class="headerlink" title="Topology方法调用流程"></a>Topology方法调用流程</h4><p>1、在Spout或者Bolt中，declareOutputFields方法和构造方法只被调用一次<br>2、open和prepare调用多次，次数由设置运行组件的Task线程数量。<br>3、nextTuple和execute一直运行。<br>4、提交Topology后，Storm创建Spout/Bolt实例并进行序列化，之后将序列化组件发送给所有任务节点，在每个任务节点进行反序列化。<br>5、组件之间通信使用ZeroMQ</p>
+<h4 id="Topology执行单元概念"><a href="#Topology执行单元概念" class="headerlink" title="Topology执行单元概念"></a>Topology执行单元概念</h4><blockquote>
+<ul>
+<li>Worker对Topology中每个组件运行一个或者多个Executor线程来提供Task的执行服务，一个Supervisor中有多个worker，一个worker属于一个特定的Topology</li>
+<li>Executor属于Worker进程内线程</li>
+<li>Task，实际处理数据。在Topology生命周期中Task数量不会发生变化。</li>
+</ul>
+<p>worker 在yaml中的topology.workers属性设置，或者config中setNumWorkers<br>Executor 在setBolt或者setSpout中设置<br>Task 默认和Executor一致，在TopologyBuilder.setNumTasks设置<br>停止Topology storm kill sopologyName</p>
+</blockquote>
+<h3 id="Stream消息流"><a href="#Stream消息流" class="headerlink" title="Stream消息流"></a>Stream消息流</h3><p>stream消息流是一个抽象概念，主要是消息中的Tuple。</p>
+<h3 id="Stream-Grouping消息流组"><a href="#Stream-Grouping消息流组" class="headerlink" title="Stream Grouping消息流组"></a>Stream Grouping消息流组</h3><p>Stream Grouping消息流组定义一个流如何分配Tuple到Bolt。Storm包含6中流分组类型。<br>1、随机分组：随机分发Tuple到Bolt任务，保证每个任务获取相同的Tople。<br>2、字段分组：指定字段分割数据流并分组，相同的字段分到相同的Bolt，不同字段分配到不同的Bolt。<br>3、全部分组：对于每个Tuple来说，所有Bolt都会收到，所有Tuple复制到Bolt的所有任务上，需谨慎使用。<br>4、全局分组：全部流都分配到Bolt的同一个任务，就是分配到ID最小的Task上。<br>5、无分组：目前等效于随机分组<br>6、直接分组：Tuple生产者决定Tuple消费者任务接收。改分组仅被声明为direct stream的流使用。Tuple必须通过emitDirect直接发射。</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务为了解决Tuple在处理失败后重新发送提出.事务拓扑是指Storm以并行和顺序混合的方式处理Tuple，为了实现对消息的精确处理。<br>事务拓扑的目的是满足对消息处理有着极其严格要求的场景，要求结果完全精确。可以通过修改transactional.zookeeper中server和port指定其他ZooKeeper。</p>
+<h3 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h3><p>数据流处理如下<br>定义数据 -&gt; 定义数据处理 -&gt; 定义数据节点处理 -&gt; 定义数据处理任务实例 -&gt; 读取数据源头产生的数据 -&gt; 节点上运行任务实例 -&gt; 下一个节点运行任务实例 -&gt; … -&gt; 输出结果</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Storm/" rel="tag"># Storm</a>
+          
+            <a href="/tags/Storm概念/" rel="tag"># Storm概念</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/09/SpringBoot集成swagger/cj7gzxiag0014peyk0nr4hnkb/" rel="next" title="SpringBoot集成swagger">
+                <i class="fa fa-chevron-left"></i> SpringBoot集成swagger
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/31/Java设计模式之面向对象设计原则/cj7gzxiah0016peyk06rw89mx/" rel="prev" title="Java设计模式之面向对象设计原则">
+                Java设计模式之面向对象设计原则 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.bmp"
+               alt="WHH" />
+          <p class="site-author-name" itemprop="name">WHH</p>
+           
+              <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/whhxz" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuple元组"><span class="nav-number">1.</span> <span class="nav-text">Tuple元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spout数据源"><span class="nav-number">2.</span> <span class="nav-text">Spout数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bolt"><span class="nav-number">3.</span> <span class="nav-text">Bolt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Topology"><span class="nav-number">4.</span> <span class="nav-text">Topology</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology运行流程"><span class="nav-number">4.1.</span> <span class="nav-text">Topology运行流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology方法调用流程"><span class="nav-number">4.2.</span> <span class="nav-text">Topology方法调用流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology执行单元概念"><span class="nav-number">4.3.</span> <span class="nav-text">Topology执行单元概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream消息流"><span class="nav-number">5.</span> <span class="nav-text">Stream消息流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream-Grouping消息流组"><span class="nav-number">6.</span> <span class="nav-text">Stream Grouping消息流组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务"><span class="nav-number">7.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#数据流模型"><span class="nav-number">8.</span> <span class="nav-text">数据流模型</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WHH</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
