@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj7gzxia8000xpeykdbrbd1ac/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj7it1nab0012uhykso6px3y4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,497 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj7gzxia8000xpeykdbrbd1ac/" itemprop="url">MYSQL并发修改库存</a></h1>
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj7it1nab0012uhykso6px3y4/" itemprop="url">ajax跨域</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T15:35:32+08:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在业务需求中，有时候需要使用js跨域请求。解决办法有使用jsonp和CORS。</p>
+<ul>
+<li>jsonp利用的是在页面访问资源文件时，访问非当前域名下其他域名资源。如<code>&lt;img&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;form&gt;</code>等标签。可以利用这一特性跨域。</li>
+</ul>
+<p>前端请求：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var scriptJsonP = document.createElement(&quot;script&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;type&quot;, &quot;text/javascript&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;src&quot;, &quot;http://a.com/corssOrigin/jsonp&quot;);</span><br><span class="line">document.getElementsByTagName(&quot;body&quot;)[0].appendChild(scriptJsonP);</span><br><span class="line"></span><br><span class="line">function jsonp(data)&#123;</span><br><span class="line">  alert(data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>后台服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(&quot;corssOrigin&quot;)</span><br><span class="line">public class CrossOriginController &#123;</span><br><span class="line">    @RequestMapping(&quot;jsonp&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String jsonp(HttpServletRequest request)&#123;</span><br><span class="line">        return &quot;jsonp(&#123;test:&apos;test&apos;&#125;)&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用成功后会调用jsonp方法。完成一次跨域请求。</p>
+<p>使用jquery：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">           type: &quot;get&quot;,</span><br><span class="line">           async: false,</span><br><span class="line">           url: &quot;http://a.com/corssOrigin/jsonp&quot;,</span><br><span class="line">           dataType: &quot;jsonp&quot;,</span><br><span class="line">           jsonp: &quot;callback&quot;,//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)</span><br><span class="line">           jsonpCallback:&quot;jsonp&quot;,//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写&quot;?&quot;，jQuery会自动为你处理数据</span><br><span class="line">           success: function(json)&#123;</span><br><span class="line">             alert(json);</span><br><span class="line">           &#125;,</span><br><span class="line">           error: function()&#123;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>使用除了使用jsonp跨域，还有一种CORS，可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj7it1na8000yuhykud6xh0ro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj7it1na8000yuhykud6xh0ro/" itemprop="url">微信公众号中使用微信支付</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T10:42:45+08:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/支付/" itemprop="url" rel="index">
+                    <span itemprop="name">支付</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：</p>
+<ul>
+<li>已经备案域名</li>
+<li>微信公众号开发id（appid）</li>
+<li>微信公众号开发密钥（secret）</li>
+<li>微信商户号（mch_id）</li>
+<li>微信商户支付密钥（apy.key）</li>
+</ul>
+<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="external">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="external">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="external">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="external">http://www.xxx.com/recharge/</a></strong></p>
+<h4 id="1-2-配置授权域名"><a href="#1-2-配置授权域名" class="headerlink" title="1.2 配置授权域名"></a>1.2 配置授权域名</h4><p>在设置 -&gt; 公众号设置 -&gt; 功能设置中，配置js接口安全域名，网页授权域名，配置这里域名时，需要下载一个txt文件到域名所在服务器根目录下。详细请参考页面详细提示。</p>
+<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="external">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
+<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
+<blockquote>
+<p>注：有个商户订单号out_trade_no，在调用统一下单接口时，微信接口成功，但后续用户支付失败，或者用户取消未支付，单用户重新进入该订单支付时，使用同一订单号调用统一接口会失败。解决办法可以为在用户订单号后，加随机数，保存数据库，后调用统一下单接口，待支付成功后还原。或者在数据库添加一个新字段。</p>
+</blockquote>
+<h4 id="2-3-H5页面通过js调用微信支付"><a href="#2-3-H5页面通过js调用微信支付" class="headerlink" title="2.3 H5页面通过js调用微信支付"></a>2.3 H5页面通过js调用微信支付</h4><p>在调用微信统一下单接口成功后，通过微信浏览器中，内置WeixinJSBridge对象调用微信支付。<a href="WeixinJSBridge">参考H5调用支付</a>。这时调用支付需要参数使用之前调用统一下单接口返回的参数。</p>
+<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">API接口</a></p>
+<h3 id="3-本地调试"><a href="#3-本地调试" class="headerlink" title="3. 本地调试"></a>3. 本地调试</h3><p>因为微信支付需要指定域名，在本地调试十分不便。个人开发使用到的工具有：</p>
+<ul>
+<li>微信开发工具，用于调试微信公众号h5页面</li>
+<li>修改本地host为配置的支付域名为本地IP</li>
+<li>因为微信支付不支持端口，开启nginx配置80端口转发开发环境端口</li>
+<li>H5页面js调用，使用手机与电脑在同一局域网，PC端开启fiddler，配置手机代理为PC。调用支付直接转跳到PC调试</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj7it1naa0011uhykozhrvn7u/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj7it1naa0011uhykozhrvn7u/" itemprop="url">Elasticsearch初使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-20T21:46:18+08:00">
+                2017-07-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/搜索/" itemprop="url" rel="index">
+                    <span itemprop="name">搜索</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/搜索/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <hr>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><p>通过Elasticsearch搜索数据库，需要下载Elasticsearch、Kibana、Logstash。（当前使用版本5.0.0）<br>Elasticsearch下载：<a href="https://www.elastic.co/cn/products/elasticsearch" target="_blank" rel="external">https://www.elastic.co/cn/products/elasticsearch</a><br>Kibana下载：<a href="https://www.elastic.co/cn/products/kibana" target="_blank" rel="external">https://www.elastic.co/cn/products/kibana</a><br>Logstash下载：<a href="https://www.elastic.co/cn/products/logstash" target="_blank" rel="external">https://www.elastic.co/cn/products/logstash</a></p>
+<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><p><strong>启动elasticsearch</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd elasticsearch</span><br><span class="line">./bin/./elasticsearch</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果需要其他机器访问需要修改配置文件./config/elasticearch.yml中network.host</p>
+</blockquote>
+<p><strong> 启动kibana </strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd kibana</span><br><span class="line">./bin/./kibana</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>如果需要其他机器访问kibana，需要修改配置文件./config/kibana.yml中server.host<br>在第一启动kibana时要配置日志</p>
+</blockquote>
+<p>elasticsearch默认访问<a href="http://ip:9200" target="_blank" rel="external">http://ip:9200</a><br>kibana默认访问<a href="http://ip:5601" target="_blank" rel="external">http://ip:5601</a></p>
+<h3 id="配置Logstash同步数据库"><a href="#配置Logstash同步数据库" class="headerlink" title="配置Logstash同步数据库"></a>配置Logstash同步数据库</h3><blockquote>
+<p>同步mysql到elasticsearch，使用Logstash中的插件<em>jdbc input plugin</em>。参考<a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html" target="_blank" rel="external">https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html</a></p>
+</blockquote>
+<p>创建导入配置文件 simple_imput.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    jdbc &#123;</span><br><span class="line">        # Postgres jdbc connection string to our database, mydb</span><br><span class="line">        jdbc_connection_string =&gt; &quot;jdbc:mysql://localhost:3306/comment?characterEncoding=utf-8&amp;useUnicode=true&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true&quot;</span><br><span class="line">        # The user we wish to execute our statement as</span><br><span class="line">        jdbc_user =&gt; &quot;user&quot;</span><br><span class="line">	jdbc_password =&gt; &quot;password&quot;</span><br><span class="line">	jdbc_validate_connection =&gt; true</span><br><span class="line">        # The path to our downloaded jdbc driver</span><br><span class="line">        jdbc_driver_library =&gt; &quot;./mysql-connector-java-5.1.31.jar&quot;</span><br><span class="line">        # The name of the driver class for Postgresql</span><br><span class="line">        jdbc_driver_class =&gt; &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">        # our query</span><br><span class="line">        jdbc_paging_enabled =&gt; &quot;true&quot;</span><br><span class="line">	jdbc_page_size =&gt; &quot;50000&quot;</span><br><span class="line">	type =&gt; &quot;comment_bad_cause_type&quot;</span><br><span class="line">	# statement_filepath =&gt; &quot;/usr/local/logstash/bin/logstash_jdbc_test/jdbc.sql&quot;</span><br><span class="line">	# 表示每分钟同步更新一次</span><br><span class="line">	schedule =&gt; &quot;* * * * *&quot;</span><br><span class="line">        statement =&gt; &quot;SELECT * FROM test_table where update_time &gt;= :sql_last_value&quot;</span><br><span class="line">	jdbc_default_timezone =&gt; &quot;Asia/Shanghai&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    stdout &#123; codec =&gt; json_lines &#125;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">	index =&gt; &quot;demo_index&quot;</span><br><span class="line">	document_id =&gt; &quot;%&#123;id&#125;&quot;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动Logstash开始导入数据库<br><code>./bin/logstash -f simple_input.conf</code></p>
+<blockquote>
+<p>需要注意的是，sql中为增量导入。在第一次的时候应该是全量导入，这个可能需要先去掉查询条件全量导入（注释schedule），后重新运行增量导入。可能使用两个input一个全量，一个增量（未尝试），后期尝试下。</p>
+</blockquote>
+<p>打开kibana可以尝试搜索数据</p>
+<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="http://suclogger.com/%E4%B9%B0%E5%A5%BD%E8%BD%A6%E6%90%9C%E7%B4%A2%E7%9A%84Elasticsearch%E5%AE%9E%E8%B7%B5%EF%BC%9A%E5%88%9D%E4%BD%93%E9%AA%8C/" target="_blank" rel="external">买好车搜索的Elasticsearch实践：初体验</a></li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj7it1na7000xuhykd7fc84wd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj7it1na7000xuhykd7fc84wd/" itemprop="url">MYSQL并发修改库存</a></h1>
         
 
         <div class="post-meta">
@@ -431,7 +921,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj7gzxhfa0002peykyvti0u4z/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj7it1mfu0006uhyk7d1kd0w7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -450,7 +940,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj7gzxhfa0002peykyvti0u4z/" itemprop="url">docker环境部署</a></h1>
+                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj7it1mfu0006uhyk7d1kd0w7/" itemprop="url">docker环境部署</a></h1>
         
 
         <div class="post-meta">
@@ -577,7 +1067,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj7gzxhn5000opeyk67rj3afj/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj7it1mfz000cuhykpesbevud/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -596,7 +1086,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj7gzxhn5000opeyk67rj3afj/" itemprop="url">定时消息推送</a></h1>
+                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj7it1mfz000cuhykpesbevud/" itemprop="url">定时消息推送</a></h1>
         
 
         <div class="post-meta">
@@ -738,7 +1228,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj7gzxhfl0007peykwbvernx4/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj7it1mfw0007uhykbwwu38be/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -757,7 +1247,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj7gzxhfl0007peykwbvernx4/" itemprop="url">SpringMVC RESTful风格</a></h1>
+                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj7it1mfw0007uhykbwwu38be/" itemprop="url">SpringMVC RESTful风格</a></h1>
         
 
         <div class="post-meta">
@@ -882,7 +1372,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj7gzxhfd0003peykjk5o26kj/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj7it1mfj0001uhyk6p7dnjtu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -901,7 +1391,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/04/02/Git命令/cj7gzxhfd0003peykjk5o26kj/" itemprop="url">Git命令</a></h1>
+                <a class="post-title-link" href="/2015/04/02/Git命令/cj7it1mfj0001uhyk6p7dnjtu/" itemprop="url">Git命令</a></h1>
         
 
         <div class="post-meta">
@@ -1080,7 +1570,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj7gzxhfk0006peykivq8c7r0/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj7it1mfy0009uhykl3qfi78y/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1099,7 +1589,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj7gzxhfk0006peykivq8c7r0/" itemprop="url">jetty9遇到问题</a></h1>
+                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj7it1mfy0009uhykl3qfi78y/" itemprop="url">jetty9遇到问题</a></h1>
         
 
         <div class="post-meta">
@@ -1228,7 +1718,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj7gzxhf60001peykyw1d7pie/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj7it1mfp0003uhyk0ku4tn6z/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1247,7 +1737,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj7gzxhf60001peykyw1d7pie/" itemprop="url">hexo部署静态文件位置修改</a></h1>
+                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj7it1mfp0003uhyk0ku4tn6z/" itemprop="url">hexo部署静态文件位置修改</a></h1>
         
 
         <div class="post-meta">
@@ -1388,7 +1878,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1410,7 +1900,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

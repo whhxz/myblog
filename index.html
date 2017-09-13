@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj7gzxiao001cpeyk99tdyyer/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7it1nah001cuhyku87a5u1o/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,494 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj7gzxiao001cpeyk99tdyyer/" itemprop="url">Python selenium 初次使用</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7it1nah001cuhyku87a5u1o/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T14:31:47+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="单例模式概念"><a href="#单例模式概念" class="headerlink" title="单例模式概念"></a>单例模式概念</h3><blockquote>
+<ul>
+<li>有且只有一个实例</li>
+<li>必须自行创建这个实例</li>
+<li>必须自行向整个系统提供这个实例</li>
+</ul>
+</blockquote>
+<h3 id="单例设计"><a href="#单例设计" class="headerlink" title="单例设计"></a>单例设计</h3><p>单例的创建一般分为 <strong>饿汉式单例</strong> 、 <strong>懒汉式单例</strong> 。</p>
+<h4 id="懒汉式单例"><a href="#懒汉式单例" class="headerlink" title="懒汉式单例"></a>懒汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EagerSingleton</span> </span>&#123;</span><br><span class="line">    <span class="comment">//自己创建的实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> EagerSingleton singleton = <span class="keyword">new</span> EagerSingleton();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数，不允许外部创建</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">EagerSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供当前实例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EagerSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>当类被加载的时候，static会初始化，创建当前对象，因为构造函数是私有的，这样避免了外部创建改对象，通过静态方法提供了系统外部的访问。由java类加载器保证该类只会加载一次。采用的是空间换时间。<br>缺点：该类就是在系统中不使用也会初始化，对象会一直存在，不会被回收。占用系统资源。</p>
+<p>在jdk中有啥用饿汉式单例设计模式，如Runtime：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%883.02.15.png" alt=""></p>
+<h4 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 懒汉式单例</span><br><span class="line"> */</span></span><br><span class="line"> <span class="comment">/**</span><br><span class="line">  * 懒汉式单例</span><br><span class="line">  */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">LazySingleton</span> </span>&#123;</span><br><span class="line">   <span class="comment">/**</span><br><span class="line">    * 避免jdk做相关优化，导致代码重排序</span><br><span class="line">    */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingleton singleton = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 私有构造函数</span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="title">LazySingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 创建获取单例对象</span><br><span class="line">      * <span class="doctag">@return</span></span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//懒汉式改进，避免方法上锁导致效率变低</span></span><br><span class="line">         <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="comment">//双重检查锁，保证创建的时候只有一个线程参与</span></span><br><span class="line">             <span class="keyword">synchronized</span>(LazySingleton.class)&#123;</span><br><span class="line">                 <span class="keyword">if</span> (singleton == <span class="keyword">null</span>)&#123;</span><br><span class="line">                     singleton = <span class="keyword">new</span> LazySingleton();</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> singleton;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<p>类被初始化的时候，不会创建对象。在第一次调用getInstance才会创建对象。第一次判断，判断是否单例已经存在。在创建改单例的时候，加锁后判断，是避免多线程访问的时候，保证只创建一个实例。<br>在java中java.util.Calendar使用的是懒汉式。<br>缺点：因为使用了volatile和判断，速度相对饿汉式要慢，懒汉式避免了未使用的时候占用系统资源。</p>
+<h4 id="Initialization-Demand-Holder-IoDH-单例"><a href="#Initialization-Demand-Holder-IoDH-单例" class="headerlink" title="Initialization Demand Holder (IoDH) 单例"></a>Initialization Demand Holder (IoDH) 单例</h4><p>饿汉式单例和懒汉式单例创建各有优缺点。使用IoDH可以避免二者缺点<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 静态内部类，用于创建单例</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HolderClass</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Singleton singleton = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供单例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> HolderClass.singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在类被初始化的时候，静态内部类并不会被初始化，只有使用到静态内部类的时候，才会被初始化。因为是私有类，保证了外部无法访问，静态属性由java类加载器保证了该类只被初始化一次。同时没有锁没有判断，集合之前两种单例创建的优点。</p>
+<h4 id="枚举单例"><a href="#枚举单例" class="headerlink" title="枚举单例"></a>枚举单例</h4><p>之前三种单例创建有个缺点，在单例实现序列化后，在实例序列化反序列化后，会存在多个实现，违背了单例设计模式。例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> <span class="keyword">implements</span> <span class="title">Serializable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">1218018069415776722L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 静态内部类，用于创建单例</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HolderClass</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Singleton singleton = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供单例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> HolderClass.singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">        <span class="comment">//创建单例</span></span><br><span class="line">        Singleton instance = Singleton.getInstance();</span><br><span class="line">        <span class="comment">//创建输入输出管道</span></span><br><span class="line">        PipedOutputStream outputStream = <span class="keyword">new</span> PipedOutputStream();</span><br><span class="line">        PipedInputStream inputStream = <span class="keyword">new</span> PipedInputStream();</span><br><span class="line">        inputStream.connect(outputStream);</span><br><span class="line">        <span class="comment">//准备对象序列化</span></span><br><span class="line">        ObjectOutputStream objectOutputStream = <span class="keyword">new</span> ObjectOutputStream(outputStream);</span><br><span class="line">        objectOutputStream.writeObject(instance);</span><br><span class="line"></span><br><span class="line">        ObjectInputStream objectInputStream = <span class="keyword">new</span> ObjectInputStream(inputStream);</span><br><span class="line">        Singleton singleton = (Singleton) objectInputStream.readObject();</span><br><span class="line">        outputStream.close();</span><br><span class="line">        inputStream.close();</span><br><span class="line"></span><br><span class="line">        System.out.println(singleton == instance);<span class="comment">//false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>注：可以使用readResolve避免，但是需要自己处理</p>
+<p>在该例子中，序列化后的对象是一个新的实例。<br>解决办法使用枚举做单例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">enum</span> EnumSingleton&#123;</span><br><span class="line">    SINGLETON;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomeThing</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"单例"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在《高效Java 第二版》中说：单元素的枚举类型已经成为实现Singleton的最佳方法。用枚举来实现单例非常简单，只需要编写一个包含单个元素的枚举类型即可。<br>枚举在序列化时候其实是序列化了name，在反序列化的时候，通过valueOf(name)，保证了枚举的唯一性。</p>
+<h3 id="单例模式总结"><a href="#单例模式总结" class="headerlink" title="单例模式总结"></a>单例模式总结</h3><p>单例因为控制实例的创建，在系统内存中只有唯一一份，可以节约系统资源，减少了对象的频繁创建和销毁。在Spring中默认创建的对象为单例，在Struts2中action默认创建的对象为多例。<br>单例缺点在于扩展比较困难，而且违背了“单一职责原则”，因为单例又是对象创建工厂，又是实例，还包含相关业务方法。<br>单例设计模式用在，系统因为消耗太大只允许创建一个对象情况。或者系统只能使用一个公共访问点，除了公共访问点，不能通过其他途径访问该实例。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7it1nam001iuhyksonoeryf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7it1nam001iuhyksonoeryf/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T10:48:25+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="抽象工厂概念"><a href="#抽象工厂概念" class="headerlink" title="抽象工厂概念"></a>抽象工厂概念</h3><blockquote>
+<p>抽象工厂相对工厂方法，可以创建一个产品族，而不是单一的产品。也就是在工厂方法上添加了创建其他产品方法。</p>
+</blockquote>
+<p>如图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%882.17.10.png" alt=""></p>
+<ul>
+<li>SeasonFactory：季节工厂</li>
+<li>SpringFactory：春天工厂</li>
+<li>SummerFactory：夏天工厂</li>
+<li>Clothes：衣服</li>
+<li>Coat:上衣</li>
+<li>Trousers：裤子<br>Java代码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Coat</span> <span class="keyword">extends</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Trousers</span> <span class="keyword">extends</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringCoat</span> <span class="keyword">implements</span> <span class="title">Coat</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"春天的上衣"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerCoat</span> <span class="keyword">implements</span> <span class="title">Coat</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"夏天的上衣"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringTrousers</span> <span class="keyword">implements</span> <span class="title">Trousers</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"春天的裤子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerTrousers</span> <span class="keyword">implements</span> <span class="title">Trousers</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"夏天的裤子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Clothes <span class="title">createCoat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Clothes <span class="title">createTrousers</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringFactory</span> <span class="keyword">implements</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createCoat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes coat = <span class="keyword">new</span> SpringCoat();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + coat.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> coat;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createTrousers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes trousers = <span class="keyword">new</span> SpringTrousers();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + trousers.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> trousers;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerFactory</span> <span class="keyword">implements</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createCoat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes clothes = <span class="keyword">new</span> SummerCoat();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + clothes.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> clothes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createTrousers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes clothes = <span class="keyword">new</span> SummerTrousers();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + clothes.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> clothes;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在范例中，如果要创建夏天的一套衣服，直接使用SummerFactory创建上衣和裤子就可以，这样的话身上一套就是夏天的装扮，避免因为出现混搭而出现问题。在实际生活中，电脑主板和CPU的针脚是需要对应，可以使用该抽象方法，避免组别和CUP针脚对不上。</p>
+<h3 id="抽象工厂模式优点"><a href="#抽象工厂模式优点" class="headerlink" title="抽象工厂模式优点"></a>抽象工厂模式优点</h3><ol>
+<li>一个工厂车间一系列相关相互依赖的对象，避免出现混合。</li>
+<li>新增产品族时，无需修改系统，比如冬天的衣服。符合“开闭原则”。</li>
+</ol>
+<h3 id="抽象工厂模式缺点"><a href="#抽象工厂模式缺点" class="headerlink" title="抽象工厂模式缺点"></a>抽象工厂模式缺点</h3><ol>
+<li>新增产品的时候比较麻烦，比如新增鞋子。<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>抽象工厂是在工厂方法模式上的增强，一个工厂类可以创建多个产品。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7it1nal001euhykv2g5vmga/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7it1nal001euhykv2g5vmga/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T09:37:34+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="工厂方法模式"><a href="#工厂方法模式" class="headerlink" title="工厂方法模式"></a>工厂方法模式</h3><blockquote>
+<p>定义一个用于创建对象的接口，让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式提供一个抽象接口来声明抽象工厂方法，而由其子类来具体实现工厂方法，创建具体的产品对象。</p>
+</blockquote>
+<p>如图工厂方法：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8A%E5%8D%8810.14.46.png" alt=""></p>
+<ul>
+<li>Logger：抽象日志类</li>
+<li>FileLogger：文件日志</li>
+<li>ConsoleLogger：控制台日志</li>
+<li>LoggerFactory：工厂类接口</li>
+<li>FileLoggerFactory：具体的文件工厂类</li>
+<li>ConsoleLoggerFactory：具体的控制台日志工厂类</li>
+</ul>
+<p>Java代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">LoggerFactory</span> </span>&#123;</span><br><span class="line">    <span class="function">Logger <span class="title">createLogger</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileLoggerFactory</span> <span class="keyword">implements</span> <span class="title">LoggerFactory</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Logger <span class="title">createLogger</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        FileLogger fileLogger = <span class="keyword">new</span> FileLogger();</span><br><span class="line">        <span class="comment">//do other something</span></span><br><span class="line">        System.out.println(<span class="string">"创建成功："</span> + fileLogger.getClass().getSimpleName());</span><br><span class="line">        <span class="keyword">return</span> fileLogger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConsoleLoggerFactory</span> <span class="keyword">implements</span> <span class="title">LoggerFactory</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Logger <span class="title">createLogger</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ConsoleLogger consoleLogger = <span class="keyword">new</span> ConsoleLogger();</span><br><span class="line">        <span class="comment">//do other something</span></span><br><span class="line">        System.out.println(<span class="string">"创建成功："</span> + consoleLogger.getClass().getSimpleName());</span><br><span class="line">        <span class="keyword">return</span> consoleLogger;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">writeLog</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FileLogger</span> <span class="keyword">implements</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"文件日志输出"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConsoleLogger</span> <span class="keyword">implements</span> <span class="title">Logger</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">writeLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"控制台日志输出"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Logger fileLogger = <span class="keyword">new</span> FileLoggerFactory().createLogger();</span><br><span class="line">        Logger consoleLogger = <span class="keyword">new</span> ConsoleLoggerFactory().createLogger();</span><br><span class="line">        fileLogger.writeLog();</span><br><span class="line">        consoleLogger.writeLog();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="工厂模式优点"><a href="#工厂模式优点" class="headerlink" title="工厂模式优点"></a>工厂模式优点</h3><ol>
+<li>在工厂设计模式中，工厂方法用于创建所需要的对象。调用方不需要关心创建细节，只需要找到对应的工厂创建对应的对象。</li>
+<li>在需求变更时，需要新增一个产品。只需要新建相应的工厂类就可以，无需变动原有代码，使可扩展性变强，符合<strong>开闭原则</strong>。</li>
+<li>方便维护，对象一致性。在需要修改创建的对象，或者在创建对象前后有变更相关操作，可以直接修改Factory中创建对象的前后操作。如果每个地方都自己用new创建，修改地方太多，存在风险。</li>
+</ol>
+<h3 id="工厂模式缺点"><a href="#工厂模式缺点" class="headerlink" title="工厂模式缺点"></a>工厂模式缺点</h3><ol>
+<li>每次新增一个产品，都需要写个新的工厂类。</li>
+<li>考虑了可扩展性，引入了抽象层次，加大系统理解难度</li>
+</ol>
+<h3 id="工厂模式总结"><a href="#工厂模式总结" class="headerlink" title="工厂模式总结"></a>工厂模式总结</h3><p>在Spring中大量使用了工厂设计模式（可参考FacoryBean），由Spring这个大工厂创建用户所需要的对象，组装对象，用户需要时，由Spring工厂创建对象提供给用户使用。减少了用户自己操作出错概率，各个对象之间也可以解耦。<br>在JDK中还有<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">java.lang.Proxy#newProxyInstance()</span><br><span class="line">java.lang.Class#newInstance()</span><br><span class="line">java.lang.reflect.Constructor#newInstance()</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj7it1nar001suhykg9tt23t5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj7it1nar001suhykg9tt23t5/" itemprop="url">Python selenium 初次使用</a></h1>
         
 
         <div class="post-meta">
@@ -437,7 +924,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj7gzxias001jpeyk738inm1r/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj7it1nao001muhyke0kjsz9g/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -456,7 +943,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj7gzxias001jpeyk738inm1r/" itemprop="url">创建maven archetypes</a></h1>
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj7it1nao001muhyke0kjsz9g/" itemprop="url">创建maven archetypes</a></h1>
         
 
         <div class="post-meta">
@@ -592,7 +1079,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj7gzxiah0016peyk06rw89mx/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj7it1nap001ouhykf98w72ee/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -611,7 +1098,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj7gzxiah0016peyk06rw89mx/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj7it1nap001ouhykf98w72ee/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
         
 
         <div class="post-meta">
@@ -778,7 +1265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7gzxiad0011peykvmgg7lzv/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7it1nad0014uhykl5u2tlhg/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -797,7 +1284,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj7gzxiad0011peykvmgg7lzv/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
+                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj7it1nad0014uhykl5u2tlhg/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
         
 
         <div class="post-meta">
@@ -957,7 +1444,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj7gzxiag0014peyk0nr4hnkb/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj7it1nae0016uhykgzz3t2zf/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -976,7 +1463,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj7gzxiag0014peyk0nr4hnkb/" itemprop="url">SpringBoot集成swagger</a></h1>
+                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj7it1nae0016uhykgzz3t2zf/" itemprop="url">SpringBoot集成swagger</a></h1>
         
 
         <div class="post-meta">
@@ -1118,7 +1605,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj7gzxiaf0012peykz1iq97o0/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj7it1nan001juhykkafusnyx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1137,7 +1624,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj7gzxiaf0012peykz1iq97o0/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj7it1nan001juhykkafusnyx/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1284,7 +1771,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj7gzxiaa000ypeyklqfsc601/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj7it1naf0018uhykzjvuxp73/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1303,7 +1790,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj7gzxiaa000ypeyklqfsc601/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj7it1naf0018uhykzjvuxp73/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1485,496 +1972,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj7gzxiap001epeykrqu4022n/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj7gzxiap001epeykrqu4022n/" itemprop="url">ajax跨域</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T15:35:32+08:00">
-                2017-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/js/" itemprop="url" rel="index">
-                    <span itemprop="name">js</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在业务需求中，有时候需要使用js跨域请求。解决办法有使用jsonp和CORS。</p>
-<ul>
-<li>jsonp利用的是在页面访问资源文件时，访问非当前域名下其他域名资源。如<code>&lt;img&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;form&gt;</code>等标签。可以利用这一特性跨域。</li>
-</ul>
-<p>前端请求：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var scriptJsonP = document.createElement(&quot;script&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;type&quot;, &quot;text/javascript&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;src&quot;, &quot;http://a.com/corssOrigin/jsonp&quot;);</span><br><span class="line">document.getElementsByTagName(&quot;body&quot;)[0].appendChild(scriptJsonP);</span><br><span class="line"></span><br><span class="line">function jsonp(data)&#123;</span><br><span class="line">  alert(data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>后台服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(&quot;corssOrigin&quot;)</span><br><span class="line">public class CrossOriginController &#123;</span><br><span class="line">    @RequestMapping(&quot;jsonp&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String jsonp(HttpServletRequest request)&#123;</span><br><span class="line">        return &quot;jsonp(&#123;test:&apos;test&apos;&#125;)&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>调用成功后会调用jsonp方法。完成一次跨域请求。</p>
-<p>使用jquery：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">           type: &quot;get&quot;,</span><br><span class="line">           async: false,</span><br><span class="line">           url: &quot;http://a.com/corssOrigin/jsonp&quot;,</span><br><span class="line">           dataType: &quot;jsonp&quot;,</span><br><span class="line">           jsonp: &quot;callback&quot;,//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)</span><br><span class="line">           jsonpCallback:&quot;jsonp&quot;,//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写&quot;?&quot;，jQuery会自动为你处理数据</span><br><span class="line">           success: function(json)&#123;</span><br><span class="line">             alert(json);</span><br><span class="line">           &#125;,</span><br><span class="line">           error: function()&#123;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>使用除了使用jsonp跨域，还有一种CORS，可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj7gzxiar001ipeyksduh17hu/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj7gzxiar001ipeyksduh17hu/" itemprop="url">微信公众号中使用微信支付</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T10:42:45+08:00">
-                2017-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/支付/" itemprop="url" rel="index">
-                    <span itemprop="name">支付</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：</p>
-<ul>
-<li>已经备案域名</li>
-<li>微信公众号开发id（appid）</li>
-<li>微信公众号开发密钥（secret）</li>
-<li>微信商户号（mch_id）</li>
-<li>微信商户支付密钥（apy.key）</li>
-</ul>
-<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="external">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="external">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="external">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="external">http://www.xxx.com/recharge/</a></strong></p>
-<h4 id="1-2-配置授权域名"><a href="#1-2-配置授权域名" class="headerlink" title="1.2 配置授权域名"></a>1.2 配置授权域名</h4><p>在设置 -&gt; 公众号设置 -&gt; 功能设置中，配置js接口安全域名，网页授权域名，配置这里域名时，需要下载一个txt文件到域名所在服务器根目录下。详细请参考页面详细提示。</p>
-<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="external">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
-<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
-<blockquote>
-<p>注：有个商户订单号out_trade_no，在调用统一下单接口时，微信接口成功，但后续用户支付失败，或者用户取消未支付，单用户重新进入该订单支付时，使用同一订单号调用统一接口会失败。解决办法可以为在用户订单号后，加随机数，保存数据库，后调用统一下单接口，待支付成功后还原。或者在数据库添加一个新字段。</p>
-</blockquote>
-<h4 id="2-3-H5页面通过js调用微信支付"><a href="#2-3-H5页面通过js调用微信支付" class="headerlink" title="2.3 H5页面通过js调用微信支付"></a>2.3 H5页面通过js调用微信支付</h4><p>在调用微信统一下单接口成功后，通过微信浏览器中，内置WeixinJSBridge对象调用微信支付。<a href="WeixinJSBridge">参考H5调用支付</a>。这时调用支付需要参数使用之前调用统一下单接口返回的参数。</p>
-<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">API接口</a></p>
-<h3 id="3-本地调试"><a href="#3-本地调试" class="headerlink" title="3. 本地调试"></a>3. 本地调试</h3><p>因为微信支付需要指定域名，在本地调试十分不便。个人开发使用到的工具有：</p>
-<ul>
-<li>微信开发工具，用于调试微信公众号h5页面</li>
-<li>修改本地host为配置的支付域名为本地IP</li>
-<li>因为微信支付不支持端口，开启nginx配置80端口转发开发环境端口</li>
-<li>H5页面js调用，使用手机与电脑在同一局域网，PC端开启fiddler，配置手机代理为PC。调用支付直接转跳到PC调试</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj7gzxiaj0018peyk61xktvdy/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj7gzxiaj0018peyk61xktvdy/" itemprop="url">Elasticsearch初使用</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-20T21:46:18+08:00">
-                2017-07-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/搜索/" itemprop="url" rel="index">
-                    <span itemprop="name">搜索</span>
-                  </a>
-                </span>
-
-                
-                
-                  ， 
-                
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/搜索/Elasticsearch/" itemprop="url" rel="index">
-                    <span itemprop="name">Elasticsearch</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <hr>
-<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><p>通过Elasticsearch搜索数据库，需要下载Elasticsearch、Kibana、Logstash。（当前使用版本5.0.0）<br>Elasticsearch下载：<a href="https://www.elastic.co/cn/products/elasticsearch" target="_blank" rel="external">https://www.elastic.co/cn/products/elasticsearch</a><br>Kibana下载：<a href="https://www.elastic.co/cn/products/kibana" target="_blank" rel="external">https://www.elastic.co/cn/products/kibana</a><br>Logstash下载：<a href="https://www.elastic.co/cn/products/logstash" target="_blank" rel="external">https://www.elastic.co/cn/products/logstash</a></p>
-<h3 id="启动服务"><a href="#启动服务" class="headerlink" title="启动服务"></a>启动服务</h3><p><strong>启动elasticsearch</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd elasticsearch</span><br><span class="line">./bin/./elasticsearch</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>如果需要其他机器访问需要修改配置文件./config/elasticearch.yml中network.host</p>
-</blockquote>
-<p><strong> 启动kibana </strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd kibana</span><br><span class="line">./bin/./kibana</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>如果需要其他机器访问kibana，需要修改配置文件./config/kibana.yml中server.host<br>在第一启动kibana时要配置日志</p>
-</blockquote>
-<p>elasticsearch默认访问<a href="http://ip:9200" target="_blank" rel="external">http://ip:9200</a><br>kibana默认访问<a href="http://ip:5601" target="_blank" rel="external">http://ip:5601</a></p>
-<h3 id="配置Logstash同步数据库"><a href="#配置Logstash同步数据库" class="headerlink" title="配置Logstash同步数据库"></a>配置Logstash同步数据库</h3><blockquote>
-<p>同步mysql到elasticsearch，使用Logstash中的插件<em>jdbc input plugin</em>。参考<a href="https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html" target="_blank" rel="external">https://www.elastic.co/guide/en/logstash/current/plugins-inputs-jdbc.html</a></p>
-</blockquote>
-<p>创建导入配置文件 simple_imput.conf<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">input &#123;</span><br><span class="line">    jdbc &#123;</span><br><span class="line">        # Postgres jdbc connection string to our database, mydb</span><br><span class="line">        jdbc_connection_string =&gt; &quot;jdbc:mysql://localhost:3306/comment?characterEncoding=utf-8&amp;useUnicode=true&amp;zeroDateTimeBehavior=convertToNull&amp;allowMultiQueries=true&quot;</span><br><span class="line">        # The user we wish to execute our statement as</span><br><span class="line">        jdbc_user =&gt; &quot;user&quot;</span><br><span class="line">	jdbc_password =&gt; &quot;password&quot;</span><br><span class="line">	jdbc_validate_connection =&gt; true</span><br><span class="line">        # The path to our downloaded jdbc driver</span><br><span class="line">        jdbc_driver_library =&gt; &quot;./mysql-connector-java-5.1.31.jar&quot;</span><br><span class="line">        # The name of the driver class for Postgresql</span><br><span class="line">        jdbc_driver_class =&gt; &quot;com.mysql.jdbc.Driver&quot;</span><br><span class="line">        # our query</span><br><span class="line">        jdbc_paging_enabled =&gt; &quot;true&quot;</span><br><span class="line">	jdbc_page_size =&gt; &quot;50000&quot;</span><br><span class="line">	type =&gt; &quot;comment_bad_cause_type&quot;</span><br><span class="line">	# statement_filepath =&gt; &quot;/usr/local/logstash/bin/logstash_jdbc_test/jdbc.sql&quot;</span><br><span class="line">	# 表示每分钟同步更新一次</span><br><span class="line">	schedule =&gt; &quot;* * * * *&quot;</span><br><span class="line">        statement =&gt; &quot;SELECT * FROM test_table where update_time &gt;= :sql_last_value&quot;</span><br><span class="line">	jdbc_default_timezone =&gt; &quot;Asia/Shanghai&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">output &#123;</span><br><span class="line">    stdout &#123; codec =&gt; json_lines &#125;</span><br><span class="line">    elasticsearch &#123;</span><br><span class="line">	index =&gt; &quot;demo_index&quot;</span><br><span class="line">	document_id =&gt; &quot;%&#123;id&#125;&quot;</span><br><span class="line">    &#125;  </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>启动Logstash开始导入数据库<br><code>./bin/logstash -f simple_input.conf</code></p>
-<blockquote>
-<p>需要注意的是，sql中为增量导入。在第一次的时候应该是全量导入，这个可能需要先去掉查询条件全量导入（注释schedule），后重新运行增量导入。可能使用两个input一个全量，一个增量（未尝试），后期尝试下。</p>
-</blockquote>
-<p>打开kibana可以尝试搜索数据</p>
-<h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
-<li><a href="http://suclogger.com/%E4%B9%B0%E5%A5%BD%E8%BD%A6%E6%90%9C%E7%B4%A2%E7%9A%84Elasticsearch%E5%AE%9E%E8%B7%B5%EF%BC%9A%E5%88%9D%E4%BD%93%E9%AA%8C/" target="_blank" rel="external">买好车搜索的Elasticsearch实践：初体验</a></li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2025,7 +2022,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2047,7 +2044,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">38</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
