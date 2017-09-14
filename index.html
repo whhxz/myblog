@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7it1nah001cuhyku87a5u1o/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj7k958c4001s1ayk4b2xgv5t/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,337 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7it1nah001cuhyku87a5u1o/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj7k958c4001s1ayk4b2xgv5t/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T15:42:00+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><blockquote>
+<p>创建一个产品时，有时产品有不同的组成成分，在其组成成分没创建完成之前，改产品是不可使用的。使用建造者模式，通过创建所有产品内部零件，组装完成后返回给用户。</p>
+</blockquote>
+<p>例子：<br>举例设计LOL角色，角色包含皮肤、技能、属性、性别<br><img src="http://otxnth5wx.bkt.clouddn.com/20170914%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-14%E4%B8%8B%E5%8D%885.04.14.png" alt=""></p>
+<p>Java实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 角色</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Actor</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 皮肤</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String skin;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 技能</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String skill;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 属性</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String attribute;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 性别</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> skin;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSkin</span><span class="params">(String skin)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.skin = skin;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> skill;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSkill</span><span class="params">(String skill)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.skill = skill;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> attribute;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAttribute</span><span class="params">(String attribute)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.attribute = attribute;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGender</span><span class="params">(String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Actor&#123;"</span> +</span><br><span class="line">                <span class="string">"skin='"</span> + skin + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", skill='"</span> + skill + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", attribute='"</span> + attribute + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", gender='"</span> + gender + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Actor actor = <span class="keyword">new</span> Actor();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建皮肤</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建技能</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建属性</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建性别</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 创建角色</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Actor <span class="title">resultActor</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 德玛西亚之力建造者</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GarenActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"盖伦皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"盖伦技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"盖伦属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"男"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 德邦总管建造者</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XinZhaoActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"赵信皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"赵信技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"赵信属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"男"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 寒冰射手</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AsheActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"艾希皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"艾希技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"艾希属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"女"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 建造组装</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BuilderDirector</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建角色</span><br><span class="line">     * <span class="doctag">@param</span> actorBuilder</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Actor <span class="title">constructActor</span><span class="params">(AbstractActorBuilder actorBuilder)</span></span>&#123;</span><br><span class="line">        actorBuilder.buildSkin();</span><br><span class="line">        actorBuilder.buildSkill();</span><br><span class="line">        actorBuilder.buildAttribute();</span><br><span class="line">        actorBuilder.buildGender();</span><br><span class="line">        <span class="keyword">return</span> actorBuilder.resultActor();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Actor asheActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> AsheActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='艾希皮肤', skill='艾希技能', attribute='艾希属性', gender='女'&#125;</span></span><br><span class="line">        System.out.println(asheActor);</span><br><span class="line">        Actor xinZhaoActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> XinZhaoActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='赵信皮肤', skill='赵信技能', attribute='赵信属性', gender='男'&#125;</span></span><br><span class="line">        System.out.println(xinZhaoActor);</span><br><span class="line">        Actor garenActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> GarenActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='盖伦皮肤', skill='盖伦技能', attribute='盖伦属性', gender='男'&#125;</span></span><br><span class="line">        System.out.println(garenActor);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在创建角色的时候，用户直接使用建造组装者创建创建相关角色，传入相关角色的创建者即可。在实际使用中，在创建各个组件的时候，应该是有规则的，通过不同的规则建造不同的角色。在后续如果新增了相关角色，可以新建一个角色建造者即可，无需修改其他相关代码。改处缺点在于，如果角色新增了其他相关组件，则修改较大。</p>
+<h3 id="建造者总结"><a href="#建造者总结" class="headerlink" title="建造者总结"></a>建造者总结</h3><p>建造者核心在于一步步构建一个包含多个组件的完整对象，与工厂模式不同在于通常建造者创建的对象相对工厂模式比较复杂，通常工厂模式创建的是单一或者相对不是很复杂的对象。如果将工厂模式看出汽车零件生产厂，建造者模式可以看出汽车装配厂。</p>
+<p><strong>建造者优点：</strong></p>
+<ol>
+<li>用户不需要知道建造细节，将产品本身和产品创建进行解耦，使相同的创建过程可以创建不同的产品。</li>
+<li>扩展方便，符合”开闭原则”</li>
+<li>细化了产品创建，使创建过程清晰明了<br><strong>建造者缺点：</strong></li>
+<li>如果产品过多，会导致建造者过多，系统过于臃肿。</li>
+<li>如果产品组件过于复杂而且多变，会导致产品创建过程过于复杂。</li>
+</ol>
+<p><strong>建造者使用范围：</strong></p>
+<ol>
+<li>需要生成的产品对象有复杂的内部结构，这些产品对象通常包含多个成员属性。</li>
+<li>需要生成的产品对象的属性相互依赖，需要指定其生成顺序。</li>
+<li>对象的创建过程独立于创建该对象的类。在建造者模式中通过引入了指挥者类，将创建过程封装在指挥者类中，而不在建造者类和客户类中。</li>
+<li>隔离复杂对象的创建和使用，并使得相同的创建过程可以创建不同的产品。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj7k958c1001m1aykug8jvahd/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj7k958c1001m1aykug8jvahd/" itemprop="url">Java设计模式-原型模式（Prototype Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T09:17:55+08:00">
+                2017-09-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h3><blockquote>
+<p>原型模式要求对象实现一个可以“克隆”自身的接口，这样就可以通过复制一个实例对象本身来创建一个新的实例。这样一来，通过原型实例创建新的对象，就不再需要关心这个实例本身的类型，只要实现了克隆自身的方法，就可以通过这个方法来获取新的对象，而无须再去通过new来创建。</p>
+</blockquote>
+<p>原型模式相对于工厂模式而言，本身就是一个工厂，不同的是，工厂模式是直接创建一个新实例，而原型模式是克隆本身实例生成一个相似而完全不同的新实例，在内存中拥有新的地址，且每个克隆对象都是相互独立的。</p>
+<p>Java实例代码如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcretePrototype</span> <span class="keyword">implements</span> <span class="title">Cloneable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; list;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcretePrototype</span><span class="params">(String name, Integer age, List&lt;String&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">        <span class="keyword">this</span>.list = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">getList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setList</span><span class="params">(List&lt;String&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 克隆</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConcretePrototype <span class="title">clone</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Object clone = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//object中的clone</span></span><br><span class="line">            clone = <span class="keyword">super</span>.clone();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (ConcretePrototype) clone;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">        ConcretePrototype concretePrototype = <span class="keyword">new</span> ConcretePrototype(<span class="string">"whh"</span>, <span class="number">1</span>, <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">        ConcretePrototype clone = concretePrototype.clone();</span><br><span class="line">        System.out.println(clone == concretePrototype);<span class="comment">//false</span></span><br><span class="line">        System.out.println(clone.getName()==(clone.getName()));<span class="comment">//true</span></span><br><span class="line">        System.out.println(clone.getAge()==(clone.getAge()));<span class="comment">//true</span></span><br><span class="line">        System.out.println(clone.getList()==(clone.getList()));<span class="comment">//true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>代码中使用的Object中的clone方法，对象必须实现Cloneable接口，接口Cloneable的作用在于，在运行期间通知Java虚拟机安全的在这个类上使用clone方法，通过调用clone方法得到当前对象的复制。如果没有实现Cloneable接口，在运行期间会抛出CloneNotSupportedException。</p>
+<p>克隆需要满足的条件有：</p>
+<ol>
+<li>对任何对象都有x.clone() != x</li>
+<li>x.clone().getClass() == x.getClass()</li>
+<li>如果对象的equals方法定义恰当，x.clone().equals(x)为true</li>
+</ol>
+<h3 id="浅克隆、深克隆"><a href="#浅克隆、深克隆" class="headerlink" title="浅克隆、深克隆"></a>浅克隆、深克隆</h3><p>对于浅克隆：</p>
+<blockquote>
+<p>被复制对象的所有变量都含有与原来的对象相同的值，而所有的对其他对象的引用仍然指向原来的对象。换言之，浅复制仅仅复制所考虑的对象，而不复制它所引用的对象。</p>
+</blockquote>
+<p>上面的例子中，属性的判断都为true</p>
+<p>对于深克隆：</p>
+<blockquote>
+<p>被复制对象的所有变量都含有与原来的对象相同的值，除去那些引用其他对象的变量。那些引用其他对象的变量将指向被复制过的新对象，而不再是原有的那些被引用的对象。换言之，深复制把要复制的对象所引用的对象都复制了一遍。</p>
+</blockquote>
+<p>解决深度克隆可以使用Java中序列化。如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcretePrototype</span> <span class="keyword">implements</span> <span class="title">Cloneable</span>, <span class="title">Serializable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line">    <span class="keyword">private</span> List&lt;String&gt; list;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcretePrototype</span><span class="params">(String name, Integer age, List&lt;String&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">        <span class="keyword">this</span>.list = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">getList</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setList</span><span class="params">(List&lt;String&gt; list)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.list = list;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 克隆</span><br><span class="line">     *</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConcretePrototype <span class="title">clone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Object clone = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//object中的clone</span></span><br><span class="line">            clone = <span class="keyword">super</span>.clone();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (CloneNotSupportedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> (ConcretePrototype) clone;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 深克隆</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> ConcretePrototype <span class="title">deepClone</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ConcretePrototype concretePrototype = <span class="keyword">null</span>;</span><br><span class="line">        ObjectOutputStream outputStream = <span class="keyword">null</span>;</span><br><span class="line">        ObjectInputStream inputStream = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            ByteArrayOutputStream byteArrayOutputStream = <span class="keyword">new</span> ByteArrayOutputStream();</span><br><span class="line">            outputStream = <span class="keyword">new</span> ObjectOutputStream(byteArrayOutputStream);</span><br><span class="line">            outputStream.writeObject(<span class="keyword">this</span>);</span><br><span class="line"></span><br><span class="line">            inputStream = <span class="keyword">new</span> ObjectInputStream(<span class="keyword">new</span> ByteArrayInputStream(byteArrayOutputStream.toByteArray()));</span><br><span class="line">            concretePrototype = (ConcretePrototype) inputStream.readObject();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException | ClassNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">//关闭流</span></span><br><span class="line">            <span class="keyword">if</span> (outputStream != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    outputStream.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (inputStream != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    inputStream.close();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> concretePrototype;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException, ClassNotFoundException </span>&#123;</span><br><span class="line">        ConcretePrototype concretePrototype = <span class="keyword">new</span> ConcretePrototype(<span class="string">"whh"</span>, <span class="number">1</span>, <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">        ConcretePrototype clone = concretePrototype.clone();</span><br><span class="line">        System.out.println(clone == concretePrototype);<span class="comment">//false</span></span><br><span class="line">        System.out.println(clone.getName() == (concretePrototype.getName()));<span class="comment">//true</span></span><br><span class="line">        System.out.println(clone.getAge() == (concretePrototype.getAge()));<span class="comment">//true</span></span><br><span class="line">        System.out.println(clone.getList() == (concretePrototype.getList()));<span class="comment">//true</span></span><br><span class="line">        <span class="comment">//深度克隆比较</span></span><br><span class="line">        ConcretePrototype deepClone = concretePrototype.deepClone();</span><br><span class="line">        System.out.println(deepClone == concretePrototype);<span class="comment">//false</span></span><br><span class="line">        System.out.println(deepClone.getName() == (concretePrototype.getName()));<span class="comment">//false</span></span><br><span class="line">        System.out.println(deepClone.getAge() == (concretePrototype.getAge()));<span class="comment">//true</span></span><br><span class="line">        System.out.println(deepClone.getList() == (concretePrototype.getList()));<span class="comment">//false</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在深度克隆中，克隆的对象与元对象属性比较为false（基本类型比较除外）。深度克隆后生成的对象相对原类型完全独立，对克隆对象的修改，不会影响到原类型。</p>
+<h3 id="原型管理器"><a href="#原型管理器" class="headerlink" title="原型管理器"></a>原型管理器</h3><p>在使用克隆过程中，如果要控制克隆的数量，或者避免重复克隆，可以引入原型管理器，本质就是把克隆对象放入Map中，控制克隆生产和读取即可。在此不做举例。</p>
+<h3 id="原型模式总结"><a href="#原型模式总结" class="headerlink" title="原型模式总结"></a>原型模式总结</h3><p><strong>原型模式优点：</strong><br>在在对象比较复杂时，通过复制一个已有对象，达到快速创建新对象。原型相对工厂而已，创建的是一个和原对象值一样的对象。</p>
+<p><strong>原型模式缺点：</strong><br>如果对象引用了不支持序列化的间接对象，处理相对比较麻烦，在使用深度克隆的时候，如果对象结构比较复杂，序列化和反序列化比较消耗系统资源。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7k958bz001h1aykh4kx0b9h/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj7k958bz001h1aykh4kx0b9h/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -443,7 +773,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7it1nam001iuhyksonoeryf/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7k958bx001e1aykywpqjfeg/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -462,7 +792,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7it1nam001iuhyksonoeryf/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj7k958bx001e1aykywpqjfeg/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -605,7 +935,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7it1nal001euhykv2g5vmga/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7k958c0001i1ayko6r0wpl3/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -624,7 +954,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7it1nal001euhykv2g5vmga/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj7k958c0001i1ayko6r0wpl3/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -769,7 +1099,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj7it1nar001suhykg9tt23t5/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj7k958c5001u1aykpdm35vii/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -788,7 +1118,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj7it1nar001suhykg9tt23t5/" itemprop="url">Python selenium 初次使用</a></h1>
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj7k958c5001u1aykpdm35vii/" itemprop="url">Python selenium 初次使用</a></h1>
         
 
         <div class="post-meta">
@@ -924,7 +1254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj7it1nao001muhyke0kjsz9g/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj7k958c3001q1ayk8izw2vwz/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -943,7 +1273,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj7it1nao001muhyke0kjsz9g/" itemprop="url">创建maven archetypes</a></h1>
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj7k958c3001q1ayk8izw2vwz/" itemprop="url">创建maven archetypes</a></h1>
         
 
         <div class="post-meta">
@@ -1079,7 +1409,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj7it1nap001ouhykf98w72ee/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj7k958c2001n1ayknvxedqur/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1098,7 +1428,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj7it1nap001ouhykf98w72ee/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj7k958c2001n1ayknvxedqur/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
         
 
         <div class="post-meta">
@@ -1265,7 +1595,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7it1nad0014uhykl5u2tlhg/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj7k958bw001c1ayk0w3ijg13/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1284,7 +1614,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj7it1nad0014uhykl5u2tlhg/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
+                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj7k958bw001c1ayk0w3ijg13/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
         
 
         <div class="post-meta">
@@ -1444,7 +1774,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj7it1nae0016uhykgzz3t2zf/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj7k958bq00141ayk7jzr0e4t/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1463,7 +1793,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj7it1nae0016uhykgzz3t2zf/" itemprop="url">SpringBoot集成swagger</a></h1>
+                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj7k958bq00141ayk7jzr0e4t/" itemprop="url">SpringBoot集成swagger</a></h1>
         
 
         <div class="post-meta">
@@ -1592,391 +1922,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj7it1nan001juhykkafusnyx/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj7it1nan001juhykkafusnyx/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T10:42:47+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
-                    <span itemprop="name">Storm学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="系统环境需要"><a href="#系统环境需要" class="headerlink" title="系统环境需要"></a>系统环境需要</h2><ul>
-<li>JDK配置好环境变量</li>
-<li>SSH，方便启动操作</li>
-<li>安装Python，Python是Storm最底层依赖</li>
-</ul>
-<h2 id="Zookeeper安装"><a href="#Zookeeper安装" class="headerlink" title="Zookeeper安装"></a>Zookeeper安装</h2><p>Zookeeper官网下载解压，安装参考<a href="https://taoistwar.gitbooks.io/spark-operationand-maintenance-management/content/spark_relate_software/zookeeper_install.html" target="_blank" rel="external">Zookeeper安装配置</a>，或者<a href="https://zookeeper.apache.org/doc/trunk/zookeeperStarted.html" target="_blank" rel="external">官方文档</a></p>
-<h2 id="Storm启动安装"><a href="#Storm启动安装" class="headerlink" title="Storm启动安装"></a>Storm启动安装</h2><h3 id="本地模式"><a href="#本地模式" class="headerlink" title="本地模式"></a>本地模式</h3><p>本地模式在一个进程中使用现场模拟Storm集群的所有功能，用于本地开调试。本地模式运行Topology于在集群上运行Topology类似，但是提交Topology任务是在本地机器上。<br>简单使用LocalCluster类，就能创建一个进程内集群。如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalCluster cluster = <span class="keyword">new</span> LocalCluster()</span><br></pre></td></tr></table></figure></p>
-<p>本地模式下要注意如下参数</p>
-<ul>
-<li>Config.TOPOLOGY_MAX_TASK_PARALLELISM 单组件最大线程数</li>
-<li>Config.TOPOLOGY_DEBUG</li>
-</ul>
-<p>* 参考：<a href="http://storm.apache.org/releases/1.1.0/Local-mode.html" target="_blank" rel="external">本地模式http://storm.apache.org/releases/1.1.0/Local-mode.html</a></p>
-<h3 id="安装部署集群"><a href="#安装部署集群" class="headerlink" title="安装部署集群"></a>安装部署集群</h3><p>下载Storm解压 <a href="http://storm.apache.org/index.html" target="_blank" rel="external">storm官网</a><br>修改conf/storm.yaml配置文件，storm.yaml中配置会覆盖defaults.yaml中配置。<br>最基本配置如下<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">storm.zookeeper.servers:</span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk1"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk2"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk3"</span></span><br><span class="line">storm.local.dir: <span class="string">"/var/storm"</span></span><br><span class="line">nimbus.host: <span class="string">"192.168.0.100"</span></span><br></pre></td></tr></table></figure></p>
-<h3 id="启动Storm集群"><a href="#启动Storm集群" class="headerlink" title="启动Storm集群"></a>启动Storm集群</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//启动nimbus</span><br><span class="line">bin/./storm nimbus &lt;/dev/null 2&lt;&amp;1 &amp;</span><br><span class="line">//启动Supervisor</span><br><span class="line">bin/./storm supervisor &lt;/dev/null 2&lt;&amp;1 &amp;</span><br><span class="line">//启动UI</span><br><span class="line">bin/./storm ui &lt;/dev/null 2&lt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
-<h2 id="Storm范例"><a href="#Storm范例" class="headerlink" title="Storm范例"></a>Storm范例</h2><p>统计Topology<br>WordCountTopology.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountTopology</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        TopologyBuilder builder = <span class="keyword">new</span> TopologyBuilder();</span><br><span class="line">        builder.setSpout(<span class="string">"word-spout"</span>, <span class="keyword">new</span> WordSpout(), <span class="number">1</span>);</span><br><span class="line">        builder.setBolt(<span class="string">"word-split"</span>, <span class="keyword">new</span> WordSplitSentenceBolt(), <span class="number">2</span>).shuffleGrouping(<span class="string">"word-spout"</span>);</span><br><span class="line">        builder.setBolt(<span class="string">"word-count"</span>, <span class="keyword">new</span> WordCountBolt(), <span class="number">2</span>).fieldsGrouping(<span class="string">"word-split"</span>, <span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line">        Config conf = <span class="keyword">new</span> Config();</span><br><span class="line">        conf.setDebug(<span class="keyword">true</span>);</span><br><span class="line">        conf.put(<span class="string">"wordsFile"</span>, <span class="string">"D:\\tmp\\word.txt"</span>);</span><br><span class="line">        conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, <span class="number">1</span>);</span><br><span class="line">        LocalCluster cluster = <span class="keyword">new</span> LocalCluster();</span><br><span class="line">        <span class="comment">//storm集群运行</span></span><br><span class="line">        <span class="comment">/*</span><br><span class="line">        StormSubmitter.submitTopology("Getting-Started-Toplogie", conf, builder.createTopology());</span><br><span class="line">        */</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            cluster.submitTopology(<span class="string">"Getting-Started-Toplogie"</span>, conf, builder.createTopology());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.exit(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">        cluster.shutdown();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>spout输入<br>WordSpout.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordSpout</span> <span class="keyword">extends</span> <span class="title">BaseRichSpout</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpoutOutputCollector collector;</span><br><span class="line">    <span class="keyword">private</span> FileReader fileReader;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> completed = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ack</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"OK:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fail</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"FAIL:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(Map conf, TopologyContext context, SpoutOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.fileReader = <span class="keyword">new</span> FileReader(conf.get(<span class="string">"wordsFile"</span>).toString());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.collector = collector;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nextTuple</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(completed)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="comment">//Do nothing</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String str;</span><br><span class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(fileReader);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>((str = reader.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">this</span>.collector.emit(<span class="keyword">new</span> Values(str));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Error reading tuple"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            completed = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"sentence"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>分割句子<br>WordSplitSentenceBolt.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordSplitSentenceBolt</span> <span class="keyword">extends</span> <span class="title">BaseBasicBolt</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple input, BasicOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        String sentence = input.getString(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span> (String word : sentence.split(<span class="string">" "</span>)) &#123;</span><br><span class="line">            word = word.trim();</span><br><span class="line">            <span class="keyword">if</span> (!word.isEmpty()) &#123;</span><br><span class="line">                collector.emit(<span class="keyword">new</span> Values(word));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>统计单词数量<br>WordCountBolt.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WordCountBolt</span> <span class="keyword">extends</span> <span class="title">BaseBasicBolt</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(WordCountBolt.class);</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Integer&gt;counts = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        counts.forEach((key, value) -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"```````````````````````````````````````"</span>);</span><br><span class="line">            logger.error(<span class="string">"&#123;&#125;: &#123;&#125;"</span>, key, value);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple input, BasicOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        String word = input.getString(<span class="number">0</span>);</span><br><span class="line">        Integer count = counts.get(word);</span><br><span class="line">        <span class="keyword">if</span> (count == <span class="keyword">null</span>)&#123;</span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        count++;</span><br><span class="line">        counts.put(word, count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>其他例子可参考：<a href="https://github.com/apache/storm/tree/master/examples" target="_blank" rel="external">Storm官方例子</a></p>
-<h3 id="向集群提交任务"><a href="#向集群提交任务" class="headerlink" title="向集群提交任务"></a>向集群提交任务</h3><p>把项目打成jar包，在storm安装主目录下执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/./storm jar demo.jar com.whh.WordCountTopology</span><br></pre></td></tr></table></figure></p>
-<p>如果需要停止Topology，在storm目录下执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/./storm <span class="built_in">kill</span> &#123;toponmae&#125;</span><br></pre></td></tr></table></figure></p>
-<blockquote>
-<p>其中{toponmae}是Topology提交到Storm集群时指定的Topology任务名称</p>
-</blockquote>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj7it1naf0018uhykzjvuxp73/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj7it1naf0018uhykzjvuxp73/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T08:58:28+08:00">
-                2017-08-01
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
-                    <span itemprop="name">Storm学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="实时流计算"><a href="#实时流计算" class="headerlink" title="实时流计算"></a>实时流计算</h3><p>传统DBMS不是为快速连续地存放单独的数据单元而设计，而且也不支持<em>持续处理</em>，而<em>持续处理</em>是数据流应用的典型特征。一些方案采用MapReduce来处理实时数据流。但是尽管MapReduce做了实时性改进，也很难稳定地满足应用需求。这是因为<strong>Hadoop MapReduce框架为批处理做了高度优化，典型的是通过调度批量任务来操作静态数据，任务不是常驻服务，数据也不是实时流入。</strong></p>
-<h4 id="实时计算流程"><a href="#实时计算流程" class="headerlink" title="实时计算流程"></a>实时计算流程</h4><p>1、数据采集<br>功能上保证可以完整的收集到所有日志数据，为实时应用提供实时数据；响应时间上要保证实时性、低延迟；配置简单，部署容易；系统稳定可靠等。<br>目前采集数据工具有：</p>
-<ul>
-<li>Facebook开源的Scribe</li>
-<li>LinkedIn开源的Kafka</li>
-<li>Cloudera开源的Flume</li>
-<li>淘宝开源的TimeTunnel</li>
-<li>Hadoop的Chukwa等</li>
-</ul>
-<p>2、数据实时计算<br>适应流式数据、不间断查询；系统稳定可靠、可扩展性好、可维护性好。需要关注的注意点：<strong> 分布式计算、并行计算、热点数据缓存策略、服务端计算。</strong></p>
-<p>3、实时数据查询</p>
-<ul>
-<li>全内存：直接提供数据读取、定期转存到磁盘或者数据库中进行持久化；</li>
-<li>半内存：使用Redis、Memcache、MongoDB、等内存数据库提供数据库实时查询范围，由这些系统进行持久化操作；</li>
-<li>全磁盘：使用HBase等分布式文件系统（HDFS）为基础的NoSQL数据库，对于KeyValue内存引擎，关键是设计好Key。</li>
-</ul>
-<h3 id="实时计算框架"><a href="#实时计算框架" class="headerlink" title="实时计算框架"></a>实时计算框架</h3><ul>
-<li>IBM的StreamBase</li>
-<li>Yahoo的S4<blockquote>
-<p> 设计特点：</p>
-<ul>
-<li>Actor计算模型</li>
-<li>对等集群架构</li>
-<li>课插拔体系架构</li>
-<li>支持部分容错</li>
-</ul>
-</blockquote>
-</li>
-<li>Twitter的Storm<blockquote>
-<p> 主要特点：</p>
-<ul>
-<li>简单模型；</li>
-<li>可以使用各种编程语言.默认支持Clojure、Java、Ruby和Python。要增加其他支持，只需要实现一个简单的Storm通信协议；</li>
-<li>容错性、水平扩展、可靠消息处理、快速、本地模式。</li>
-</ul>
-</blockquote>
-</li>
-<li>Twitter的Rainbird</li>
-<li>Facebook的Puma</li>
-<li>阿里的JStorm</li>
-<li>其他的如：HStreaming、Esper、Borealis</li>
-</ul>
-<h3 id="Storm设计"><a href="#Storm设计" class="headerlink" title="Storm设计"></a>Storm设计</h3><p>在Storm中流是有Spout作为源头源源不断产生Tuple，Tuple流向Bolt处理。Spout产生Tuple流向Bolt整体称之为Topology。提交Topology到Storm集群执行，Topology就是一个流转换图。</p>
-<h3 id="Storm核心组件"><a href="#Storm核心组件" class="headerlink" title="Storm核心组件"></a>Storm核心组件</h3><ul>
-<li>主节点Nimbus<blockquote>
-<p>主节点通常运行一个后台查询—Numbus，用于响应发布在集群中的节点，分配任务和监测故障，这类似于Hadoop中的JobTracker。Nimbus进程是快速失败和无状态的，所有的状态要么在ZooKeeper中，要么在本地磁盘上。</p>
-</blockquote>
-</li>
-<li>工作节点Supervisor<blockquote>
-<p>工作节点同样会运行一个后台程序—Supervisor，用于收听工作指派并基于要求运行工作进程。每个工作节点都是Topology中一个子集的实现。Nimbus和Supervisor之间协调通过ZooKeeper,Supervisor同Nimbus是无状态的，</p>
-</blockquote>
-</li>
-<li>协调服务组件ZooKeeper</li>
-<li>其他核心组件<blockquote>
-<ul>
-<li>具体处理事务进程Worker：运行具体处理组件逻辑的进程；</li>
-<li>具体处理现场Task：Worker中每一个Spout/Bolt线程称为一个Task。在Storm 0.8之后，Task不再与物理线程对应，同一个Spoot/Bolt的Task可能会共享一个物理线程，该线程称为Executor</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<h3 id="Storm特性"><a href="#Storm特性" class="headerlink" title="Storm特性"></a>Storm特性</h3><ul>
-<li>编程模型简单</li>
-<li>可扩展</li>
-<li>高可靠性<blockquote>
-<p>在Spout发出消息后，可能会触发成千上万条消息，Storm会保证所有消息被处理完成，才认为该Spout消息被完全处理。如果在限定时间内没有完全处理，那么Spout发出的消息就会重发。为了减少内存消耗，Storm不会跟踪所有消息，Storm通过对所有消息的唯一ID进行异或计算，通过是否为0来判断Spout发出的消息是否被处理</p>
-</blockquote>
-</li>
-<li>高容错性</li>
-<li>支持本地模式</li>
-<li>支持多种编程语言</li>
-<li>高效</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -2022,7 +1972,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2044,7 +1994,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

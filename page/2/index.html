@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj7it1nab0012uhykso6px3y4/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj7k958bs00181aykqo7ssyt2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,387 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj7it1nab0012uhykso6px3y4/" itemprop="url">ajax跨域</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj7k958bs00181aykqo7ssyt2/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T10:42:47+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
+                    <span itemprop="name">Storm学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="系统环境需要"><a href="#系统环境需要" class="headerlink" title="系统环境需要"></a>系统环境需要</h2><ul>
+<li>JDK配置好环境变量</li>
+<li>SSH，方便启动操作</li>
+<li>安装Python，Python是Storm最底层依赖</li>
+</ul>
+<h2 id="Zookeeper安装"><a href="#Zookeeper安装" class="headerlink" title="Zookeeper安装"></a>Zookeeper安装</h2><p>Zookeeper官网下载解压，安装参考<a href="https://taoistwar.gitbooks.io/spark-operationand-maintenance-management/content/spark_relate_software/zookeeper_install.html" target="_blank" rel="external">Zookeeper安装配置</a>，或者<a href="https://zookeeper.apache.org/doc/trunk/zookeeperStarted.html" target="_blank" rel="external">官方文档</a></p>
+<h2 id="Storm启动安装"><a href="#Storm启动安装" class="headerlink" title="Storm启动安装"></a>Storm启动安装</h2><h3 id="本地模式"><a href="#本地模式" class="headerlink" title="本地模式"></a>本地模式</h3><p>本地模式在一个进程中使用现场模拟Storm集群的所有功能，用于本地开调试。本地模式运行Topology于在集群上运行Topology类似，但是提交Topology任务是在本地机器上。<br>简单使用LocalCluster类，就能创建一个进程内集群。如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LocalCluster cluster = <span class="keyword">new</span> LocalCluster()</span><br></pre></td></tr></table></figure></p>
+<p>本地模式下要注意如下参数</p>
+<ul>
+<li>Config.TOPOLOGY_MAX_TASK_PARALLELISM 单组件最大线程数</li>
+<li>Config.TOPOLOGY_DEBUG</li>
+</ul>
+<p>* 参考：<a href="http://storm.apache.org/releases/1.1.0/Local-mode.html" target="_blank" rel="external">本地模式http://storm.apache.org/releases/1.1.0/Local-mode.html</a></p>
+<h3 id="安装部署集群"><a href="#安装部署集群" class="headerlink" title="安装部署集群"></a>安装部署集群</h3><p>下载Storm解压 <a href="http://storm.apache.org/index.html" target="_blank" rel="external">storm官网</a><br>修改conf/storm.yaml配置文件，storm.yaml中配置会覆盖defaults.yaml中配置。<br>最基本配置如下<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">storm.zookeeper.servers:</span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk1"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk2"</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">"zk3"</span></span><br><span class="line">storm.local.dir: <span class="string">"/var/storm"</span></span><br><span class="line">nimbus.host: <span class="string">"192.168.0.100"</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="启动Storm集群"><a href="#启动Storm集群" class="headerlink" title="启动Storm集群"></a>启动Storm集群</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//启动nimbus</span><br><span class="line">bin/./storm nimbus &lt;/dev/null 2&lt;&amp;1 &amp;</span><br><span class="line">//启动Supervisor</span><br><span class="line">bin/./storm supervisor &lt;/dev/null 2&lt;&amp;1 &amp;</span><br><span class="line">//启动UI</span><br><span class="line">bin/./storm ui &lt;/dev/null 2&lt;&amp;1 &amp;</span><br></pre></td></tr></table></figure>
+<h2 id="Storm范例"><a href="#Storm范例" class="headerlink" title="Storm范例"></a>Storm范例</h2><p>统计Topology<br>WordCountTopology.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordCountTopology</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        TopologyBuilder builder = <span class="keyword">new</span> TopologyBuilder();</span><br><span class="line">        builder.setSpout(<span class="string">"word-spout"</span>, <span class="keyword">new</span> WordSpout(), <span class="number">1</span>);</span><br><span class="line">        builder.setBolt(<span class="string">"word-split"</span>, <span class="keyword">new</span> WordSplitSentenceBolt(), <span class="number">2</span>).shuffleGrouping(<span class="string">"word-spout"</span>);</span><br><span class="line">        builder.setBolt(<span class="string">"word-count"</span>, <span class="keyword">new</span> WordCountBolt(), <span class="number">2</span>).fieldsGrouping(<span class="string">"word-split"</span>, <span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line">        Config conf = <span class="keyword">new</span> Config();</span><br><span class="line">        conf.setDebug(<span class="keyword">true</span>);</span><br><span class="line">        conf.put(<span class="string">"wordsFile"</span>, <span class="string">"D:\\tmp\\word.txt"</span>);</span><br><span class="line">        conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, <span class="number">1</span>);</span><br><span class="line">        LocalCluster cluster = <span class="keyword">new</span> LocalCluster();</span><br><span class="line">        <span class="comment">//storm集群运行</span></span><br><span class="line">        <span class="comment">/*</span><br><span class="line">        StormSubmitter.submitTopology("Getting-Started-Toplogie", conf, builder.createTopology());</span><br><span class="line">        */</span></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            cluster.submitTopology(<span class="string">"Getting-Started-Toplogie"</span>, conf, builder.createTopology());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.exit(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        Thread.sleep(<span class="number">10000</span>);</span><br><span class="line">        cluster.shutdown();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>spout输入<br>WordSpout.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordSpout</span> <span class="keyword">extends</span> <span class="title">BaseRichSpout</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> SpoutOutputCollector collector;</span><br><span class="line">    <span class="keyword">private</span> FileReader fileReader;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">boolean</span> completed = <span class="keyword">false</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">ack</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"OK:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">close</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">fail</span><span class="params">(Object msgId)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"FAIL:"</span>+msgId);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">open</span><span class="params">(Map conf, TopologyContext context, SpoutOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.fileReader = <span class="keyword">new</span> FileReader(conf.get(<span class="string">"wordsFile"</span>).toString());</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">this</span>.collector = collector;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">nextTuple</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(completed)&#123;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                <span class="comment">//Do nothing</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        String str;</span><br><span class="line">        BufferedReader reader = <span class="keyword">new</span> BufferedReader(fileReader);</span><br><span class="line">        <span class="keyword">try</span>&#123;</span><br><span class="line">            <span class="keyword">while</span>((str = reader.readLine()) != <span class="keyword">null</span>)&#123;</span><br><span class="line">                <span class="keyword">this</span>.collector.emit(<span class="keyword">new</span> Values(str));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;<span class="keyword">catch</span>(Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Error reading tuple"</span>,e);</span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            completed = <span class="keyword">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"sentence"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>分割句子<br>WordSplitSentenceBolt.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">WordSplitSentenceBolt</span> <span class="keyword">extends</span> <span class="title">BaseBasicBolt</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple input, BasicOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        String sentence = input.getString(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span> (String word : sentence.split(<span class="string">" "</span>)) &#123;</span><br><span class="line">            word = word.trim();</span><br><span class="line">            <span class="keyword">if</span> (!word.isEmpty()) &#123;</span><br><span class="line">                collector.emit(<span class="keyword">new</span> Values(word));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">        declarer.declare(<span class="keyword">new</span> Fields(<span class="string">"word"</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>统计单词数量<br>WordCountBolt.java<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WordCountBolt</span> <span class="keyword">extends</span> <span class="title">BaseBasicBolt</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Logger logger = LoggerFactory.getLogger(WordCountBolt.class);</span><br><span class="line">    <span class="keyword">private</span> Map&lt;String, Integer&gt;counts = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">cleanup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        counts.forEach((key, value) -&gt; &#123;</span><br><span class="line">            System.out.println(<span class="string">"```````````````````````````````````````"</span>);</span><br><span class="line">            logger.error(<span class="string">"&#123;&#125;: &#123;&#125;"</span>, key, value);</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Tuple input, BasicOutputCollector collector)</span> </span>&#123;</span><br><span class="line">        String word = input.getString(<span class="number">0</span>);</span><br><span class="line">        Integer count = counts.get(word);</span><br><span class="line">        <span class="keyword">if</span> (count == <span class="keyword">null</span>)&#123;</span><br><span class="line">            count = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        count++;</span><br><span class="line">        counts.put(word, count);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">declareOutputFields</span><span class="params">(OutputFieldsDeclarer declarer)</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>其他例子可参考：<a href="https://github.com/apache/storm/tree/master/examples" target="_blank" rel="external">Storm官方例子</a></p>
+<h3 id="向集群提交任务"><a href="#向集群提交任务" class="headerlink" title="向集群提交任务"></a>向集群提交任务</h3><p>把项目打成jar包，在storm安装主目录下执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/./storm jar demo.jar com.whh.WordCountTopology</span><br></pre></td></tr></table></figure></p>
+<p>如果需要停止Topology，在storm目录下执行：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bin/./storm <span class="built_in">kill</span> &#123;toponmae&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>其中{toponmae}是Topology提交到Storm集群时指定的Topology任务名称</p>
+</blockquote>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj7k958bs00161aykpls6tny9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj7k958bs00161aykpls6tny9/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T08:58:28+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
+                    <span itemprop="name">Storm学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="实时流计算"><a href="#实时流计算" class="headerlink" title="实时流计算"></a>实时流计算</h3><p>传统DBMS不是为快速连续地存放单独的数据单元而设计，而且也不支持<em>持续处理</em>，而<em>持续处理</em>是数据流应用的典型特征。一些方案采用MapReduce来处理实时数据流。但是尽管MapReduce做了实时性改进，也很难稳定地满足应用需求。这是因为<strong>Hadoop MapReduce框架为批处理做了高度优化，典型的是通过调度批量任务来操作静态数据，任务不是常驻服务，数据也不是实时流入。</strong></p>
+<h4 id="实时计算流程"><a href="#实时计算流程" class="headerlink" title="实时计算流程"></a>实时计算流程</h4><p>1、数据采集<br>功能上保证可以完整的收集到所有日志数据，为实时应用提供实时数据；响应时间上要保证实时性、低延迟；配置简单，部署容易；系统稳定可靠等。<br>目前采集数据工具有：</p>
+<ul>
+<li>Facebook开源的Scribe</li>
+<li>LinkedIn开源的Kafka</li>
+<li>Cloudera开源的Flume</li>
+<li>淘宝开源的TimeTunnel</li>
+<li>Hadoop的Chukwa等</li>
+</ul>
+<p>2、数据实时计算<br>适应流式数据、不间断查询；系统稳定可靠、可扩展性好、可维护性好。需要关注的注意点：<strong> 分布式计算、并行计算、热点数据缓存策略、服务端计算。</strong></p>
+<p>3、实时数据查询</p>
+<ul>
+<li>全内存：直接提供数据读取、定期转存到磁盘或者数据库中进行持久化；</li>
+<li>半内存：使用Redis、Memcache、MongoDB、等内存数据库提供数据库实时查询范围，由这些系统进行持久化操作；</li>
+<li>全磁盘：使用HBase等分布式文件系统（HDFS）为基础的NoSQL数据库，对于KeyValue内存引擎，关键是设计好Key。</li>
+</ul>
+<h3 id="实时计算框架"><a href="#实时计算框架" class="headerlink" title="实时计算框架"></a>实时计算框架</h3><ul>
+<li>IBM的StreamBase</li>
+<li>Yahoo的S4<blockquote>
+<p> 设计特点：</p>
+<ul>
+<li>Actor计算模型</li>
+<li>对等集群架构</li>
+<li>课插拔体系架构</li>
+<li>支持部分容错</li>
+</ul>
+</blockquote>
+</li>
+<li>Twitter的Storm<blockquote>
+<p> 主要特点：</p>
+<ul>
+<li>简单模型；</li>
+<li>可以使用各种编程语言.默认支持Clojure、Java、Ruby和Python。要增加其他支持，只需要实现一个简单的Storm通信协议；</li>
+<li>容错性、水平扩展、可靠消息处理、快速、本地模式。</li>
+</ul>
+</blockquote>
+</li>
+<li>Twitter的Rainbird</li>
+<li>Facebook的Puma</li>
+<li>阿里的JStorm</li>
+<li>其他的如：HStreaming、Esper、Borealis</li>
+</ul>
+<h3 id="Storm设计"><a href="#Storm设计" class="headerlink" title="Storm设计"></a>Storm设计</h3><p>在Storm中流是有Spout作为源头源源不断产生Tuple，Tuple流向Bolt处理。Spout产生Tuple流向Bolt整体称之为Topology。提交Topology到Storm集群执行，Topology就是一个流转换图。</p>
+<h3 id="Storm核心组件"><a href="#Storm核心组件" class="headerlink" title="Storm核心组件"></a>Storm核心组件</h3><ul>
+<li>主节点Nimbus<blockquote>
+<p>主节点通常运行一个后台查询—Numbus，用于响应发布在集群中的节点，分配任务和监测故障，这类似于Hadoop中的JobTracker。Nimbus进程是快速失败和无状态的，所有的状态要么在ZooKeeper中，要么在本地磁盘上。</p>
+</blockquote>
+</li>
+<li>工作节点Supervisor<blockquote>
+<p>工作节点同样会运行一个后台程序—Supervisor，用于收听工作指派并基于要求运行工作进程。每个工作节点都是Topology中一个子集的实现。Nimbus和Supervisor之间协调通过ZooKeeper,Supervisor同Nimbus是无状态的，</p>
+</blockquote>
+</li>
+<li>协调服务组件ZooKeeper</li>
+<li>其他核心组件<blockquote>
+<ul>
+<li>具体处理事务进程Worker：运行具体处理组件逻辑的进程；</li>
+<li>具体处理现场Task：Worker中每一个Spout/Bolt线程称为一个Task。在Storm 0.8之后，Task不再与物理线程对应，同一个Spoot/Bolt的Task可能会共享一个物理线程，该线程称为Executor</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="Storm特性"><a href="#Storm特性" class="headerlink" title="Storm特性"></a>Storm特性</h3><ul>
+<li>编程模型简单</li>
+<li>可扩展</li>
+<li>高可靠性<blockquote>
+<p>在Spout发出消息后，可能会触发成千上万条消息，Storm会保证所有消息被处理完成，才认为该Spout消息被完全处理。如果在限定时间内没有完全处理，那么Spout发出的消息就会重发。为了减少内存消耗，Storm不会跟踪所有消息，Storm通过对所有消息的唯一ID进行异或计算，通过是否为0来判断Spout发出的消息是否被处理</p>
+</blockquote>
+</li>
+<li>高容错性</li>
+<li>支持本地模式</li>
+<li>支持多种编程语言</li>
+<li>高效</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj7k958bn00111aykbbqgi352/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj7k958bn00111aykbbqgi352/" itemprop="url">ajax跨域</a></h1>
         
 
         <div class="post-meta">
@@ -432,7 +812,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj7it1na8000yuhykud6xh0ro/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj7k958bp00121aykjz43gdzx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -451,7 +831,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj7it1na8000yuhykud6xh0ro/" itemprop="url">微信公众号中使用微信支付</a></h1>
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj7k958bp00121aykjz43gdzx/" itemprop="url">微信公众号中使用微信支付</a></h1>
         
 
         <div class="post-meta">
@@ -597,7 +977,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj7it1naa0011uhykozhrvn7u/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj7k958bm000y1aykhkldkrw7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -616,7 +996,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj7it1naa0011uhykozhrvn7u/" itemprop="url">Elasticsearch初使用</a></h1>
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj7k958bm000y1aykhkldkrw7/" itemprop="url">Elasticsearch初使用</a></h1>
         
 
         <div class="post-meta">
@@ -772,7 +1152,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj7it1na7000xuhykd7fc84wd/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj7k958bl000x1aykky70lx7m/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -791,7 +1171,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj7it1na7000xuhykd7fc84wd/" itemprop="url">MYSQL并发修改库存</a></h1>
+                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj7k958bl000x1aykky70lx7m/" itemprop="url">MYSQL并发修改库存</a></h1>
         
 
         <div class="post-meta">
@@ -921,7 +1301,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj7it1mfu0006uhyk7d1kd0w7/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj7k957ks00051ayk2gnmhf30/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -940,7 +1320,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj7it1mfu0006uhyk7d1kd0w7/" itemprop="url">docker环境部署</a></h1>
+                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj7k957ks00051ayk2gnmhf30/" itemprop="url">docker环境部署</a></h1>
         
 
         <div class="post-meta">
@@ -1067,7 +1447,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj7it1mfz000cuhykpesbevud/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj7k957l5000b1ayk9zyxx8pb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1086,7 +1466,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj7it1mfz000cuhykpesbevud/" itemprop="url">定时消息推送</a></h1>
+                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj7k957l5000b1ayk9zyxx8pb/" itemprop="url">定时消息推送</a></h1>
         
 
         <div class="post-meta">
@@ -1228,7 +1608,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj7it1mfw0007uhykbwwu38be/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj7k957l300091aykqhhu2r6b/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1247,7 +1627,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj7it1mfw0007uhykbwwu38be/" itemprop="url">SpringMVC RESTful风格</a></h1>
+                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj7k957l300091aykqhhu2r6b/" itemprop="url">SpringMVC RESTful风格</a></h1>
         
 
         <div class="post-meta">
@@ -1372,7 +1752,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj7it1mfj0001uhyk6p7dnjtu/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj7k957kn00041aykad6di6p0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1391,7 +1771,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/04/02/Git命令/cj7it1mfj0001uhyk6p7dnjtu/" itemprop="url">Git命令</a></h1>
+                <a class="post-title-link" href="/2015/04/02/Git命令/cj7k957kn00041aykad6di6p0/" itemprop="url">Git命令</a></h1>
         
 
         <div class="post-meta">
@@ -1557,282 +1937,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj7it1mfy0009uhykl3qfi78y/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj7it1mfy0009uhykl3qfi78y/" itemprop="url">jetty9遇到问题</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-06T17:18:21+08:00">
-                2015-02-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/编程/" itemprop="url" rel="index">
-                    <span itemprop="name">编程</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="端口修改"><a href="#端口修改" class="headerlink" title="端口修改"></a>端口修改</h2><p>在jetty9中修改$JETTY_HOME/start.d/http.ini中修改</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">jetty.port=9999</span><br><span class="line">http.timeout=30000</span><br></pre></td></tr></table></figure>
-<h2 id="jetty9中原来jar"><a href="#jetty9中原来jar" class="headerlink" title="jetty9中原来jar"></a>jetty9中原来jar</h2><p>因为在部署项目时，为了避免war包过大，使用在生成war包的时候，不吧依赖jar添加进去，在jetty使用中，一般是一个jetty使用一个项目，所以需要把依赖jar包放入jetty目录 <strong>$JETTY_HOME/lib/ext</strong> 中</p>
-<h2 id="IllegalStateException-No-LoginService"><a href="#IllegalStateException-No-LoginService" class="headerlink" title="IllegalStateException: No LoginService"></a>IllegalStateException: No LoginService</h2><p>因为在web.xml中添加了权限验证，所以在jetty中也需要相应的配置，在<strong>$JETTY_HOME/etc/jetty.xml</strong>中添加：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Call</span> <span class="attr">name</span>=<span class="string">"addBean"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">Arg</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">New</span> <span class="attr">class</span>=<span class="string">"org.eclipse.jetty.security.HashLoginService"</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Set</span> <span class="attr">name</span>=<span class="string">"name"</span>&gt;</span>Preauth Realm<span class="tag">&lt;/<span class="name">Set</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Set</span> <span class="attr">name</span>=<span class="string">"config"</span>&gt;</span><span class="tag">&lt;<span class="name">SystemProperty</span> <span class="attr">name</span>=<span class="string">"jetty.home"</span> <span class="attr">default</span>=<span class="string">"."</span>/&gt;</span>/etc/realm.properties<span class="tag">&lt;/<span class="name">Set</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">Set</span> <span class="attr">name</span>=<span class="string">"refreshInterval"</span>&gt;</span>0<span class="tag">&lt;/<span class="name">Set</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">New</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">Arg</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Call</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<p>注意：<set name="name">Preauth Realm</set>这个要和web.xml中<realm-name>配置一致</realm-name></p>
-<h2 id="jar包冲突"><a href="#jar包冲突" class="headerlink" title="jar包冲突"></a>jar包冲突</h2><p>添加在jetty9中使用的是asm-4.1.jar，如果在项目中有使用，需要删除</p>
-<h2 id="找不到npn-1-7-0-51-mod"><a href="#找不到npn-1-7-0-51-mod" class="headerlink" title="找不到npn-1.7.0_51.mod"></a>找不到npn-1.7.0_51.mod</h2><p>从其他地方copy这个文件到$JETTY_HOME/modules/npn中就可</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj7it1mfp0003uhyk0ku4tn6z/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj7it1mfp0003uhyk0ku4tn6z/" itemprop="url">hexo部署静态文件位置修改</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-04T16:18:32+08:00">
-                2015-02-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="使用hexo-htemo-kael后出现样式不对"><a href="#使用hexo-htemo-kael后出现样式不对" class="headerlink" title="使用hexo-htemo-kael后出现样式不对"></a>使用hexo-htemo-kael后出现样式不对</h2><p>一般在部署到whhxz.github.io上不会出现问题，如果部署在whhxz.github.io/myblog上，会出现本地静态文件如js、css等出错</p>
-<p>解决办法：修改hexo-htemo-kael中head.ejs，添加</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/myblog\/$/</span>;</span><br><span class="line"><span class="keyword">if</span>(reg.exec(config.root) == <span class="literal">null</span>)&#123;</span><br><span class="line">    config.root = config.root + <span class="string">"myblog/"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>设置config.root后面添加博客地址，在生成html后，就会自动添加上去，而且为了避免多次添加，所以使用正则表达式判断是否已经存在</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1878,7 +1987,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1900,7 +2009,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">42</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
