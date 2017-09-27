@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/cj82mfqjb001qeyyks03tqvwa/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/cj82rkf1r001y36ykxwvvuna6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/cj82mfqjb001qeyyks03tqvwa/" itemprop="url">SSM搭建讲解</a></h1>
+                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/cj82rkf1r001y36ykxwvvuna6/" itemprop="url">SSM搭建讲解</a></h1>
         
 
         <div class="post-meta">
@@ -390,7 +390,7 @@
 <p>注意点：servlet-api和jsp-api这个scope需要设置为provided，因为项目部署的容器中，一般都有这两个jar包。</p>
 </blockquote>
 <p>在resources目录下添加日志配置文件log4j.properties：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#简单配置日志</span><br><span class="line">log4j.rootLogger=info, Console</span><br><span class="line"></span><br><span class="line">#Console</span><br><span class="line">log4j.appender.Console=org.apache.log4j.ConsoleAppender</span><br><span class="line">log4j.appender.Console.layout=org.apache.log4j.PatternLayout</span><br><span class="line">log4j.appender.Console.layout.ConversionPattern=%d [%t] %-5p [%c] - %m%n</span><br></pre></td></tr></table></figure></p>
-<p>添加插件org.apache.maven.plugins.maven-compiler-plugin、org.codehaus.mojo.tomcat-maven-plugin</p>
+<p>添加插件org.apache.maven.plugins.maven-compiler-plugin、org.codehaus.mojo.tomcat-maven-plugin<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-compiler-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>3.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">source</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">source</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">target</span>&gt;</span>1.8<span class="tag">&lt;/<span class="name">target</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">encoding</span>&gt;</span>utf-8<span class="tag">&lt;/<span class="name">encoding</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.codehaus.mojo<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>tomcat-maven-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">configuration</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">path</span>&gt;</span>/<span class="tag">&lt;/<span class="name">path</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">port</span>&gt;</span>8080<span class="tag">&lt;/<span class="name">port</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">uriEncoding</span>&gt;</span>utf-8<span class="tag">&lt;/<span class="name">uriEncoding</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">server</span>&gt;</span>tomcat7<span class="tag">&lt;/<span class="name">server</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">configuration</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>org.apache.maven.plugins.maven-compiler-plugin插件作用设置项目编译的jdk版本</li>
 <li>org.codehaus.mojo.tomcat-maven-plugin插件用于通过maven的tomcat插件直接启动项目。如果需要使用高版本tomcat，不建议使用该插件启动tomcat，该插件支持的tomcat插件版本较低。</li>
@@ -402,7 +402,9 @@
 <li>配置SpringMVC配置文件</li>
 <li>启动访问Controller</li>
 </ol>
-<p>操作：<br>添加springmvc依赖，pom文件修改添加依赖org.springframework.spring-webmvc，webmvc依赖了常用的jar包，包括bean、context、aop等。<br>在默认的web.xml中约束需要修改为web-app_2_5.xsd。配置servlet。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置Spring MVC--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>spring<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--配置SpringMVC配置文件路径，如果不配置默认为WEB-INF下面$&#123;servlet-name&#125;-servlet.xml--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--源码AbstractRefreshableConfigApplicationContext.getConfigLocations--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span><br><span class="line">  &lt;init-param&gt;</span><br><span class="line">    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</span><br><span class="line">    &lt;param-value&gt;classpath:&lt;/param-value&gt;</span><br><span class="line">  &lt;/init-param&gt;</span><br><span class="line">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>spring<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>操作：<br>添加springmvc依赖，pom文件修改添加依赖org.springframework.spring-webmvc，webmvc依赖了常用的jar包，包括bean、context、aop等。<br>在默认的web.xml中约束需要修改为web-app_2_5.xsd（如果不修改为2.4以上在jsp页面需要写&lt;%@ page isELIgnored=”false” %&gt; $才会生效）。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">web-app</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">         <span class="attr">xmlns</span>=<span class="string">"http://java.sun.com/xml/ns/javaee"</span></span><br><span class="line">         <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/"</span></span><br><span class="line">         <span class="attr">version</span>=<span class="string">"2.5"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>配置servlet。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置Spring MVC--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>spring<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-class</span>&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="tag">&lt;/<span class="name">servlet-class</span>&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--配置SpringMVC配置文件路径，如果不配置默认为WEB-INF下面$&#123;servlet-name&#125;-servlet.xml--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--源码AbstractRefreshableConfigApplicationContext.getConfigLocations--&gt;</span></span><br><span class="line">  <span class="comment">&lt;!--</span><br><span class="line">  &lt;init-param&gt;</span><br><span class="line">    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</span><br><span class="line">    &lt;param-value&gt;classpath:&lt;/param-value&gt;</span><br><span class="line">  &lt;/init-param&gt;</span><br><span class="line">  --&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">load-on-startup</span>&gt;</span>1<span class="tag">&lt;/<span class="name">load-on-startup</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">servlet-mapping</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">servlet-name</span>&gt;</span>spring<span class="tag">&lt;/<span class="name">servlet-name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url-pattern</span>&gt;</span>/<span class="tag">&lt;/<span class="name">url-pattern</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">servlet-mapping</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>load-on-startup节点：</p>
 <blockquote>
 <ul>
@@ -416,6 +418,9 @@
 </blockquote>
 <p>默认在WEB-INF添加spring-servlet.xml配置文件，配置spring扫描，配置视图解析器，配置静态资源，配置入出参UTF-8<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--Spring MVC配置--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.feiniu"</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 对模型视图名称的解析,即对模型视图名称添加前后缀 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"viewResolver"</span></span><br><span class="line">      <span class="attr">class</span>=<span class="string">"org.springframework.web.servlet.view.InternalResourceViewResolver"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"prefix"</span> <span class="attr">value</span>=<span class="string">"/WEB-INF/jsp/"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"suffix"</span> <span class="attr">value</span>=<span class="string">".jsp"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--静态资源文件位置--&gt;</span></span><br><span class="line"><span class="comment">&lt;!--由SimpleUrlHandlerMapping处理静态资源--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:resources</span> <span class="attr">mapping</span>=<span class="string">"/static/**"</span> <span class="attr">location</span>=<span class="string">"/static/"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!--解决返回乱码--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mvc:annotation-driven</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 消息转换器 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">mvc:message-converters</span> <span class="attr">register-defaults</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.springframework.http.converter.StringHttpMessageConverter"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"supportedMediaTypes"</span> <span class="attr">value</span>=<span class="string">"text/html;charset=UTF-8"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">mvc:message-converters</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mvc:annotation-driven</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>添加Controller，添加jsp，添加js，看是否能正常访问。</p>
+<h4 id="Controller获取请求参数"><a href="#Controller获取请求参数" class="headerlink" title="Controller获取请求参数"></a>Controller获取请求参数</h4><blockquote>
+<p>CookieValue：获取cookie的值<br>ModelAttribute：表单提交封装对象<br>PathVariable：获取路径中的参数，和开发rest风格api同用<br>RequestBody：一般用户json请求<br>RequestParam：request请求中的值<br>SessionAttributes：session中的值<br>等其他注解</p>
+</blockquote>
 <h4 id="SpringMVC相关"><a href="#SpringMVC相关" class="headerlink" title="SpringMVC相关"></a>SpringMVC相关</h4><p>SpringMVC原理是定义一个Servlet，配置请求路径，之后相关请求会全部走到配置的DispatcherServlet，请求的url匹配到相关的Controller，默认SpringMVC的Controller是单例的，使用的时候需要注意线程安全。<br>源码阅读入口：</p>
 <ol>
 <li>SpringMVC启动：DispatcherServlet父类HttpServletBean.init（因为实现了Servlet，所以web容器会调用init初始化Servlet）</li>
@@ -450,12 +455,16 @@
 <li>配置Mybatis</li>
 <li>启动服务</li>
 </ol>
-<p>操作：<br>添加数据库依赖org.springframework.spring-jdbc、org.mybatis.mybatis、org.mybatis.mybatis-spring、mysql.mysql-connector-java、com.alibaba.druid<br>resources目录添加application-db.xml配置文件，在Spring配置文件中引入改文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置数据库连接池--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"com.alibaba.druid.pool.DruidDataSource"</span> <span class="attr">init-method</span>=<span class="string">"init"</span> <span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql://localhost:3306/test"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"test"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"password"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--在Mybatis中每次操作都依赖于SqlSession，异常sql操作会话，通过SqlSessionFactoryBean，可以不用自己管理SqlSession--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置打印Mybatis的sql，online请关闭 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--&lt;property name="configLocation" value="classpath:mybatis-config.xml" /&gt;--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置扫描sql位置，默认不配置在Mapper同目录--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--</span><br><span class="line">    &lt;property name="mapperLocations" value="classpath*:sqlmap/*-mapper.xml"/&gt;</span><br><span class="line">    --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--结合spring配置扫描Mapper--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.mapper.MapperScannerConfigurer"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置扫描Mapper所在目录--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"basePackage"</span> <span class="attr">value</span>=<span class="string">"com.feiniu.mapper"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactoryBeanName"</span> <span class="attr">value</span>=<span class="string">"sessionFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>操作：<br>添加数据库依赖org.springframework.spring-jdbc、org.mybatis.mybatis、org.mybatis.mybatis-spring、mysql.mysql-connector-java、com.alibaba.druid<br>resources目录添加application-db.xml配置文件，在Spring配置文件中引入该文件<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--配置数据库连接池--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"dataSource"</span> <span class="attr">class</span>=<span class="string">"com.alibaba.druid.pool.DruidDataSource"</span> <span class="attr">init-method</span>=<span class="string">"init"</span> <span class="attr">destroy-method</span>=<span class="string">"close"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"url"</span> <span class="attr">value</span>=<span class="string">"jdbc:mysql://localhost:3306/test"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"username"</span> <span class="attr">value</span>=<span class="string">"test"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"password"</span> <span class="attr">value</span>=<span class="string">"password"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--在Mybatis中每次操作都依赖于SqlSession，异常sql操作会话，通过SqlSessionFactoryBean，可以不用自己管理SqlSession--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"sessionFactory"</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.SqlSessionFactoryBean"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span>/&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 配置打印Mybatis的sql，online请关闭 --&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--&lt;property name="configLocation" value="classpath:mybatis-config.xml" /&gt;--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置扫描sql位置，默认不配置在Mapper同目录--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--</span><br><span class="line">    &lt;property name="mapperLocations" value="classpath*:sqlmap/*-mapper.xml"/&gt;</span><br><span class="line">    --&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--结合spring配置扫描Mapper--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">class</span>=<span class="string">"org.mybatis.spring.mapper.MapperScannerConfigurer"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--配置扫描Mapper所在目录--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"basePackage"</span> <span class="attr">value</span>=<span class="string">"com.feiniu.mapper"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"sqlSessionFactoryBeanName"</span> <span class="attr">value</span>=<span class="string">"sessionFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>mapper.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="utf-8"?&gt;</span><br><span class="line"><span class="meta">&lt;!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mapper</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>添加Mapper和XML中的sql，启动服务，访问是否正常。<br>访问启动正常，但是在访问的时候会报错 <em>org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): com.feiniu.mapper.DemoMapper.countDemo</em> ，这个时候可以看target编译的目录中，并没有mapper.xml，因为如果不额外配置的话，只有src/main/java下面的java文件编译为class，需要修改pom文件，设置src/main/java下面资源文件不过滤。如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">resources</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">resource</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">filtering</span>&gt;</span>false<span class="tag">&lt;/<span class="name">filtering</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.xml<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.properties<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">resource</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">resources</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <h3 id="配置事务"><a href="#配置事务" class="headerlink" title="配置事务"></a>配置事务</h3><p>因为spring-jdbc中已经包含了事务所需要的jar包，所以不需要额外配置相关依赖<br>修改applicationContext-db.xml添加事务支持<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!--添加数据库是否操作--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"transactionManager"</span></span><br><span class="line">      <span class="attr">class</span>=<span class="string">"org.springframework.jdbc.datasource.DataSourceTransactionManager"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"dataSource"</span> <span class="attr">ref</span>=<span class="string">"dataSource"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--开启事务注解--&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">tx:annotation-driven</span> <span class="attr">transaction-manager</span>=<span class="string">"transactionManager"</span> /&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>启动服务测试事务是否生效。启动服务正常，但是事务不会生效。<br>因为在事务等配置是写在Spring的配置文件中，在配置扫描的时候，Spring和SpringMVC都扫描到Controller和Service导致，所配置的扫描对象会在Controller和Service中个存在一份，用户访问时，先通过SpringMVC的servelt获取的MVC中对象，直到DAO中获取不到实例，从父容器中获取。而事务又是配置Spring容器中，导致事务失效。可以在Controller和Service中都注入ApplicationContext，比较下两边的容器。<br>解决办法：修改MVC容器只能加载Controller，Spring容器加载非Controller<br>spring-servlet.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.feiniu"</span> <span class="attr">use-default-filters</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:include-filter</span> <span class="attr">type</span>=<span class="string">"annotation"</span> <span class="attr">expression</span>=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>applicationContext.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.feiniu"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:exclude-filter</span> <span class="attr">type</span>=<span class="string">"annotation"</span> <span class="attr">expression</span>=<span class="string">"org.springframework.stereotype.Controller"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">context:component-scan</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>修改后测试事务是否生效。</p>
+<ul>
+<li>在使用注解Transactional时，如果不写rollbackFor，默认只回滚RuntimeException、Error，具体源码可以查看RuleBasedTransactionAttribute的父类DefaultTransactionAttribute中rollbackOn</li>
+</ul>
 <h4 id="事务相关"><a href="#事务相关" class="headerlink" title="事务相关"></a>事务相关</h4><p>事务特性：</p>
 <blockquote>
 <ul>
@@ -583,7 +592,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82mfqjf001yeyyk2o8bynfh/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82rkf59005b36ykj6ph884f/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -602,7 +611,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82mfqjf001yeyyk2o8bynfh/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82rkf59005b36ykj6ph884f/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -754,7 +763,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82mfqj9001neyyk2p9h72u7/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82rkf1s002136ykfvy82v39/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -773,7 +782,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82mfqj9001neyyk2p9h72u7/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82rkf1s002136ykfvy82v39/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -926,7 +935,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82mfqiu001ieyyki8iypgfl/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82rkf1n001u36yk7o1uhhzr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -945,7 +954,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82mfqiu001ieyyki8iypgfl/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82rkf1n001u36yk7o1uhhzr/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1089,7 +1098,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82mfqip001ceyykwgsd8174/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82rkf1j001q36yko5jawbon/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1108,7 +1117,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82mfqip001ceyykwgsd8174/" itemprop="url">Java设计模式-原型模式（Prototype Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82rkf1j001q36yko5jawbon/" itemprop="url">Java设计模式-原型模式（Prototype Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1256,7 +1265,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82mfqir001eeyyk1jqbevj1/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82rkf13001m36ykir3s14vt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1275,7 +1284,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82mfqir001eeyyk1jqbevj1/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82rkf13001m36ykir3s14vt/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1417,7 +1426,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82mfqin0018eyykrd0beyeo/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82rkf1l001s36ykea7xwd38/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1436,7 +1445,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82mfqin0018eyykrd0beyeo/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82rkf1l001s36ykea7xwd38/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1579,7 +1588,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82mfqim0016eyyk7r269xov/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82rkf1h001n36ykt379hzgj/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1598,7 +1607,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82mfqim0016eyyk7r269xov/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82rkf1h001n36ykt379hzgj/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1743,7 +1752,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj82mfqit001heyykh5f1hain/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj82rkf10001h36ykfsvb0dfw/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1762,7 +1771,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj82mfqit001heyykh5f1hain/" itemprop="url">Python selenium 初次使用</a></h1>
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj82rkf10001h36ykfsvb0dfw/" itemprop="url">Python selenium 初次使用</a></h1>
         
 
         <div class="post-meta">
@@ -1898,7 +1907,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj82mfqil0014eyyk5nvtbj3p/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj82rkf0y001e36ykf0x6h82p/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1917,7 +1926,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj82mfqil0014eyyk5nvtbj3p/" itemprop="url">创建maven archetypes</a></h1>
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj82rkf0y001e36ykf0x6h82p/" itemprop="url">创建maven archetypes</a></h1>
         
 
         <div class="post-meta">
