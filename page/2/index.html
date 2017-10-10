@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj8lhs94l001ihvyko23zg9cv/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj8llezcc001qqbyk50yzrx0r/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,162 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj8lhs94l001ihvyko23zg9cv/" itemprop="url">创建maven archetypes</a></h1>
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj8llezcc001qqbyk50yzrx0r/" itemprop="url">Python selenium 初次使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T09:18:48+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/selenium/" itemprop="url" rel="index">
+                    <span itemprop="name">selenium</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="使用前准备"><a href="#使用前准备" class="headerlink" title="使用前准备"></a>使用前准备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
+<p>下载PhantomJS，ChromeDriver</p>
+<h3 id="使用selenium"><a href="#使用selenium" class="headerlink" title="使用selenium"></a>使用selenium</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过phantomjs使用，phantomjs是无界面浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_phantom</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 设置代理</span></span><br><span class="line">    service_args = [<span class="string">'--proxy=proxy3.fn.com:8080'</span>, <span class="string">'--proxy-type=http'</span>]</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.PhantomJS(executable_path=<span class="string">"/Users/xuzhuo/SOFT/phantomjs/phantomjs-2.1.1-macosx/bin/phantomjs"</span>,</span><br><span class="line">                                 service_args=service_args)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"phantomjsGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用chrome浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_chrome</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 获取chrome参数配置</span></span><br><span class="line">    chrome_options = webdriver.ChromeOptions()</span><br><span class="line">    <span class="comment"># 使用代理</span></span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-server=proxy3.fn.com:8080"</span>)</span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-type=http"</span>)</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.Chrome(executable_path=<span class="string">"/Users/xuzhuo/SOFT/chromedriver/chromedriver"</span>,</span><br><span class="line">                              chrome_options=chrome_options)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"chromeGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use_phantom()</span><br><span class="line">use_chrome()</span><br></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj8llezbv0012qbyksnginpr6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj8llezbv0012qbyksnginpr6/" itemprop="url">创建maven archetypes</a></h1>
         
 
         <div class="post-meta">
@@ -437,7 +592,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj8lhs94h001chvykax2hbef5/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj8llezcp002cqbykyksgmyba/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -456,7 +611,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj8lhs94h001chvykax2hbef5/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj8llezcp002cqbykyksgmyba/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
         
 
         <div class="post-meta">
@@ -623,7 +778,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj8lhs94j001ehvyk5pqf1umq/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj8llezcn0028qbyknr4zthha/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -642,7 +797,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj8lhs94j001ehvyk5pqf1umq/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
+                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj8llezcn0028qbyknr4zthha/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
         
 
         <div class="post-meta">
@@ -802,7 +957,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj8lhs94e0016hvykroph6u0x/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj8llezcm0027qbykaqcixafv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -821,7 +976,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj8lhs94e0016hvykroph6u0x/" itemprop="url">SpringBoot集成swagger</a></h1>
+                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj8llezcm0027qbykaqcixafv/" itemprop="url">SpringBoot集成swagger</a></h1>
         
 
         <div class="post-meta">
@@ -963,7 +1118,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj8lhs94c0014hvykwd0hsqmm/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj8llezcj0023qbyk8agb83n0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -982,7 +1137,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj8lhs94c0014hvykwd0hsqmm/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj8llezcj0023qbyk8agb83n0/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1129,7 +1284,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj8lhs94f0018hvykqn6g59t4/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj8llezcf001wqbykj4tw3lgt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1148,7 +1303,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj8lhs94f0018hvykqn6g59t4/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj8llezcf001wqbykj4tw3lgt/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1343,7 +1498,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8lhs948000yhvyks4oinxfn/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8llezbu0011qbyk2s9bkyij/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1362,7 +1517,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8lhs948000yhvyks4oinxfn/" itemprop="url">ajax跨域</a></h1>
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8llezbu0011qbyk2s9bkyij/" itemprop="url">ajax跨域</a></h1>
         
 
         <div class="post-meta">
@@ -1493,7 +1648,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8lhs94a0012hvykqtsw51y1/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8llezbx0014qbykmlq6kg5v/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1512,7 +1667,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8lhs94a0012hvykqtsw51y1/" itemprop="url">微信公众号中使用微信支付</a></h1>
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8llezbx0014qbykmlq6kg5v/" itemprop="url">微信公众号中使用微信支付</a></h1>
         
 
         <div class="post-meta">
@@ -1658,7 +1813,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8lhs9490011hvykgz9g3i9t/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8llezbr000xqbykfd9zg3gy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1677,7 +1832,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8lhs9490011hvykgz9g3i9t/" itemprop="url">Elasticsearch初使用</a></h1>
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8llezbr000xqbykfd9zg3gy/" itemprop="url">Elasticsearch初使用</a></h1>
         
 
         <div class="post-meta">
@@ -1820,155 +1975,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8lhs946000xhvykvwi0wv1k/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8lhs946000xhvykvwi0wv1k/" itemprop="url">MYSQL并发修改库存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T18:05:26+08:00">
-                2017-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MYSQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MYSQL</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="MYSQL插入或更新"><a href="#MYSQL插入或更新" class="headerlink" title="MYSQL插入或更新"></a>MYSQL插入或更新</h2><blockquote>
-<p>问题：在数据库操作时，如果需要先判断数据是否存在，做插入或者更新操作。在并发情况下，容易出现异常。</p>
-</blockquote>
-<p>解决办法：使用<code>INSERT INTO TABLE(A, B, C) VALUES(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;) ON DUPLICATE KEY UPDATE B = &#39;b&#39;, C=&#39;c&#39;</code>，此处A为唯一约束，在插入时，如果已经存在数据为a，则做更新操作。</p>
-<h2 id="并发修改数量"><a href="#并发修改数量" class="headerlink" title="并发修改数量"></a>并发修改数量</h2><blockquote>
-<p>在并发扣除库存时，库存数量不能扣到小于0。</p>
-</blockquote>
-<p>使用<code>UPDATE TABLE SET A = A - a WHERE A &gt;= a AND ID = &#39;xx&#39;</code>，通过SQL返回值是否大于0，判断是否操作成功。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2019,7 +2025,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2041,7 +2047,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">51</span>
+                <span class="site-state-item-count">53</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
