@@ -193,6 +193,8 @@ web.xml中阅读源码入口：ContextLoaderListener.contextInitialized
 ### 添加数据库配置
 对于数据库操作，一般采用Mybatis。采用Mybatis方便统一管理所有sql，统一sql写在xml配置中，解除程序与sql耦合。方便维护对象和数据库映射关系，相对原生sql编写较简单，且不会过多影响性能。
 在使用数据的时候，如果频繁创建、释放数据库连接，会产生大量的性能开销，引入数据库连接池，可以让数据库连接得到重用。在启动数据库连接池时，会初始化一部分数据库连接，对于业务而言，直接利用现有可用连接，避免连接初始花费时间。而且入数据库连接池，统一管理数据库连接，避免数据库连接泄露。（采用第三方数据源：druid）
+* [spring-mybatis中文文档](http://www.mybatis.org/spring/zh/index.html)
+
 步骤：
 1. 配置数据库连接
 2. 配置Mybatis
