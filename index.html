@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/cj82rkf1r001y36ykxwvvuna6/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/10/Docker-安装/cj8lhs9500024hvykphsthmmo/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,159 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/cj82rkf1r001y36ykxwvvuna6/" itemprop="url">SSM搭建讲解</a></h1>
+                <a class="post-title-link" href="/2017/10/10/Docker-安装/cj8lhs9500024hvykphsthmmo/" itemprop="url">Docker 安装</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-10T18:24:21+08:00">
+                2017-10-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index">
+                    <span itemprop="name">Docker</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="安装虚拟机"><a href="#安装虚拟机" class="headerlink" title="安装虚拟机"></a>安装虚拟机</h3><p>本机使用vmware fusion安装CentOS7，配置好网络后打开虚拟机。</p>
+<p>因为docker无法被墙，需要使用代理。<br>当前用户代理修改~/.bash_profile添加<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#代理</span></span><br><span class="line">http_proxy=http://proxy.com:8080</span><br><span class="line">https_proxy=http://proxy.com:8080</span><br><span class="line"><span class="built_in">export</span> http_proxy</span><br><span class="line"><span class="built_in">export</span> https_proxy</span><br></pre></td></tr></table></figure></p>
+<p>执行命令：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
+<p>如果需要所有用户代理生效需要修改/etc/profile</p>
+<h3 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h3><p><a href="https://docs.docker.com/engine/installation/linux/docker-ce/centos/" target="_blank" rel="external">CentOS Docker官方安装文档</a></p>
+<p>每次操作docker都需要sudo过于麻烦，把当前用户添加到docker组</p>
+<blockquote>
+<p>1.创建docker组（可能提示已经存在docker组）：sudo groupadd docker<br>2.当前用户加入docker组：sudo gpasswd -a ${USER} docker<br>3.重启docker服务：sudo systemctl restart docker<br>4.刷新docker成员：newgrp - docker</p>
+</blockquote>
+<p>之后操作docker就不要添加sudo了。</p>
+<h3 id="配置Docker国内加速"><a href="#配置Docker国内加速" class="headerlink" title="配置Docker国内加速"></a>配置Docker国内加速</h3><p>使用阿里云加速Docker<br>打开<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="external">Docker Hub镜像站点</a>获取个人加速地址。<br>通过修改daemon配置文件/etc/docker/daemon.json来使用加速器：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://w5g1eln1.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/cj8lhs9510025hvykxvyg1e5y/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/cj8lhs9510025hvykxvyg1e5y/" itemprop="url">SSM搭建讲解</a></h1>
         
 
         <div class="post-meta">
@@ -449,7 +601,11 @@
 </ul>
 </blockquote>
 <h4 id="Spring相关"><a href="#Spring相关" class="headerlink" title="Spring相关"></a>Spring相关</h4><p>在Spring容器概念，基本概念可以理解为Spring有一个工厂类用于创建和销毁bean，同时有个Map管理所有bean。延伸出了bean的生命周期、属性管理等其他相关操作。<br>源码阅读入口：<br>web.xml中阅读源码入口：ContextLoaderListener.contextInitialized<br>所有Spring不同容器的最终加载启动入口：AbstractApplicationContext.refresh</p>
-<h3 id="添加数据库配置"><a href="#添加数据库配置" class="headerlink" title="添加数据库配置"></a>添加数据库配置</h3><p>对于数据库操作，一般采用Mybatis。采用Mybatis方便统一管理所有sql，统一sql写在xml配置中，解除程序与sql耦合。方便维护对象和数据库映射关系，相对原生sql编写较简单，且不会过多影响性能。<br>在使用数据的时候，如果频繁创建、释放数据库连接，会产生大量的性能开销，引入数据库连接池，可以让数据库连接得到重用。在启动数据库连接池时，会初始化一部分数据库连接，对于业务而言，直接利用现有可用连接，避免连接初始花费时间。而且入数据库连接池，统一管理数据库连接，避免数据库连接泄露。（采用第三方数据源：druid）<br>步骤：</p>
+<h3 id="添加数据库配置"><a href="#添加数据库配置" class="headerlink" title="添加数据库配置"></a>添加数据库配置</h3><p>对于数据库操作，一般采用Mybatis。采用Mybatis方便统一管理所有sql，统一sql写在xml配置中，解除程序与sql耦合。方便维护对象和数据库映射关系，相对原生sql编写较简单，且不会过多影响性能。<br>在使用数据的时候，如果频繁创建、释放数据库连接，会产生大量的性能开销，引入数据库连接池，可以让数据库连接得到重用。在启动数据库连接池时，会初始化一部分数据库连接，对于业务而言，直接利用现有可用连接，避免连接初始花费时间。而且入数据库连接池，统一管理数据库连接，避免数据库连接泄露。（采用第三方数据源：druid）</p>
+<ul>
+<li><a href="http://www.mybatis.org/spring/zh/index.html" target="_blank" rel="external">spring-mybatis中文文档</a></li>
+</ul>
+<p>步骤：</p>
 <ol>
 <li>配置数据库连接</li>
 <li>配置Mybatis</li>
@@ -592,7 +748,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82rkf59005b36ykj6ph884f/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj8lhs94x0020hvyko2w26utd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -611,7 +767,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj82rkf59005b36ykj6ph884f/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj8lhs94x0020hvyko2w26utd/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -763,7 +919,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82rkf1s002136ykfvy82v39/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj8lhs94u001zhvykqjrvr2qt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -782,7 +938,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj82rkf1s002136ykfvy82v39/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj8lhs94u001zhvykqjrvr2qt/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -935,7 +1091,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82rkf1n001u36yk7o1uhhzr/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj8lhs94r001uhvyk7sz1vgxz/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -954,7 +1110,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj82rkf1n001u36yk7o1uhhzr/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj8lhs94r001uhvyk7sz1vgxz/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1098,7 +1254,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82rkf1j001q36yko5jawbon/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj8lhs94s001whvykhsc6dzsu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1117,7 +1273,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj82rkf1j001q36yko5jawbon/" itemprop="url">Java设计模式-原型模式（Prototype Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/14/Java设计模式-原型模式（Prototype-Pattern）/cj8lhs94s001whvykhsc6dzsu/" itemprop="url">Java设计模式-原型模式（Prototype Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1265,7 +1421,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82rkf13001m36ykir3s14vt/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj8lhs94o001ohvykex7umhdm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1284,7 +1440,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj82rkf13001m36ykir3s14vt/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-单例模式（Singleton-Pattern）/cj8lhs94o001ohvykex7umhdm/" itemprop="url">Java设计模式-单例模式（Singleton Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1426,7 +1582,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82rkf1l001s36ykea7xwd38/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj8lhs94n001mhvykb551m1z8/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1445,7 +1601,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj82rkf1l001s36ykea7xwd38/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj8lhs94n001mhvykb551m1z8/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1588,7 +1744,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82rkf1h001n36ykt379hzgj/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8lhs94p001shvykganttyi7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1607,7 +1763,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj82rkf1h001n36ykt379hzgj/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8lhs94p001shvykganttyi7/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1752,7 +1908,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj82rkf10001h36ykfsvb0dfw/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj8lhs94m001jhvykm6yf31fl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1771,7 +1927,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj82rkf10001h36ykfsvb0dfw/" itemprop="url">Python selenium 初次使用</a></h1>
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj8lhs94m001jhvykm6yf31fl/" itemprop="url">Python selenium 初次使用</a></h1>
         
 
         <div class="post-meta">
@@ -1894,161 +2050,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj82rkf0y001e36ykf0x6h82p/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj82rkf0y001e36ykf0x6h82p/" itemprop="url">创建maven archetypes</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-08T09:48:25+08:00">
-                2017-09-08
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/maven/" itemprop="url" rel="index">
-                    <span itemprop="name">maven</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="建立maven-archetypes，后期快速搭建项目"><a href="#建立maven-archetypes，后期快速搭建项目" class="headerlink" title="建立maven archetypes，后期快速搭建项目"></a>建立maven archetypes，后期快速搭建项目</h2><h4 id="创建一个空的maven项目"><a href="#创建一个空的maven项目" class="headerlink" title="创建一个空的maven项目"></a>创建一个空的maven项目</h4><p>修改当前maven项目pom.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.whh.maven.archetypes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quick-ssm-webapp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>quick-ssm-webapp Maven Webapp<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>quick-ssm-webapp<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">pluginManagement</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-archetype-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">pluginManagement</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<h4 id="配置相关文件"><a href="#配置相关文件" class="headerlink" title="配置相关文件"></a>配置相关文件</h4><p>目录结构如下<br><img src="http://otxnth5wx.bkt.clouddn.com/20170908%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-08%E4%B8%8A%E5%8D%8810.13.35.png" alt=""><br>目录<strong>archetype-resources</strong>下配置需要生成的项目，在使用maven生成项目时，目录结构和archetype-resources下目录一致。<br>目录<strong>META-INF/maven</strong>下<em>archetype-metadata.xml</em>设置生成规则<br>如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">archetype-descriptor</span> <span class="attr">name</span>=<span class="string">"sample"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">fileSets</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- package为true表示通过groupId自动生成包 --&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- 如下配置表示archetype-resources下文件有效文件 --&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span> <span class="attr">packaged</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/resources<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/webapp<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.**<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/main/webapp/static<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.**<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span> <span class="attr">packaged</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/test/java<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">fileSet</span> <span class="attr">filtered</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">directory</span>&gt;</span>src/test/resources<span class="tag">&lt;/<span class="name">directory</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">includes</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">include</span>&gt;</span>**/*.*<span class="tag">&lt;/<span class="name">include</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">includes</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">fileSet</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">fileSets</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">archetype-descriptor</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>注意事项：<blockquote>
-<p>在archetype-resources文件夹java代码中，package和import不要直写当前路径，可以使用${package}，在生成项目后，会自动替换，以免代码生成项目后，路径出错。<br>在pom.xml 或者其他配置文件，或其他java代码中有路径的，比如说spring扫描路径，可以配置为${groupId}，在创建项目时填写的groupId会被替换。同理还有${groupId}，其他相关配置可参考maven官方文档。</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h4><ol>
-<li>使用命令 <em>mvn install</em> 把当前项目打包到本地maven仓库中，如果都要上传到服务器，可以配置好服务器路径，账号密码，使用 <em>mvn deploy</em> 上传文件。</li>
-<li>创建maven项目,如图<img src="http://otxnth5wx.bkt.clouddn.com/20170908QQ20170908-102803.png" alt="">，配置archetype相关参数。后续步骤和普通创建maven项目一致。</li>
-<li>导入创建的maven项目，配置数据库，启动项目即可。</li>
-</ol>
-<p>该项目地址 <strong> <a href="https://github.com/whhxz/quick-ssm-webapp" target="_blank" rel="external">quick-ssm-webapp</a> </strong></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2099,7 +2100,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">25</span>
+                <span class="site-state-item-count">26</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2110,7 +2111,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-count">19</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -2121,7 +2122,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">50</span>
+                <span class="site-state-item-count">51</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
