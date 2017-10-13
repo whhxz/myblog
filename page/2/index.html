@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8o4eifp001mtmykg211kzfs/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj8oc8imu001exeyknr44hnqw/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,169 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8o4eifp001mtmykg211kzfs/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-抽象工厂模式（Abstract-Factory-Pattern）/cj8oc8imu001exeyknr44hnqw/" itemprop="url">Java设计模式-抽象工厂模式（Abstract Factory Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-13T10:48:25+08:00">
+                2017-09-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="抽象工厂概念"><a href="#抽象工厂概念" class="headerlink" title="抽象工厂概念"></a>抽象工厂概念</h3><blockquote>
+<p>抽象工厂相对工厂方法，可以创建一个产品族，而不是单一的产品。也就是在工厂方法上添加了创建其他产品方法。</p>
+</blockquote>
+<p>如图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%882.17.10.png" alt=""></p>
+<ul>
+<li>SeasonFactory：季节工厂</li>
+<li>SpringFactory：春天工厂</li>
+<li>SummerFactory：夏天工厂</li>
+<li>Clothes：衣服</li>
+<li>Coat:上衣</li>
+<li>Trousers：裤子<br>Java代码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Coat</span> <span class="keyword">extends</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Trousers</span> <span class="keyword">extends</span> <span class="title">Clothes</span></span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringCoat</span> <span class="keyword">implements</span> <span class="title">Coat</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"春天的上衣"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerCoat</span> <span class="keyword">implements</span> <span class="title">Coat</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"夏天的上衣"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringTrousers</span> <span class="keyword">implements</span> <span class="title">Trousers</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"春天的裤子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerTrousers</span> <span class="keyword">implements</span> <span class="title">Trousers</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">coth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"夏天的裤子"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line">    <span class="function">Clothes <span class="title">createCoat</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function">Clothes <span class="title">createTrousers</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SpringFactory</span> <span class="keyword">implements</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createCoat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes coat = <span class="keyword">new</span> SpringCoat();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + coat.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> coat;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createTrousers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes trousers = <span class="keyword">new</span> SpringTrousers();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + trousers.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> trousers;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SummerFactory</span> <span class="keyword">implements</span> <span class="title">SeaconFactory</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createCoat</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes clothes = <span class="keyword">new</span> SummerCoat();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + clothes.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> clothes;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Clothes <span class="title">createTrousers</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        Clothes clothes = <span class="keyword">new</span> SummerTrousers();</span><br><span class="line">        System.out.println(<span class="string">"创建："</span> + clothes.getClass().getSimpleName());</span><br><span class="line">        <span class="comment">//do some thing</span></span><br><span class="line">        <span class="keyword">return</span> clothes;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>在范例中，如果要创建夏天的一套衣服，直接使用SummerFactory创建上衣和裤子就可以，这样的话身上一套就是夏天的装扮，避免因为出现混搭而出现问题。在实际生活中，电脑主板和CPU的针脚是需要对应，可以使用该抽象方法，避免组别和CUP针脚对不上。</p>
+<h3 id="抽象工厂模式优点"><a href="#抽象工厂模式优点" class="headerlink" title="抽象工厂模式优点"></a>抽象工厂模式优点</h3><ol>
+<li>一个工厂车间一系列相关相互依赖的对象，避免出现混合。</li>
+<li>新增产品族时，无需修改系统，比如冬天的衣服。符合“开闭原则”。</li>
+</ol>
+<h3 id="抽象工厂模式缺点"><a href="#抽象工厂模式缺点" class="headerlink" title="抽象工厂模式缺点"></a>抽象工厂模式缺点</h3><ol>
+<li>新增产品的时候比较麻烦，比如新增鞋子。<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3>抽象工厂是在工厂方法模式上的增强，一个工厂类可以创建多个产品。</li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8oc8imr001cxeykzkzlyvka/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/13/Java设计模式-工厂方法模式（Factory-Method-Pattern）/cj8oc8imr001cxeykzkzlyvka/" itemprop="url">Java设计模式-工厂方法模式（Factory Method Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -446,7 +608,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj8o4eifm001htmyk2j43gt8r/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/12/Python-selenium-初次使用/cj8oc8imn0016xeyka53u91pb/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -465,7 +627,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj8o4eifm001htmyk2j43gt8r/" itemprop="url">Python selenium 初次使用</a></h1>
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/cj8oc8imn0016xeyka53u91pb/" itemprop="url">Python selenium 初次使用</a></h1>
         
 
         <div class="post-meta">
@@ -601,7 +763,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj8o4eifn001itmykxys7dgrr/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/08/创建maven-archetypes/cj8oc8imm0014xeyk4f3niizn/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -620,7 +782,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj8o4eifn001itmykxys7dgrr/" itemprop="url">创建maven archetypes</a></h1>
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/cj8oc8imm0014xeyk4f3niizn/" itemprop="url">创建maven archetypes</a></h1>
         
 
         <div class="post-meta">
@@ -756,7 +918,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj8o4eif5001ctmykshtvkx5t/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/31/Java设计模式之面向对象设计原则/cj8oc8inc0026xeyk6gj4ttx9/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -775,7 +937,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj8o4eif5001ctmykshtvkx5t/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
+                <a class="post-title-link" href="/2017/08/31/Java设计模式之面向对象设计原则/cj8oc8inc0026xeyk6gj4ttx9/" itemprop="url">Java设计模式之面向对象设计原则</a></h1>
         
 
         <div class="post-meta">
@@ -942,7 +1104,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj8o4eifk001etmykmlsysl0v/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/cj8oc8in90020xeyk9oohxjop/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -961,7 +1123,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj8o4eifk001etmykmlsysl0v/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
+                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/cj8oc8in90020xeyk9oohxjop/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
         
 
         <div class="post-meta">
@@ -1121,7 +1283,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj8o4eif30018tmykji293lin/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/cj8oc8in6001yxeykx1auowwi/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1140,7 +1302,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj8o4eif30018tmykji293lin/" itemprop="url">SpringBoot集成swagger</a></h1>
+                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/cj8oc8in6001yxeykx1auowwi/" itemprop="url">SpringBoot集成swagger</a></h1>
         
 
         <div class="post-meta">
@@ -1282,7 +1444,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj8o4eif20016tmykajf3kxbv/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/cj8oc8in4001uxeykspb7i6fs/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1301,7 +1463,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj8o4eif20016tmykajf3kxbv/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（二）：安装使用Storm/cj8oc8in4001uxeykspb7i6fs/" itemprop="url">Storm学习（二）：安装使用Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1448,7 +1610,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj8o4eif00014tmyk6f1jgbxe/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj8oc8in2001qxeykw52e1wyc/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1467,7 +1629,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj8o4eif00014tmyk6f1jgbxe/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj8oc8in2001qxeykw52e1wyc/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
         
 
         <div class="post-meta">
@@ -1662,7 +1824,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8o4eiev000xtmykh3uoxlsp/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8oc8imk0012xeykldy6dmhz/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1681,7 +1843,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8o4eiev000xtmykh3uoxlsp/" itemprop="url">ajax跨域</a></h1>
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8oc8imk0012xeykldy6dmhz/" itemprop="url">ajax跨域</a></h1>
         
 
         <div class="post-meta">
@@ -1799,171 +1961,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8o4eiez0012tmyknjlpsvtb/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8o4eiez0012tmyknjlpsvtb/" itemprop="url">微信公众号中使用微信支付</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T10:42:45+08:00">
-                2017-07-31
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/支付/" itemprop="url" rel="index">
-                    <span itemprop="name">支付</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：</p>
-<ul>
-<li>已经备案域名</li>
-<li>微信公众号开发id（appid）</li>
-<li>微信公众号开发密钥（secret）</li>
-<li>微信商户号（mch_id）</li>
-<li>微信商户支付密钥（apy.key）</li>
-</ul>
-<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="external">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="external">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="external">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="external">http://www.xxx.com/recharge/</a></strong></p>
-<h4 id="1-2-配置授权域名"><a href="#1-2-配置授权域名" class="headerlink" title="1.2 配置授权域名"></a>1.2 配置授权域名</h4><p>在设置 -&gt; 公众号设置 -&gt; 功能设置中，配置js接口安全域名，网页授权域名，配置这里域名时，需要下载一个txt文件到域名所在服务器根目录下。详细请参考页面详细提示。</p>
-<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="external">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
-<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
-<blockquote>
-<p>注：有个商户订单号out_trade_no，在调用统一下单接口时，微信接口成功，但后续用户支付失败，或者用户取消未支付，单用户重新进入该订单支付时，使用同一订单号调用统一接口会失败。解决办法可以为在用户订单号后，加随机数，保存数据库，后调用统一下单接口，待支付成功后还原。或者在数据库添加一个新字段。</p>
-</blockquote>
-<h4 id="2-3-H5页面通过js调用微信支付"><a href="#2-3-H5页面通过js调用微信支付" class="headerlink" title="2.3 H5页面通过js调用微信支付"></a>2.3 H5页面通过js调用微信支付</h4><p>在调用微信统一下单接口成功后，通过微信浏览器中，内置WeixinJSBridge对象调用微信支付。<a href="WeixinJSBridge">参考H5调用支付</a>。这时调用支付需要参数使用之前调用统一下单接口返回的参数。</p>
-<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">API接口</a></p>
-<h3 id="3-本地调试"><a href="#3-本地调试" class="headerlink" title="3. 本地调试"></a>3. 本地调试</h3><p>因为微信支付需要指定域名，在本地调试十分不便。个人开发使用到的工具有：</p>
-<ul>
-<li>微信开发工具，用于调试微信公众号h5页面</li>
-<li>修改本地host为配置的支付域名为本地IP</li>
-<li>因为微信支付不支持端口，开启nginx配置80端口转发开发环境端口</li>
-<li>H5页面js调用，使用手机与电脑在同一局域网，PC端开启fiddler，配置手机代理为PC。调用支付直接转跳到PC调试</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2014,7 +2011,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2036,7 +2033,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">55</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

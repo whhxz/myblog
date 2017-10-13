@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8o4eiew000ytmykmi56xkou/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8oc8imj0011xeyk6bpt1r8j/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,172 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8o4eiew000ytmykmi56xkou/" itemprop="url">Elasticsearch初使用</a></h1>
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8oc8imj0011xeyk6bpt1r8j/" itemprop="url">微信公众号中使用微信支付</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T10:42:45+08:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/支付/" itemprop="url" rel="index">
+                    <span itemprop="name">支付</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：</p>
+<ul>
+<li>已经备案域名</li>
+<li>微信公众号开发id（appid）</li>
+<li>微信公众号开发密钥（secret）</li>
+<li>微信商户号（mch_id）</li>
+<li>微信商户支付密钥（apy.key）</li>
+</ul>
+<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="external">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="external">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="external">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="external">http://www.xxx.com/recharge/</a></strong></p>
+<h4 id="1-2-配置授权域名"><a href="#1-2-配置授权域名" class="headerlink" title="1.2 配置授权域名"></a>1.2 配置授权域名</h4><p>在设置 -&gt; 公众号设置 -&gt; 功能设置中，配置js接口安全域名，网页授权域名，配置这里域名时，需要下载一个txt文件到域名所在服务器根目录下。详细请参考页面详细提示。</p>
+<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="external">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
+<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
+<blockquote>
+<p>注：有个商户订单号out_trade_no，在调用统一下单接口时，微信接口成功，但后续用户支付失败，或者用户取消未支付，单用户重新进入该订单支付时，使用同一订单号调用统一接口会失败。解决办法可以为在用户订单号后，加随机数，保存数据库，后调用统一下单接口，待支付成功后还原。或者在数据库添加一个新字段。</p>
+</blockquote>
+<h4 id="2-3-H5页面通过js调用微信支付"><a href="#2-3-H5页面通过js调用微信支付" class="headerlink" title="2.3 H5页面通过js调用微信支付"></a>2.3 H5页面通过js调用微信支付</h4><p>在调用微信统一下单接口成功后，通过微信浏览器中，内置WeixinJSBridge对象调用微信支付。<a href="WeixinJSBridge">参考H5调用支付</a>。这时调用支付需要参数使用之前调用统一下单接口返回的参数。</p>
+<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">API接口</a></p>
+<h3 id="3-本地调试"><a href="#3-本地调试" class="headerlink" title="3. 本地调试"></a>3. 本地调试</h3><p>因为微信支付需要指定域名，在本地调试十分不便。个人开发使用到的工具有：</p>
+<ul>
+<li>微信开发工具，用于调试微信公众号h5页面</li>
+<li>修改本地host为配置的支付域名为本地IP</li>
+<li>因为微信支付不支持端口，开启nginx配置80端口转发开发环境端口</li>
+<li>H5页面js调用，使用手机与电脑在同一局域网，PC端开启fiddler，配置手机代理为PC。调用支付直接转跳到PC调试</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8oc8imh000yxeykbveivx1v/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8oc8imh000yxeykbveivx1v/" itemprop="url">Elasticsearch初使用</a></h1>
         
 
         <div class="post-meta">
@@ -457,7 +622,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8o4eiey0011tmyke3pn7fy3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8oc8imf000xxeykkzmfaigr/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -476,7 +641,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8o4eiey0011tmyke3pn7fy3/" itemprop="url">MYSQL并发修改库存</a></h1>
+                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8oc8imf000xxeykkzmfaigr/" itemprop="url">MYSQL并发修改库存</a></h1>
         
 
         <div class="post-meta">
@@ -606,7 +771,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8o4ehkz0006tmykc0lmeq0d/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8oc8hu50001xeyknvruy9zv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -625,7 +790,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8o4ehkz0006tmykc0lmeq0d/" itemprop="url">docker环境部署</a></h1>
+                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8oc8hu50001xeyknvruy9zv/" itemprop="url">docker环境部署</a></h1>
         
 
         <div class="post-meta">
@@ -752,7 +917,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8o4ehl5000ctmykwmjubuwf/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8oc8huk000bxeyk9ss8yc5a/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -771,7 +936,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8o4ehl5000ctmykwmjubuwf/" itemprop="url">定时消息推送</a></h1>
+                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8oc8huk000bxeyk9ss8yc5a/" itemprop="url">定时消息推送</a></h1>
         
 
         <div class="post-meta">
@@ -913,7 +1078,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8o4ehl30009tmykln1za2n3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8oc8hui0008xeykyqeqsk3r/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -932,7 +1097,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8o4ehl30009tmykln1za2n3/" itemprop="url">SpringMVC RESTful风格</a></h1>
+                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8oc8hui0008xeykyqeqsk3r/" itemprop="url">SpringMVC RESTful风格</a></h1>
         
 
         <div class="post-meta">
@@ -1057,7 +1222,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8o4ehko0001tmykzx5rmx1d/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8oc8huh0006xeykbr2dkl5f/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1076,7 +1241,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/04/02/Git命令/cj8o4ehko0001tmykzx5rmx1d/" itemprop="url">Git命令</a></h1>
+                <a class="post-title-link" href="/2015/04/02/Git命令/cj8oc8huh0006xeykbr2dkl5f/" itemprop="url">Git命令</a></h1>
         
 
         <div class="post-meta">
@@ -1255,7 +1420,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8o4ehl10007tmykh3eupyxi/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8oc8huf0005xeykhm2723cg/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1274,7 +1439,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8o4ehl10007tmykh3eupyxi/" itemprop="url">jetty9遇到问题</a></h1>
+                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8oc8huf0005xeykhm2723cg/" itemprop="url">jetty9遇到问题</a></h1>
         
 
         <div class="post-meta">
@@ -1403,7 +1568,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj8o4ehku0003tmyk74tuyblv/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj8oc8hu90002xeykf2swn7xj/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1422,7 +1587,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj8o4ehku0003tmyk74tuyblv/" itemprop="url">hexo部署静态文件位置修改</a></h1>
+                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj8oc8hu90002xeykf2swn7xj/" itemprop="url">hexo部署静态文件位置修改</a></h1>
         
 
         <div class="post-meta">
@@ -1563,7 +1728,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">28</span>
+                <span class="site-state-item-count">29</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1585,7 +1750,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">53</span>
+                <span class="site-state-item-count">55</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
