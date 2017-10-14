@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8oc8imj0011xeyk6bpt1r8j/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8rf80q10011w3yknjlmurll/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,157 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8oc8imj0011xeyk6bpt1r8j/" itemprop="url">微信公众号中使用微信支付</a></h1>
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8rf80q10011w3yknjlmurll/" itemprop="url">ajax跨域</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-31T15:35:32+08:00">
+                2017-07-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/js/" itemprop="url" rel="index">
+                    <span itemprop="name">js</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>在业务需求中，有时候需要使用js跨域请求。解决办法有使用jsonp和CORS。</p>
+<ul>
+<li>jsonp利用的是在页面访问资源文件时，访问非当前域名下其他域名资源。如<code>&lt;img&gt;</code>、<code>&lt;script&gt;</code>、<code>&lt;form&gt;</code>等标签。可以利用这一特性跨域。</li>
+</ul>
+<p>前端请求：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var scriptJsonP = document.createElement(&quot;script&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;type&quot;, &quot;text/javascript&quot;);</span><br><span class="line">scriptJsonP.setAttribute(&quot;src&quot;, &quot;http://a.com/corssOrigin/jsonp&quot;);</span><br><span class="line">document.getElementsByTagName(&quot;body&quot;)[0].appendChild(scriptJsonP);</span><br><span class="line"></span><br><span class="line">function jsonp(data)&#123;</span><br><span class="line">  alert(data)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>后台服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(&quot;corssOrigin&quot;)</span><br><span class="line">public class CrossOriginController &#123;</span><br><span class="line">    @RequestMapping(&quot;jsonp&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String jsonp(HttpServletRequest request)&#123;</span><br><span class="line">        return &quot;jsonp(&#123;test:&apos;test&apos;&#125;)&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>调用成功后会调用jsonp方法。完成一次跨域请求。</p>
+<p>使用jquery：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">           type: &quot;get&quot;,</span><br><span class="line">           async: false,</span><br><span class="line">           url: &quot;http://a.com/corssOrigin/jsonp&quot;,</span><br><span class="line">           dataType: &quot;jsonp&quot;,</span><br><span class="line">           jsonp: &quot;callback&quot;,//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)</span><br><span class="line">           jsonpCallback:&quot;jsonp&quot;,//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写&quot;?&quot;，jQuery会自动为你处理数据</span><br><span class="line">           success: function(json)&#123;</span><br><span class="line">             alert(json);</span><br><span class="line">           &#125;,</span><br><span class="line">           error: function()&#123;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p>使用除了使用jsonp跨域，还有一种CORS，可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8rf80q20012w3yk5ejpjtyc/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8rf80q20012w3yk5ejpjtyc/" itemprop="url">微信公众号中使用微信支付</a></h1>
         
 
         <div class="post-meta">
@@ -447,7 +597,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8oc8imh000yxeykbveivx1v/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8rf80py000xw3ykvhr1qfph/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -466,7 +616,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8oc8imh000yxeykbveivx1v/" itemprop="url">Elasticsearch初使用</a></h1>
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8rf80py000xw3ykvhr1qfph/" itemprop="url">Elasticsearch初使用</a></h1>
         
 
         <div class="post-meta">
@@ -622,7 +772,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8oc8imf000xxeykkzmfaigr/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8rf80pz000yw3yk72r88upd/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -641,7 +791,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8oc8imf000xxeykkzmfaigr/" itemprop="url">MYSQL并发修改库存</a></h1>
+                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8rf80pz000yw3yk72r88upd/" itemprop="url">MYSQL并发修改库存</a></h1>
         
 
         <div class="post-meta">
@@ -771,7 +921,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8oc8hu50001xeyknvruy9zv/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8rf7zv20001w3ykbvfzhezu/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -790,7 +940,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8oc8hu50001xeyknvruy9zv/" itemprop="url">docker环境部署</a></h1>
+                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8rf7zv20001w3ykbvfzhezu/" itemprop="url">docker环境部署</a></h1>
         
 
         <div class="post-meta">
@@ -917,7 +1067,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8oc8huk000bxeyk9ss8yc5a/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8rf7zvj000cw3ykp54easlx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -936,7 +1086,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8oc8huk000bxeyk9ss8yc5a/" itemprop="url">定时消息推送</a></h1>
+                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8rf7zvj000cw3ykp54easlx/" itemprop="url">定时消息推送</a></h1>
         
 
         <div class="post-meta">
@@ -1078,7 +1228,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8oc8hui0008xeykyqeqsk3r/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8rf7zvh0009w3ykm7d8s2ea/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1097,7 +1247,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8oc8hui0008xeykyqeqsk3r/" itemprop="url">SpringMVC RESTful风格</a></h1>
+                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8rf7zvh0009w3ykm7d8s2ea/" itemprop="url">SpringMVC RESTful风格</a></h1>
         
 
         <div class="post-meta">
@@ -1222,7 +1372,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8oc8huh0006xeykbr2dkl5f/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8rf7zv90003w3yk7fl9rhkl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1241,7 +1391,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/04/02/Git命令/cj8oc8huh0006xeykbr2dkl5f/" itemprop="url">Git命令</a></h1>
+                <a class="post-title-link" href="/2015/04/02/Git命令/cj8rf7zv90003w3yk7fl9rhkl/" itemprop="url">Git命令</a></h1>
         
 
         <div class="post-meta">
@@ -1420,7 +1570,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8oc8huf0005xeykhm2723cg/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8rf7zvf0007w3ykavk1d4wl/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1439,7 +1589,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8oc8huf0005xeykhm2723cg/" itemprop="url">jetty9遇到问题</a></h1>
+                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8rf7zvf0007w3ykavk1d4wl/" itemprop="url">jetty9遇到问题</a></h1>
         
 
         <div class="post-meta">
@@ -1568,7 +1718,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj8oc8hu90002xeykf2swn7xj/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj8rf7zve0006w3yk0edz8zuv/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1587,7 +1737,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj8oc8hu90002xeykf2swn7xj/" itemprop="url">hexo部署静态文件位置修改</a></h1>
+                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj8rf7zve0006w3yk0edz8zuv/" itemprop="url">hexo部署静态文件位置修改</a></h1>
         
 
         <div class="post-meta">
@@ -1728,7 +1878,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">29</span>
+                <span class="site-state-item-count">30</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1750,7 +1900,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">55</span>
+                <span class="site-state-item-count">57</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
