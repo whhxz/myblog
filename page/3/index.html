@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8rf80q10011w3yknjlmurll/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（一）：认识Storm/cj8vdo29p000xoaykbm80dnvt/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,221 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8rf80q10011w3yknjlmurll/" itemprop="url">ajax跨域</a></h1>
+                <a class="post-title-link" href="/2017/08/01/Storm学习（一）：认识Storm/cj8vdo29p000xoaykbm80dnvt/" itemprop="url">Storm学习（一）：认识Storm</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-01T08:58:28+08:00">
+                2017-08-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
+                    <span itemprop="name">Storm学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="实时流计算"><a href="#实时流计算" class="headerlink" title="实时流计算"></a>实时流计算</h3><p>传统DBMS不是为快速连续地存放单独的数据单元而设计，而且也不支持<em>持续处理</em>，而<em>持续处理</em>是数据流应用的典型特征。一些方案采用MapReduce来处理实时数据流。但是尽管MapReduce做了实时性改进，也很难稳定地满足应用需求。这是因为<strong>Hadoop MapReduce框架为批处理做了高度优化，典型的是通过调度批量任务来操作静态数据，任务不是常驻服务，数据也不是实时流入。</strong></p>
+<h4 id="实时计算流程"><a href="#实时计算流程" class="headerlink" title="实时计算流程"></a>实时计算流程</h4><p>1、数据采集<br>功能上保证可以完整的收集到所有日志数据，为实时应用提供实时数据；响应时间上要保证实时性、低延迟；配置简单，部署容易；系统稳定可靠等。<br>目前采集数据工具有：</p>
+<ul>
+<li>Facebook开源的Scribe</li>
+<li>LinkedIn开源的Kafka</li>
+<li>Cloudera开源的Flume</li>
+<li>淘宝开源的TimeTunnel</li>
+<li>Hadoop的Chukwa等</li>
+</ul>
+<p>2、数据实时计算<br>适应流式数据、不间断查询；系统稳定可靠、可扩展性好、可维护性好。需要关注的注意点：<strong> 分布式计算、并行计算、热点数据缓存策略、服务端计算。</strong></p>
+<p>3、实时数据查询</p>
+<ul>
+<li>全内存：直接提供数据读取、定期转存到磁盘或者数据库中进行持久化；</li>
+<li>半内存：使用Redis、Memcache、MongoDB、等内存数据库提供数据库实时查询范围，由这些系统进行持久化操作；</li>
+<li>全磁盘：使用HBase等分布式文件系统（HDFS）为基础的NoSQL数据库，对于KeyValue内存引擎，关键是设计好Key。</li>
+</ul>
+<h3 id="实时计算框架"><a href="#实时计算框架" class="headerlink" title="实时计算框架"></a>实时计算框架</h3><ul>
+<li>IBM的StreamBase</li>
+<li>Yahoo的S4<blockquote>
+<p> 设计特点：</p>
+<ul>
+<li>Actor计算模型</li>
+<li>对等集群架构</li>
+<li>课插拔体系架构</li>
+<li>支持部分容错</li>
+</ul>
+</blockquote>
+</li>
+<li>Twitter的Storm<blockquote>
+<p> 主要特点：</p>
+<ul>
+<li>简单模型；</li>
+<li>可以使用各种编程语言.默认支持Clojure、Java、Ruby和Python。要增加其他支持，只需要实现一个简单的Storm通信协议；</li>
+<li>容错性、水平扩展、可靠消息处理、快速、本地模式。</li>
+</ul>
+</blockquote>
+</li>
+<li>Twitter的Rainbird</li>
+<li>Facebook的Puma</li>
+<li>阿里的JStorm</li>
+<li>其他的如：HStreaming、Esper、Borealis</li>
+</ul>
+<h3 id="Storm设计"><a href="#Storm设计" class="headerlink" title="Storm设计"></a>Storm设计</h3><p>在Storm中流是有Spout作为源头源源不断产生Tuple，Tuple流向Bolt处理。Spout产生Tuple流向Bolt整体称之为Topology。提交Topology到Storm集群执行，Topology就是一个流转换图。</p>
+<h3 id="Storm核心组件"><a href="#Storm核心组件" class="headerlink" title="Storm核心组件"></a>Storm核心组件</h3><ul>
+<li>主节点Nimbus<blockquote>
+<p>主节点通常运行一个后台查询—Numbus，用于响应发布在集群中的节点，分配任务和监测故障，这类似于Hadoop中的JobTracker。Nimbus进程是快速失败和无状态的，所有的状态要么在ZooKeeper中，要么在本地磁盘上。</p>
+</blockquote>
+</li>
+<li>工作节点Supervisor<blockquote>
+<p>工作节点同样会运行一个后台程序—Supervisor，用于收听工作指派并基于要求运行工作进程。每个工作节点都是Topology中一个子集的实现。Nimbus和Supervisor之间协调通过ZooKeeper,Supervisor同Nimbus是无状态的，</p>
+</blockquote>
+</li>
+<li>协调服务组件ZooKeeper</li>
+<li>其他核心组件<blockquote>
+<ul>
+<li>具体处理事务进程Worker：运行具体处理组件逻辑的进程；</li>
+<li>具体处理现场Task：Worker中每一个Spout/Bolt线程称为一个Task。在Storm 0.8之后，Task不再与物理线程对应，同一个Spoot/Bolt的Task可能会共享一个物理线程，该线程称为Executor</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<h3 id="Storm特性"><a href="#Storm特性" class="headerlink" title="Storm特性"></a>Storm特性</h3><ul>
+<li>编程模型简单</li>
+<li>可扩展</li>
+<li>高可靠性<blockquote>
+<p>在Spout发出消息后，可能会触发成千上万条消息，Storm会保证所有消息被处理完成，才认为该Spout消息被完全处理。如果在限定时间内没有完全处理，那么Spout发出的消息就会重发。为了减少内存消耗，Storm不会跟踪所有消息，Storm通过对所有消息的唯一ID进行异或计算，通过是否为0来判断Spout发出的消息是否被处理</p>
+</blockquote>
+</li>
+<li>高容错性</li>
+<li>支持本地模式</li>
+<li>支持多种编程语言</li>
+<li>高效</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/ajax跨域/cj8vdo2ap0021oayk4285gj49/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/31/ajax跨域/cj8vdo2ap0021oayk4285gj49/" itemprop="url">ajax跨域</a></h1>
         
 
         <div class="post-meta">
@@ -432,7 +646,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8rf80q20012w3yk5ejpjtyc/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/31/微信公众号中使用微信支付/cj8vdo2av0028oaykkxyeyz7c/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -451,7 +665,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8rf80q20012w3yk5ejpjtyc/" itemprop="url">微信公众号中使用微信支付</a></h1>
+                <a class="post-title-link" href="/2017/07/31/微信公众号中使用微信支付/cj8vdo2av0028oaykkxyeyz7c/" itemprop="url">微信公众号中使用微信支付</a></h1>
         
 
         <div class="post-meta">
@@ -597,7 +811,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8rf80py000xw3ykvhr1qfph/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/07/20/Elasticsearch初使用/cj8vdo2am001woaykcezxglul/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -616,7 +830,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8rf80py000xw3ykvhr1qfph/" itemprop="url">Elasticsearch初使用</a></h1>
+                <a class="post-title-link" href="/2017/07/20/Elasticsearch初使用/cj8vdo2am001woaykcezxglul/" itemprop="url">Elasticsearch初使用</a></h1>
         
 
         <div class="post-meta">
@@ -772,7 +986,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8rf80pz000yw3yk72r88upd/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/12/MYSQL并发修改库存/cj8vdo29r000yoayk1qhrgy9i/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -791,7 +1005,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8rf80pz000yw3yk72r88upd/" itemprop="url">MYSQL并发修改库存</a></h1>
+                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/cj8vdo29r000yoayk1qhrgy9i/" itemprop="url">MYSQL并发修改库存</a></h1>
         
 
         <div class="post-meta">
@@ -921,7 +1135,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8rf7zv20001w3ykbvfzhezu/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/05/11/docker环境部署/cj8vdo1ea0002oayk9iljavz4/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -940,7 +1154,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8rf7zv20001w3ykbvfzhezu/" itemprop="url">docker环境部署</a></h1>
+                <a class="post-title-link" href="/2017/05/11/docker环境部署/cj8vdo1ea0002oayk9iljavz4/" itemprop="url">docker环境部署</a></h1>
         
 
         <div class="post-meta">
@@ -1067,7 +1281,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8rf7zvj000cw3ykp54easlx/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/01/06/定时消息推送/cj8vdo1ek0008oaykbp45e76a/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1086,7 +1300,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8rf7zvj000cw3ykp54easlx/" itemprop="url">定时消息推送</a></h1>
+                <a class="post-title-link" href="/2017/01/06/定时消息推送/cj8vdo1ek0008oaykbp45e76a/" itemprop="url">定时消息推送</a></h1>
         
 
         <div class="post-meta">
@@ -1228,7 +1442,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8rf7zvh0009w3ykm7d8s2ea/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/cj8vdo1em000boaykqc9qgzv7/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1247,7 +1461,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8rf7zvh0009w3ykm7d8s2ea/" itemprop="url">SpringMVC RESTful风格</a></h1>
+                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/cj8vdo1em000boaykqc9qgzv7/" itemprop="url">SpringMVC RESTful风格</a></h1>
         
 
         <div class="post-meta">
@@ -1372,7 +1586,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8rf7zv90003w3yk7fl9rhkl/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/cj8vdo1e60001oaykplzjpb8e/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1391,7 +1605,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/04/02/Git命令/cj8rf7zv90003w3yk7fl9rhkl/" itemprop="url">Git命令</a></h1>
+                <a class="post-title-link" href="/2015/04/02/Git命令/cj8vdo1e60001oaykplzjpb8e/" itemprop="url">Git命令</a></h1>
         
 
         <div class="post-meta">
@@ -1570,7 +1784,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8rf7zvf0007w3ykavk1d4wl/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/06/jetty9遇到问题/cj8vdo1eg0005oaykcfdfpwk6/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1589,7 +1803,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8rf7zvf0007w3ykavk1d4wl/" itemprop="url">jetty9遇到问题</a></h1>
+                <a class="post-title-link" href="/2015/02/06/jetty9遇到问题/cj8vdo1eg0005oaykcfdfpwk6/" itemprop="url">jetty9遇到问题</a></h1>
         
 
         <div class="post-meta">
@@ -1705,134 +1919,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/02/04/hexo部署静态文件位置修改/cj8rf7zve0006w3yk0edz8zuv/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/02/04/hexo部署静态文件位置修改/cj8rf7zve0006w3yk0edz8zuv/" itemprop="url">hexo部署静态文件位置修改</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-02-04T16:18:32+08:00">
-                2015-02-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="使用hexo-htemo-kael后出现样式不对"><a href="#使用hexo-htemo-kael后出现样式不对" class="headerlink" title="使用hexo-htemo-kael后出现样式不对"></a>使用hexo-htemo-kael后出现样式不对</h2><p>一般在部署到whhxz.github.io上不会出现问题，如果部署在whhxz.github.io/myblog上，会出现本地静态文件如js、css等出错</p>
-<p>解决办法：修改hexo-htemo-kael中head.ejs，添加</p>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/myblog\/$/</span>;</span><br><span class="line"><span class="keyword">if</span>(reg.exec(config.root) == <span class="literal">null</span>)&#123;</span><br><span class="line">    config.root = config.root + <span class="string">"myblog/"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>设置config.root后面添加博客地址，在生成html后，就会自动添加上去，而且为了避免多次添加，所以使用正则表达式判断是否已经存在</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1878,7 +1969,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1900,7 +1991,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">57</span>
+                <span class="site-state-item-count">59</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
