@@ -282,7 +282,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/17/Java设计模式-享元模式（Flyweight-Pattern）/cj8vdo2b1002loaykta7evtlj/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/18/Java设计模式-代理模式（Proxy-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -301,7 +301,196 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/17/Java设计模式-享元模式（Flyweight-Pattern）/cj8vdo2b1002loaykta7evtlj/" itemprop="url">Java设计模式-享元模式（Flyweight Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/10/18/Java设计模式-代理模式（Proxy-Pattern）/" itemprop="url">Java设计模式-代理模式（Proxy-Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-18T09:21:16+08:00">
+                2017-10-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h3><blockquote>
+<p>给某一个对象提供一个代理或占位符，并由代理对象来控制对原对象的访问。</p>
+</blockquote>
+<p>代理模式简单UML如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171018屏幕快照2017-10-18上午9.43.05.png" alt=""></p>
+<ul>
+<li>接口：它声明了其实现和代理的共同接口，这样一来在任何使用其实现类的地方都可以使用代理类，客户端通常需要针对接口进行编程（cglib例外）。</li>
+<li>代理（proxy）：它包含了对实现类的引用，从而可以在任何时候操作实现类对象；在代理类中提供一个与实现类角色相同的接口，以便在任何时候都可以替代接口实现类；代理类还可以控制对实现类的使用，负责在需要的时候创建和删除实现类对象，并对实现类对象的使用加以约束。通常，在代理类中，客户端在调用所引用的实现类操作之前或之后还需要执行其他操作，而不仅仅是单纯调用实现类对象中的操作。</li>
+<li>实现类：接口的具体实现，定义了客户端真实方法。</li>
+</ul>
+<p>代理模式是常用的结构型设计模式之一，当无法直接访问某个对象或访问某个对象存在困难时可以通过一个代理对象来间接访问，为了保证客户端使用的透明性，所访问的真实对象与代理对象需要实现相同的接口。根据代理模式的使用目的不同，代理模式又可以分为多种类型，例如保护代理、远程代理、虚拟代理、缓冲代理等，它们应用于不同的场合，满足用户的不同需求。代理的实现又分为静态代理、动态代理。</p>
+<ul>
+<li>远程代理(Remote Proxy)：为一个位于不同的地址空间的对象提供一个本地的代理对象，这个不同的地址空间可以是在同一台主机中，也可是在另一台主机中，远程代理又称为大使(Ambassador)。（如：SOA、Web Service）</li>
+<li>虚拟代理(Virtual Proxy)：如果需要创建一个资源消耗较大的对象，先创建一个消耗相对较小的对象来表示，真实对象只在需要时才会被真正创建。</li>
+<li>保护代理(Protect Proxy)：控制对一个对象的访问，可以给不同的用户提供不同级别的使用权限。</li>
+<li>缓冲代理(Cache Proxy)：为某一个目标操作的结果提供临时的存储空间，以便多个客户端可以共享这些结果。</li>
+<li>智能引用代理(Smart Reference Proxy)：当一个对象被引用时，提供一些额外的操作，例如将对象被调用的次数记录下来等。</li>
+</ul>
+<h3 id="静态代理、动态代理"><a href="#静态代理、动态代理" class="headerlink" title="静态代理、动态代理"></a>静态代理、动态代理</h3><p>代理的实现分为静态代理、动态代理：</p>
+<ul>
+<li>静态代理：由开发人员创建或工具生成代理类的源码，再编译代理类。所谓静态也就是在程序运行前就已经存在代理类的字节码文件，代理类和委托类的关系在运行前就确定了。</li>
+<li>动态代理类的源码是在程序运行期间由JVM根据反射等机制动态的生成，所以不存在代理类的字节码文件。代理类和委托类的关系是在程序运行时确定。</li>
+</ul>
+<p>静态代理：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 接口</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ITarget</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 目标类</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Target</span> <span class="keyword">implements</span> <span class="title">ITarget</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"天气真好"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 代理类</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">ITarget</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ITarget target;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Proxy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = <span class="keyword">new</span> Target();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"记录日志：开始调用目标方法Target.operation"</span>);</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        target.operation();</span><br><span class="line">        System.out.println(<span class="string">"记录日志：目标方法Target.operation调用结束。耗时："</span> + (System.currentTimeMillis() - start));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ITarget target = <span class="keyword">new</span> Proxy();</span><br><span class="line">        target.operation();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>JDK动态代理：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 接口</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">ITarget</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 目标类</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Target</span> <span class="keyword">implements</span> <span class="title">ITarget</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">operation</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"天气真好"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 代理类</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Proxy</span> <span class="keyword">implements</span> <span class="title">InvocationHandler</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Object target;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 绑定创建代理对象</span><br><span class="line">     * <span class="doctag">@param</span> target</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">bind</span><span class="params">(Object target)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.target = target;</span><br><span class="line">        <span class="keyword">return</span> java.lang.reflect.Proxy.newProxyInstance(</span><br><span class="line">                target.getClass().getClassLoader(),</span><br><span class="line">                target.getClass().getInterfaces(),</span><br><span class="line">                <span class="keyword">this</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">invoke</span><span class="params">(Object proxy, Method method, Object[] args)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"记录日志：开始调用目标方法Target.operation"</span>);</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        Object invoke = method.invoke(target, args);</span><br><span class="line">        System.out.println(<span class="string">"记录日志：目标方法Target.operation调用结束。耗时："</span> + (System.currentTimeMillis() - start));</span><br><span class="line">        <span class="keyword">return</span> invoke;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ITarget target = (ITarget) <span class="keyword">new</span> Proxy().bind(<span class="keyword">new</span> Target());</span><br><span class="line">        target.operation();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="JDK中代理模式使用"><a href="#JDK中代理模式使用" class="headerlink" title="JDK中代理模式使用"></a>JDK中代理模式使用</h3><p>java.lang.reflect.Proxy：生成代理对象<br>RMI：代理远程调用</p>
+<h3 id="代理模式总结"><a href="#代理模式总结" class="headerlink" title="代理模式总结"></a>代理模式总结</h3><p>适配器模式、装饰模式、代理模式三者之间看起来非常相似，之前在装饰模式中总结过适配器模式和装饰模式之前区别。对于装饰模式和代理模式区别在与：</p>
+<ul>
+<li>1.对于静态代理，代理类是在编译的时候就确定了代理对象，而适配器是在调用的时候确定的被装饰对象。因为在使用装饰器的时候，通常是传递一个被装饰对象到装饰器中，而且装饰模式可以嵌套装饰。</li>
+<li>2.对于动态代理，代理类虽然和装饰模式一样需要传递一个对象，但是代理类并不需要实现与目标类相同的接口。<br>动态代理UML类图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171018屏幕快照2017-10-18上午11.39.05.png" alt=""></li>
+</ul>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>当客户端对象需要访问远程主机中的对象时可以使用远程代理。</li>
+<li>当需要控制对一个对象的访问。</li>
+<li>当需要为一个对象的访问（引用）提供一些额外的操作</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>能够协调调用者和被调用者，在一定程度上降低了系统的耦合度。</li>
+<li>客户端可以针对抽象主题角色进行编程，增加和更换代理类无须修改源代码，符合开闭原则，系统具有较好的灵活性和可扩展性。</li>
+<li>远程代理为位于两个不同地址空间对象的访问提供了一种实现机制，可以将一些消耗资源较多的对象和操作移至性能更好的计算机上，提高系统的整体运行效率。</li>
+<li>还有其他不同代理类型优点不同</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>由于在客户端和真实主题之间增加了代理对象，因此有些类型的代理模式可能会造成请求的处理速度变慢，例如保护代理。</li>
+<li>实现代理模式需要额外的工作，而且有些代理模式的实现过程较为复杂，例如远程代理。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/17/Java设计模式-享元模式（Flyweight-Pattern）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/17/Java设计模式-享元模式（Flyweight-Pattern）/" itemprop="url">Java设计模式-享元模式（Flyweight Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -474,7 +663,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/14/Java设计模式-外观模式（Facade-Pattern）/cj8vdo2b4002ooaykn7c4bd2u/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/14/Java设计模式-外观模式（Facade-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -493,7 +682,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/14/Java设计模式-外观模式（Facade-Pattern）/cj8vdo2b4002ooaykn7c4bd2u/" itemprop="url">Java设计模式-外观模式（Facade Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/10/14/Java设计模式-外观模式（Facade-Pattern）/" itemprop="url">Java设计模式-外观模式（Facade Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -645,7 +834,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/cj8vdo2aw002boayk5cxl9p5p/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -664,7 +853,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/cj8vdo2aw002boayk5cxl9p5p/" itemprop="url">Java设计模式-装饰模式（Decorator Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/" itemprop="url">Java设计模式-装饰模式（Decorator Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -840,7 +1029,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/12/Docker-Tomcat部署项目/cj8vdo2az002hoaykfgmtw3di/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/12/Docker-Tomcat部署项目/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -859,7 +1048,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/12/Docker-Tomcat部署项目/cj8vdo2az002hoaykfgmtw3di/" itemprop="url">Docker Tomcat部署项目</a></h1>
+                <a class="post-title-link" href="/2017/10/12/Docker-Tomcat部署项目/" itemprop="url">Docker Tomcat部署项目</a></h1>
         
 
         <div class="post-meta">
@@ -1000,7 +1189,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/10/Java设计模式-组合模式（Composite-Pattern）/cj8vdo2b6002soaykwoq0okd3/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/10/Java设计模式-组合模式（Composite-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1019,7 +1208,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/10/Java设计模式-组合模式（Composite-Pattern）/cj8vdo2b6002soaykwoq0okd3/" itemprop="url">Java设计模式-组合模式（Composite Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/10/10/Java设计模式-组合模式（Composite-Pattern）/" itemprop="url">Java设计模式-组合模式（Composite Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1184,7 +1373,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/10/Docker-安装/cj8vdo2ax002foaykkuhuxvuz/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/10/Docker-安装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1203,7 +1392,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/10/10/Docker-安装/cj8vdo2ax002foaykkuhuxvuz/" itemprop="url">Docker 安装</a></h1>
+                <a class="post-title-link" href="/2017/10/10/Docker-安装/" itemprop="url">Docker 安装</a></h1>
         
 
         <div class="post-meta">
@@ -1336,7 +1525,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/cj8vdo2at0023oaykg2ex3o84/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/25/SSM搭建讲解/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1355,7 +1544,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/cj8vdo2at0023oaykg2ex3o84/" itemprop="url">SSM搭建讲解</a></h1>
+                <a class="post-title-link" href="/2017/09/25/SSM搭建讲解/" itemprop="url">SSM搭建讲解</a></h1>
         
 
         <div class="post-meta">
@@ -1650,7 +1839,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj8vdo2an001yoayku7nbgt8p/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1669,7 +1858,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/cj8vdo2an001yoayku7nbgt8p/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1821,7 +2010,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj8vdo2ah001ooaykrfaibgfy/">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="WHH">
@@ -1840,7 +2029,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/cj8vdo2ah001ooaykrfaibgfy/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
+                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
         
 
         <div class="post-meta">
@@ -1980,169 +2169,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj8vdo2ai001qoayk8beqbgag/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/cj8vdo2ai001qoayk8beqbgag/" itemprop="url">Java设计模式-建造者模式（Builder Pattern）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-14T15:42:00+08:00">
-                2017-09-14
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="建造者模式"><a href="#建造者模式" class="headerlink" title="建造者模式"></a>建造者模式</h3><blockquote>
-<p>创建一个产品时，有时产品有不同的组成成分，在其组成成分没创建完成之前，改产品是不可使用的。使用建造者模式，通过创建所有产品内部零件，组装完成后返回给用户。</p>
-</blockquote>
-<p>例子：<br>举例设计LOL角色，角色包含皮肤、技能、属性、性别<br><img src="http://otxnth5wx.bkt.clouddn.com/20170914%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-14%E4%B8%8B%E5%8D%885.04.14.png" alt=""></p>
-<p>Java实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 角色</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Actor</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 皮肤</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String skin;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 技能</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String skill;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 属性</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String attribute;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 性别</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> String gender;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> skin;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSkin</span><span class="params">(String skin)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.skin = skin;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> skill;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSkill</span><span class="params">(String skill)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.skill = skill;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> attribute;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAttribute</span><span class="params">(String attribute)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.attribute = attribute;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setGender</span><span class="params">(String gender)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.gender = gender;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Actor&#123;"</span> +</span><br><span class="line">                <span class="string">"skin='"</span> + skin + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", skill='"</span> + skill + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", attribute='"</span> + attribute + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", gender='"</span> + gender + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Actor actor = <span class="keyword">new</span> Actor();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建皮肤</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建技能</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建属性</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建性别</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 创建角色</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Actor <span class="title">resultActor</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> actor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 德玛西亚之力建造者</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">GarenActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"盖伦皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"盖伦技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"盖伦属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"男"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 德邦总管建造者</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XinZhaoActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"赵信皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"赵信技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"赵信属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"男"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 寒冰射手</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AsheActorBuilder</span> <span class="keyword">extends</span> <span class="title">AbstractActorBuilder</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkin(<span class="string">"艾希皮肤"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildSkill</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setSkill(<span class="string">"艾希技能"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildAttribute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setAttribute(<span class="string">"艾希属性"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">buildGender</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        actor.setGender(<span class="string">"女"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 建造组装</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BuilderDirector</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 构建角色</span><br><span class="line">     * <span class="doctag">@param</span> actorBuilder</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Actor <span class="title">constructActor</span><span class="params">(AbstractActorBuilder actorBuilder)</span></span>&#123;</span><br><span class="line">        actorBuilder.buildSkin();</span><br><span class="line">        actorBuilder.buildSkill();</span><br><span class="line">        actorBuilder.buildAttribute();</span><br><span class="line">        actorBuilder.buildGender();</span><br><span class="line">        <span class="keyword">return</span> actorBuilder.resultActor();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Actor asheActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> AsheActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='艾希皮肤', skill='艾希技能', attribute='艾希属性', gender='女'&#125;</span></span><br><span class="line">        System.out.println(asheActor);</span><br><span class="line">        Actor xinZhaoActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> XinZhaoActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='赵信皮肤', skill='赵信技能', attribute='赵信属性', gender='男'&#125;</span></span><br><span class="line">        System.out.println(xinZhaoActor);</span><br><span class="line">        Actor garenActor = <span class="keyword">new</span> BuilderDirector().constructActor(<span class="keyword">new</span> GarenActorBuilder());</span><br><span class="line">        <span class="comment">//Actor&#123;skin='盖伦皮肤', skill='盖伦技能', attribute='盖伦属性', gender='男'&#125;</span></span><br><span class="line">        System.out.println(garenActor);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>在创建角色的时候，用户直接使用建造组装者创建创建相关角色，传入相关角色的创建者即可。在实际使用中，在创建各个组件的时候，应该是有规则的，通过不同的规则建造不同的角色。在后续如果新增了相关角色，可以新建一个角色建造者即可，无需修改其他相关代码。改处缺点在于，如果角色新增了其他相关组件，则修改较大。</p>
-<h3 id="建造者总结"><a href="#建造者总结" class="headerlink" title="建造者总结"></a>建造者总结</h3><p>建造者核心在于一步步构建一个包含多个组件的完整对象，与工厂模式不同在于通常建造者创建的对象相对工厂模式比较复杂，通常工厂模式创建的是单一或者相对不是很复杂的对象。如果将工厂模式看出汽车零件生产厂，建造者模式可以看出汽车装配厂。</p>
-<p><strong>建造者优点：</strong></p>
-<ol>
-<li>用户不需要知道建造细节，将产品本身和产品创建进行解耦，使相同的创建过程可以创建不同的产品。</li>
-<li>扩展方便，符合”开闭原则”</li>
-<li>细化了产品创建，使创建过程清晰明了<br><strong>建造者缺点：</strong></li>
-<li>如果产品过多，会导致建造者过多，系统过于臃肿。</li>
-<li>如果产品组件过于复杂而且多变，会导致产品创建过程过于复杂。</li>
-</ol>
-<p><strong>建造者使用范围：</strong></p>
-<ol>
-<li>需要生成的产品对象有复杂的内部结构，这些产品对象通常包含多个成员属性。</li>
-<li>需要生成的产品对象的属性相互依赖，需要指定其生成顺序。</li>
-<li>对象的创建过程独立于创建该对象的类。在建造者模式中通过引入了指挥者类，将创建过程封装在指挥者类中，而不在建造者类和客户类中。</li>
-<li>隔离复杂对象的创建和使用，并使得相同的创建过程可以创建不同的产品。</li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2193,7 +2219,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2215,7 +2241,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">59</span>
+                <span class="site-state-item-count">61</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
