@@ -282,6 +282,178 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T14:12:06+08:00">
+                2017-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="不兼容结构的协调–适配器模式"><a href="#不兼容结构的协调–适配器模式" class="headerlink" title="不兼容结构的协调–适配器模式"></a>不兼容结构的协调–适配器模式</h3><blockquote>
+<p>适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
+</blockquote>
+<p>当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.17.05.png" alt=""></p>
+<ul>
+<li>Target是用户使用的目标类</li>
+<li>Adaptee是需要适配的第三方类</li>
+<li>Adapter是适配器类</li>
+</ul>
+<p>举例如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.11.35.png" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 插入充电</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 双孔插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoubleEndedPlug</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"双孔插头充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 3孔插座</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeHoleSocket</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"三孔插座充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 对象适配器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoublePlugAdapter</span> <span class="keyword">extends</span> <span class="title">DoubleEndedPlug</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ThreeHoleSocket socket;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DoublePlugAdapter</span><span class="params">(ThreeHoleSocket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.socket = socket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//封装数据等操作，使适配器适配</span></span><br><span class="line">        System.out.println(<span class="string">"双孔适配插入三孔插座"</span>);</span><br><span class="line">        socket.charge();</span><br><span class="line">        <span class="comment">//封装返回值等操作，使适配器适配</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Plug plug = <span class="keyword">new</span> DoubleEndedPlug();</span><br><span class="line">        <span class="comment">//默认双孔充电</span></span><br><span class="line">        plug.charge();</span><br><span class="line">        Plug plugAdapter = <span class="keyword">new</span> DoublePlugAdapter(<span class="keyword">new</span> ThreeHoleSocket());</span><br><span class="line">        <span class="comment">//使用适配器三孔充电</span></span><br><span class="line">        plugAdapter.charge();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>使用适配器后，可以使用双孔充电器插入双孔插座充电。<br>在JDK中InputStreamReader(InputStream)就是使用的装饰适配器设计模式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//字节流</span></span><br><span class="line">InputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"tmp.txt"</span>));</span><br><span class="line">StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"><span class="keyword">int</span> tmp;</span><br><span class="line"><span class="keyword">while</span> ((tmp = fileInputStream.read()) != -<span class="number">1</span>)&#123;</span><br><span class="line">    sb.append((<span class="keyword">char</span>)tmp);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(sb);</span><br><span class="line">fileInputStream.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用适配器模式，转换为字符流，读取单个字符</span></span><br><span class="line">InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"tmp.txt"</span>));</span><br><span class="line">InputStreamReader inputStreamReader = <span class="keyword">new</span> InputStreamReader(inputStream);</span><br><span class="line">sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"><span class="keyword">while</span> ((tmp = inputStreamReader.read()) != -<span class="number">1</span>)&#123;</span><br><span class="line">    sb.append((<span class="keyword">char</span>)tmp);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(sb);</span><br></pre></td></tr></table></figure></p>
+<p>InputStreamReader父类Reader是面向字符流的读取接口，使用适配器设计模式后，从字节流中读取数据。</p>
+<h3 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h3><p>除了对象适配器模式之外，还有类适配器。类适配器模式和对象适配器模式最大的区别在于适配器和适配者之间的关系不同，对象适配器模式中适配器和适配者之间是关联关系，而类适配器模式中适配器和适配者是继承关系。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 插入充电</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 双孔插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoubleEndedPlug</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"双孔插头充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 3孔插座</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeHoleSocket</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"三孔插座充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 类适配器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoublePlugAdapter</span> <span class="keyword">extends</span> <span class="title">ThreeHoleSocket</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//封装数据等操作，使适配器适配</span></span><br><span class="line">        System.out.println(<span class="string">"双孔适配插入三孔插座"</span>);</span><br><span class="line">        <span class="keyword">super</span>.charge();</span><br><span class="line">        <span class="comment">//封装返回值等操作，使适配器适配</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Plug plug = <span class="keyword">new</span> DoubleEndedPlug();</span><br><span class="line">        <span class="comment">//默认双孔充电</span></span><br><span class="line">        plug.charge();</span><br><span class="line">        Plug plugAdapter = <span class="keyword">new</span> DoublePlugAdapter();</span><br><span class="line">        <span class="comment">//使用适配器三孔充电</span></span><br><span class="line">        plugAdapter.charge();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>因为java不支持多继承，在使用类适配器的时候，会受到很多限制。如果目标类没有接口，无法使用类适配器。</p>
+<h3 id="双向适配器"><a href="#双向适配器" class="headerlink" title="双向适配器"></a>双向适配器</h3><p>双向适配器其实就是在适配器中同时拥有双方的对象，只是对适配器的一种扩充，使用相对较少。</p>
+<h3 id="缺省适配器"><a href="#缺省适配器" class="headerlink" title="缺省适配器"></a>缺省适配器</h3><p>缺省适配器是适配器模式的一种变种。</p>
+<blockquote>
+<p>当不需要实现一个接口所提供的所有方法时，可先设计一个抽象类实现该接口，并为接口中每个方法提供一个默认实现（空方法），那么该抽象类的子类可以选择性地覆盖父类的某些方法来实现需求，它适用于不想使用一个接口中的所有方法的情况，又称为单接口适配器模式。</p>
+</blockquote>
+<p><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.27.08.png" alt=""></p>
+<p>如java.awt.event中WindowAdapter就是使用的缺省适配器设计模式<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.11.png" alt=""><br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.18.png" alt=""></p>
+<p>在处理窗口事件的时候，可以使用WindowListener接口，但是需要实现接口中所有方法，但是在使用过程中不需要，所以就可以使用WindowAdapter来完成相同的事情。WindowAdapter中实现的方法都为空方法。</p>
+<h3 id="适配器设计模式总结"><a href="#适配器设计模式总结" class="headerlink" title="适配器设计模式总结"></a>适配器设计模式总结</h3><p>优点：</p>
+<ul>
+<li>适配器设计模式是讲现有方法转换为所需要的方法，实现了对类的复用。</li>
+<li>适配器实现了目标类和适配者的解耦</li>
+<li>修改适配器可以在不修改源代码的情况下实现，符合“开闭原则”<br>缺点：</li>
+<li>过多使用适配器会导致系统混乱。</li>
+<li>final无法适配</li>
+<li>不支持多继承，适配有限制<br>适配器一般多用于后期系统扩展、修改。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/14/Java设计模式-建造者模式（Builder-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -713,10 +885,10 @@
 </ul>
 </blockquote>
 <h3 id="单例设计"><a href="#单例设计" class="headerlink" title="单例设计"></a>单例设计</h3><p>单例的创建一般分为 <strong>饿汉式单例</strong> 、 <strong>懒汉式单例</strong> 。</p>
-<h4 id="懒汉式单例"><a href="#懒汉式单例" class="headerlink" title="懒汉式单例"></a>懒汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EagerSingleton</span> </span>&#123;</span><br><span class="line">    <span class="comment">//自己创建的实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> EagerSingleton singleton = <span class="keyword">new</span> EagerSingleton();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数，不允许外部创建</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">EagerSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供当前实例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EagerSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EagerSingleton</span> </span>&#123;</span><br><span class="line">    <span class="comment">//自己创建的实例</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> EagerSingleton singleton = <span class="keyword">new</span> EagerSingleton();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数，不允许外部创建</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">EagerSingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供当前实例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> EagerSingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>当类被加载的时候，static会初始化，创建当前对象，因为构造函数是私有的，这样避免了外部创建改对象，通过静态方法提供了系统外部的访问。由java类加载器保证该类只会加载一次。采用的是空间换时间。<br>缺点：该类就是在系统中不使用也会初始化，对象会一直存在，不会被回收。占用系统资源。</p>
 <p>在jdk中有啥用饿汉式单例设计模式，如Runtime：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%883.02.15.png" alt=""></p>
-<h4 id="饿汉式单例"><a href="#饿汉式单例" class="headerlink" title="饿汉式单例"></a>饿汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 懒汉式单例</span><br><span class="line"> */</span></span><br><span class="line"> <span class="comment">/**</span><br><span class="line">  * 懒汉式单例</span><br><span class="line">  */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">LazySingleton</span> </span>&#123;</span><br><span class="line">   <span class="comment">/**</span><br><span class="line">    * 避免jdk做相关优化，导致代码重排序</span><br><span class="line">    */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingleton singleton = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 私有构造函数</span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="title">LazySingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 创建获取单例对象</span><br><span class="line">      * <span class="doctag">@return</span></span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//懒汉式改进，避免方法上锁导致效率变低</span></span><br><span class="line">         <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="comment">//双重检查锁，保证创建的时候只有一个线程参与</span></span><br><span class="line">             <span class="keyword">synchronized</span>(LazySingleton.class)&#123;</span><br><span class="line">                 <span class="keyword">if</span> (singleton == <span class="keyword">null</span>)&#123;</span><br><span class="line">                     singleton = <span class="keyword">new</span> LazySingleton();</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> singleton;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="懒汉式单例"><a href="#懒汉式单例" class="headerlink" title="懒汉式单例"></a>懒汉式单例</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 懒汉式单例</span><br><span class="line"> */</span></span><br><span class="line"> <span class="comment">/**</span><br><span class="line">  * 懒汉式单例</span><br><span class="line">  */</span></span><br><span class="line"> <span class="class"><span class="keyword">class</span> <span class="title">LazySingleton</span> </span>&#123;</span><br><span class="line">   <span class="comment">/**</span><br><span class="line">    * 避免jdk做相关优化，导致代码重排序</span><br><span class="line">    */</span></span><br><span class="line">   <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> LazySingleton singleton = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 私有构造函数</span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">private</span> <span class="title">LazySingleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">     &#125;</span><br><span class="line"></span><br><span class="line">     <span class="comment">/**</span><br><span class="line">      * 创建获取单例对象</span><br><span class="line">      * <span class="doctag">@return</span></span><br><span class="line">      */</span></span><br><span class="line">     <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> LazySingleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         <span class="comment">//懒汉式改进，避免方法上锁导致效率变低</span></span><br><span class="line">         <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">             <span class="comment">//双重检查锁，保证创建的时候只有一个线程参与</span></span><br><span class="line">             <span class="keyword">synchronized</span>(LazySingleton.class)&#123;</span><br><span class="line">                 <span class="keyword">if</span> (singleton == <span class="keyword">null</span>)&#123;</span><br><span class="line">                     singleton = <span class="keyword">new</span> LazySingleton();</span><br><span class="line">                 &#125;</span><br><span class="line">             &#125;</span><br><span class="line">         &#125;</span><br><span class="line">         <span class="keyword">return</span> singleton;</span><br><span class="line">     &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
 <p>类被初始化的时候，不会创建对象。在第一次调用getInstance才会创建对象。第一次判断，判断是否单例已经存在。在创建改单例的时候，加锁后判断，是避免多线程访问的时候，保证只创建一个实例。<br>在java中java.util.Calendar使用的是懒汉式。<br>缺点：因为使用了volatile和判断，速度相对饿汉式要慢，懒汉式避免了未使用的时候占用系统资源。</p>
 <h4 id="Initialization-Demand-Holder-IoDH-单例"><a href="#Initialization-Demand-Holder-IoDH-单例" class="headerlink" title="Initialization Demand Holder (IoDH) 单例"></a>Initialization Demand Holder (IoDH) 单例</h4><p>饿汉式单例和懒汉式单例创建各有优缺点。使用IoDH可以避免二者缺点<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 私有构造函数</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 静态内部类，用于创建单例</span><br><span class="line">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">HolderClass</span></span>&#123;</span><br><span class="line">        <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> Singleton singleton = <span class="keyword">new</span> Singleton();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 对外提供单例</span><br><span class="line">     * <span class="doctag">@return</span></span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> HolderClass.singleton;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>在类被初始化的时候，静态内部类并不会被初始化，只有使用到静态内部类的时候，才会被初始化。因为是私有类，保证了外部无法访问，静态属性由java类加载器保证了该类只被初始化一次。同时没有锁没有判断，集合之前两种单例创建的优点。</p>
@@ -1761,167 +1933,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/" itemprop="url">SpringBoot集成swagger</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-09T11:08:00+08:00">
-                2017-08-09
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
-                    <span itemprop="name">SpringBoot</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <blockquote>
-<p>Swagger 是一款RESTFUL接口的文档在线自动生成+功能测试功能软件。参考 <em><a href="https://swagger.io/" target="_blank" rel="external">官方地址</a></em></p>
-</blockquote>
-<h3 id="在SpringBoot中集成swagger"><a href="#在SpringBoot中集成swagger" class="headerlink" title="在SpringBoot中集成swagger"></a>在SpringBoot中集成swagger</h3><h4 id="创建maven项目，pom-xml添加依赖"><a href="#创建maven项目，pom-xml添加依赖" class="headerlink" title="创建maven项目，pom.xml添加依赖"></a>创建maven项目，pom.xml添加依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="添加启动，以及配置"><a href="#添加启动，以及配置" class="headerlink" title="添加启动，以及配置"></a>添加启动，以及配置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动类SpringBootMain</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMain</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SpringBootMainConfig.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//spring 配置SpringBootMainConfig</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"com.whh"</span>)</span><br><span class="line"><span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"><span class="meta">@EnableAsync</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMainConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Swagger配置</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="comment">//控制不同环境执行该配置</span></span><br><span class="line"><span class="meta">@Profile</span>(value = &#123;<span class="string">"dev"</span>, <span class="string">"beta"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">api</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .select()</span><br><span class="line">                .apis(RequestHandlerSelectors.basePackage(<span class="string">"com.whh"</span>))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//api controller</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"demoApi"</span>)</span><br><span class="line"><span class="meta">@Api</span>(value = <span class="string">"测试接口"</span>, description = <span class="string">"这个是测试用的接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApiController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, String&gt; data = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        data.put(<span class="string">"111"</span>, <span class="string">"aaa"</span>);</span><br><span class="line">        data.put(<span class="string">"222"</span>, <span class="string">"bbb"</span>);</span><br><span class="line">        data.put(<span class="string">"333"</span>, <span class="string">"ccc"</span>);</span><br><span class="line">        data.put(<span class="string">"444"</span>, <span class="string">"ddd"</span>);</span><br><span class="line">        data.put(<span class="string">"555"</span>, <span class="string">"eee"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@ApiOperation</span>(value = <span class="string">"所有数据"</span>, response = Map.class)</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/allData"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, String&gt; <span class="title">allData</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation</span>(value = <span class="string">"展示数据"</span>, response = String.class)</span><br><span class="line">    <span class="meta">@ApiResponses</span>(value = &#123;</span><br><span class="line">            <span class="meta">@ApiResponse</span>(code = <span class="number">200</span>, message = <span class="string">"数据正常"</span>),</span><br><span class="line">            <span class="meta">@ApiResponse</span>(code = <span class="number">404</span>, message = <span class="string">"页面找不到"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/show/&#123;key&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">value</span><span class="params">(@PathVariable String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data.get(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/add"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">add</span><span class="params">(@RequestParam String key, @RequestParam String value)</span></span>&#123;</span><br><span class="line">        data.put(key, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Add OK"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/update/&#123;key&#125;"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">update</span><span class="params">(@RequestParam String value, @PathVariable String key)</span></span>&#123;</span><br><span class="line">        data.put(key, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Update OK"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/remove/&#123;key&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">remove</span><span class="params">(@PathVariable String key)</span></span>&#123;</span><br><span class="line">        data.remove(key);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Remove"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="添加swaggerUI"><a href="#添加swaggerUI" class="headerlink" title="添加swaggerUI"></a>添加swaggerUI</h4><p>下载swaggerUI，<a href="https://github.com/swagger-api/swagger-ui" target="_blank" rel="external">github swagger-ui官方地址</a>，把文件夹dist 放入springboot项目resource/statis下。改名为swagger-ui。修改文件index.html js中SwaggerUIBundle的url为<a href="http://localhost:7070/v2/api-docs。" target="_blank" rel="external">http://localhost:7070/v2/api-docs。</a></p>
-<h4 id="添加springboot配置文件"><a href="#添加springboot配置文件" class="headerlink" title="添加springboot配置文件"></a>添加springboot配置文件</h4><p>在resource下添加目录coufig，添加文件application.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#配置文件环境</span><br><span class="line">spring.profiles.active=dev</span><br><span class="line">#server 启动端口</span><br><span class="line">server.port=7070</span><br><span class="line">#thymeleaf 模板缓存</span><br><span class="line">spring.thymeleaf.cache=false</span><br><span class="line">#spring.mvc 配置静态文件为准</span><br><span class="line">spring.mvc.static-path-pattern=/static/**</span><br></pre></td></tr></table></figure></p>
-<p>启动main方法，访问地址<a href="http://localhost:7070/static/swagger-ui/index.html" target="_blank" rel="external">http://localhost:7070/static/swagger-ui/index.html</a> ，大功告成</p>
-<blockquote>
-<p>如果需要直接通过配置文件。直接生产restful风格代码，可以使用<a href="https://editor.swagger.io/" target="_blank" rel="external">swagger edit</a>。</p>
-</blockquote>
-<h3 id="传统SpringMVC添加swagger"><a href="#传统SpringMVC添加swagger" class="headerlink" title="传统SpringMVC添加swagger"></a>传统SpringMVC添加swagger</h3><h4 id="添加pom依赖"><a href="#添加pom依赖" class="headerlink" title="添加pom依赖"></a>添加pom依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
-<h4 id="添加swagger配置文件"><a href="#添加swagger配置文件" class="headerlink" title="添加swagger配置文件"></a>添加swagger配置文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">api</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .select()</span><br><span class="line">                .apis(RequestHandlerSelectors.basePackage(<span class="string">"com.whh"</span>))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>如果确实jackson类，需要添加jackson依赖</p>
-</blockquote>
-<p>后续操作和SpringBoot一样，添加ui和配置js地址等。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1972,7 +1983,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1994,7 +2005,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

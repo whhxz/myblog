@@ -94,39 +94,39 @@
 
 
 
-<meta name="description" content="适配器模式
+<meta name="description" content="不兼容结构的协调–适配器模式
 适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。
 
 当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。
 
-Plug是用户使用的目标类
-Adaptee是需要适配的第三">
+Target是用户使用的目标类
+Adap">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java设计模式-适配器模式（Adapter Pattern）">
 <meta property="og:url" content="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="适配器模式
+<meta property="og:description" content="不兼容结构的协调–适配器模式
 适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。
 
 当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。
 
-Plug是用户使用的目标类
-Adaptee是需要适配的第三">
+Target是用户使用的目标类
+Adap">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.17.05.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.11.35.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.27.08.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.11.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.18.png">
-<meta property="og:updated_time" content="2017-09-18T07:53:18.000Z">
+<meta property="og:updated_time" content="2017-10-19T06:23:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java设计模式-适配器模式（Adapter Pattern）">
-<meta name="twitter:description" content="适配器模式
+<meta name="twitter:description" content="不兼容结构的协调–适配器模式
 适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。
 
 当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。
 
-Plug是用户使用的目标类
-Adaptee是需要适配的第三">
+Target是用户使用的目标类
+Adap">
 <meta name="twitter:image" content="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.17.05.png">
 
 
@@ -394,12 +394,12 @@ Adaptee是需要适配的第三">
       
 
       
-        <h3 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h3><blockquote>
+        <h3 id="不兼容结构的协调–适配器模式"><a href="#不兼容结构的协调–适配器模式" class="headerlink" title="不兼容结构的协调–适配器模式"></a>不兼容结构的协调–适配器模式</h3><blockquote>
 <p>适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
 </blockquote>
 <p>当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.17.05.png" alt=""></p>
 <ul>
-<li>Plug是用户使用的目标类</li>
+<li>Target是用户使用的目标类</li>
 <li>Adaptee是需要适配的第三方类</li>
 <li>Adapter是适配器类</li>
 </ul>
@@ -548,7 +548,7 @@ Adaptee是需要适配的第三">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">32</span>
+                <span class="site-state-item-count">33</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -570,7 +570,7 @@ Adaptee是需要适配的第三">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">61</span>
+                <span class="site-state-item-count">63</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -618,7 +618,7 @@ Adaptee是需要适配的第三">
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器模式"><span class="nav-number">1.</span> <span class="nav-text">适配器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类适配器"><span class="nav-number">2.</span> <span class="nav-text">类适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双向适配器"><span class="nav-number">3.</span> <span class="nav-text">双向适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺省适配器"><span class="nav-number">4.</span> <span class="nav-text">缺省适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器设计模式总结"><span class="nav-number">5.</span> <span class="nav-text">适配器设计模式总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#不兼容结构的协调–适配器模式"><span class="nav-number">1.</span> <span class="nav-text">不兼容结构的协调–适配器模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类适配器"><span class="nav-number">2.</span> <span class="nav-text">类适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#双向适配器"><span class="nav-number">3.</span> <span class="nav-text">双向适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺省适配器"><span class="nav-number">4.</span> <span class="nav-text">缺省适配器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#适配器设计模式总结"><span class="nav-number">5.</span> <span class="nav-text">适配器设计模式总结</span></a></li></ol></div>
             
 
           </div>
