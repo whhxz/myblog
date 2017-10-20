@@ -12,7 +12,7 @@ tags: ['设计模式', '单例模式', 'Singleton Pattern']
 
 ### 单例设计
 单例的创建一般分为 **饿汉式单例** 、 **懒汉式单例** 。
-#### 懒汉式单例
+#### 饿汉式单例
 ```java
 class EagerSingleton {
     //自己创建的实例
@@ -39,7 +39,7 @@ class EagerSingleton {
 在jdk中有啥用饿汉式单例设计模式，如Runtime：
 ![](http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%883.02.15.png)
 
-#### 饿汉式单例
+#### 懒汉式单例
 ```java
 /**
  * 懒汉式单例

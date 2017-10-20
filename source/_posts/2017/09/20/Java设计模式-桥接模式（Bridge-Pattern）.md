@@ -5,7 +5,7 @@ categories: ['设计模式']
 tags: ['设计模式', '桥接模式', 'Bridge Pattern']
 ---
 
-### 桥接模式
+### 处理多维度变化--桥接模式
 > 将抽象部分与它的实现部分分离，使它们都可以独立地变化。它是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。
 
 桥接模式用一种巧妙的方式处理多层继承存在的问题，用抽象关联取代了传统的多层继承，将类之间的静态继承关系转换为动态的对象组合关系，使得系统更加灵活，并易于扩展，同时有效控制了系统中类的个数。
@@ -177,8 +177,8 @@ public class Main {
     }
 }
 ```
-### Java中使用的适配器
-java.util.logging.Handler中Formatter，采用的事适配器设计模式。
+### Java中使用的桥接
+java.util.logging.Handler中Formatter，采用的是桥接设计模式。
 ![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.49.05.png)
 Handler子类有ConsoleHandler、FileHandler、SocketHandler等
 ![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.52.39.png)
