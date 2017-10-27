@@ -113,7 +113,7 @@ class PotionFactory {
     public static AbstractPotion buildPotion(PotionTypeEnum potionType, String name) {
         AbstractPotion potion = potionMap.get(potionType.name() + "_" + name);
         if (potion == null) {
-            synchronized (potionBuild) {
+            synchronized (potionMap) {
                 potion = potionMap.get(potionType.name() + "_" + name);
                 if (potion == null) {
                     switch (potionType) {
