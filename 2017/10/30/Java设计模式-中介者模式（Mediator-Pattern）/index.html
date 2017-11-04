@@ -109,7 +109,7 @@
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30下午2.34.34.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30下午2.34.41.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30下午3.00.36.png">
-<meta property="og:updated_time" content="2017-10-31T01:00:21.000Z">
+<meta property="og:updated_time" content="2017-11-02T07:17:54.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java设计模式-中介者模式（Mediator Pattern）">
 <meta name="twitter:description" content="中介者模式
@@ -395,8 +395,9 @@
 <li>ConcreteColleague（具体同事类）：它是抽象同事类的子类；每一个同事对象在需要和其他同事对象通信时，先与中介者通信，通过中介者来间接完成与其他同事类的通信；在具体同事类中实现了在抽象同事类中声明的抽象方法。</li>
 <li>同事类指互相之间有关联的类。</li>
 </ul>
-<h3 id="外观模式、代理模式、中介者模式"><a href="#外观模式、代理模式、中介者模式" class="headerlink" title="外观模式、代理模式、中介者模式"></a>外观模式、代理模式、中介者模式</h3><p><strong>外观模式：</strong> 为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。<br>在外观模式中，外观模式所有的请求处理都委托给子系统完成，而中介者模式则由中心协调同事类和中心本身共同完成业务。外观模式属于单向操作，调用者和子系统可以理解为1-&gt;N。<br><strong>代理模式：</strong> 给某一个对象提供一个代理或占位符，并由代理对象来控制对原对象的访问。<br>在代理模式中，代理类用于隐藏真实对象、扩展额外功能。可以理解为代理模式为1-&gt;1。</p>
-<p><strong>中介者模式：</strong> 可以理解为N&lt;–&gt;N。</p>
+<h3 id="外观模式、代理模式、中介者模式"><a href="#外观模式、代理模式、中介者模式" class="headerlink" title="外观模式、代理模式、中介者模式"></a>外观模式、代理模式、中介者模式</h3><p><strong>外观模式：</strong> 为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。<br>在外观模式中，外观模式所有的请求处理都委托给子系统完成，而中介者模式则由中心协调同事类和中心本身共同完成业务。外观模式属于单向操作，调用者和子系统可以理解为1-&gt;N。</p>
+<p><strong>代理模式：</strong> 给某一个对象提供一个代理或占位符，并由代理对象来控制对原对象的访问。在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到传递的作用。<br>在代理模式中，代理类用于隐藏真实对象、扩展额外功能。可以理解为代理模式为1-&gt;1。</p>
+<p><strong>中介者模式：</strong> 可以理解为N&lt;–&gt;N解耦。</p>
 <h3 id="中介者模式总结"><a href="#中介者模式总结" class="headerlink" title="中介者模式总结"></a>中介者模式总结</h3><p>在中介者模式中，中介者承担两方面的职责：</p>
 <ul>
 <li>中转作用（结构性）：通过中介者提供的中转作用，各个同事对象就不再需要显式引用其他同事，当需要和其他同事进行通信时，通过中介者即可。该中转作用属于中介者在结构上的支持。</li>
@@ -551,7 +552,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">38</span>
+                <span class="site-state-item-count">40</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -562,7 +563,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -573,7 +574,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">73</span>
+                <span class="site-state-item-count">77</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
