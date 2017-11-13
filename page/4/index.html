@@ -282,6 +282,346 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/10/Storm学习（三）：Storm概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/10/Storm学习（三）：Storm概念/" itemprop="url">Storm学习（三）：Storm概念</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-10T16:00:22+08:00">
+                2017-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Storm学习/" itemprop="url" rel="index">
+                    <span itemprop="name">Storm学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>对于Storm，其核心概念有包括：</p>
+<blockquote>
+<ul>
+<li>Stream 数据流</li>
+<li>Spout 数据流</li>
+<li>Bolt 处理数据</li>
+<li>Tuple 数据单元</li>
+<li>Task 运行Spout或Bolt中的线程</li>
+<li>Worker 是运行这些线程中的进程</li>
+<li>Stream Grouping 规定了Bolt接受何种数据类型作为输入</li>
+<li>Topology 是Stream Grouping连接起来的Spout和Bolt节点网络</li>
+</ul>
+</blockquote>
+<h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><blockquote>
+<p>Tuple 是Storm中使用的最基本单元、数据模型和元组。Tuple就是一个值列表，Tuple默认值类型有：integer、float、double、long、short、string、byte、binary[byte[]]。如果需要使用其他类型，需要序列化该类型。</p>
+</blockquote>
+<p>Tuple可以理解为键值对，键为declareOutputFields中的Fields，值为emit发送的Values。<br>Tuple由Spout中的nextTuple来获取下一个Tuple，通过emit将生成的Tuple发送出去。</p>
+<h3 id="Spout数据源"><a href="#Spout数据源" class="headerlink" title="Spout数据源"></a>Spout数据源</h3><p>Spout最源头的接口为IComponent，由Spout发出的Tuple，可以是可靠的，可以是不可靠的。可靠的Tuple会保证被Storm成功处理。处理失败后会重新发送。一个Spout可以发射多个流。在使用Spout时可以实现IRichSpout或者继承BaseRichSpout。<br>在Spout.declareOutputFields声明发送的Tuple包含的字段。</p>
+<h3 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h3><p>Bolt属于被动处理，元组输入Bolt，然后产生新的Tuple。<br>Bolt流程如下：<br>创建Bolt -&gt; 序列化Bolt -&gt; 提交集群开启Worker进程处理 -&gt; 反序列化Bolt -&gt; 调用prepare处理Tuple</p>
+<p>在Bolt处理完成后，如果Tuple是可靠的，需要调用ack，反馈调用成功。在使用IBasicBolt时，会自动调用ack，在BasicBoltExecutor.execute中可以看到调用完成后会调用ack。</p>
+<p>在使用Bolt中，常用类为BaseRichBolt、BaseBasicBolt，对于BaseBasicBolt继承IBasicBolt，同样处理完成后会自动调ack。BaseRichBot在处理完成后，如果Tuple是可靠的，需要手动调用ack。在可靠Tuple中，如果不是调用ack，因为Storm会一直追踪每个Tuple，需要中内存，长时间运行会导致OOM。</p>
+<p>在方法declareOutputFields中声明当前Bolt发送的字段。同样使用declareStream方法来定义流，之后使用emit选择需要发送的流。</p>
+<p>在Bolt使用emit时，可以通过传递参数streamId，来控制新的Tuple是否后旧的Tuple属于同一颗Tuple树。</p>
+<h3 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h3><p>在Storm中Topology是指类似于网络拓扑图的一种虚拟结构。一个拓扑图有Spout和Bolt组成，Spout和Bolt之间通过流分组连接起来。在启动Topology时，TopologyBuilder实际上是封装了Topology的Thrift接口，Topology实际上是Thrift定义的一个结构，Nimbus实际上运行的是一个Thrift服务器，用于接受用户提交的结构。因为使用Thrift实现，用户可以使用其他语言建立Topology。在提交Topology给Nimbus时，也会提交Topology代码。Nimbus负责分发代码和给Topology分配工作进程.如果一个工作进程挂掉后,Nimbus节点会重新分配到其他节点。</p>
+<h4 id="Topology运行流程"><a href="#Topology运行流程" class="headerlink" title="Topology运行流程"></a>Topology运行流程</h4><p>1、提交Topology后，Storm会把代码存放发到Nimbus节点的inbox目录下；之后把当前配置生成stormconf.ser文件放到Nimbus节点的stormdis目录中，改目录中还有序列化后的Topology文件。<br>2、设定Topology关联的Spout和Bolt，可以同时随着Spout和Bolt的Executor和Task数量，一个默认Topology的Task总和与Executor一致。之后根据Worker的数量，将这些Task分配到不同的Worder上执行。<br>3、分配任务后，Nimbus节点将任务信息提交到ZooKeeper集群，同时在ZooKeeper集群中有Workerbeats，这里存储了当前Topology所有Worker心跳<br>4、Supervisor节点轮询ZooKeeper集群，在ZooKeeper中assignments中保存了所有Topology任务分配信息、代码存储目录、任务之间关联关系等，Supervisor通过轮询改节点领取自己任务，启动Worker进程运行<br>5、Topology运行后，不断通过Spout来发生流，除非手动结束Topology。</p>
+<h4 id="Topology方法调用流程"><a href="#Topology方法调用流程" class="headerlink" title="Topology方法调用流程"></a>Topology方法调用流程</h4><p>1、在Spout或者Bolt中，declareOutputFields方法和构造方法只被调用一次<br>2、open和prepare调用多次，次数由设置运行组件的Task线程数量。<br>3、nextTuple和execute一直运行。<br>4、提交Topology后，Storm创建Spout/Bolt实例并进行序列化，之后将序列化组件发送给所有任务节点，在每个任务节点进行反序列化。<br>5、组件之间通信使用ZeroMQ</p>
+<h4 id="Topology执行单元概念"><a href="#Topology执行单元概念" class="headerlink" title="Topology执行单元概念"></a>Topology执行单元概念</h4><blockquote>
+<ul>
+<li>Worker对Topology中每个组件运行一个或者多个Executor线程来提供Task的执行服务，一个Supervisor中有多个worker，一个worker属于一个特定的Topology</li>
+<li>Executor属于Worker进程内线程</li>
+<li>Task，实际处理数据。在Topology生命周期中Task数量不会发生变化。</li>
+</ul>
+<p>worker 在yaml中的topology.workers属性设置，或者config中setNumWorkers<br>Executor 在setBolt或者setSpout中设置<br>Task 默认和Executor一致，在TopologyBuilder.setNumTasks设置<br>停止Topology storm kill sopologyName</p>
+</blockquote>
+<h3 id="Stream消息流"><a href="#Stream消息流" class="headerlink" title="Stream消息流"></a>Stream消息流</h3><p>stream消息流是一个抽象概念，主要是消息中的Tuple。</p>
+<h3 id="Stream-Grouping消息流组"><a href="#Stream-Grouping消息流组" class="headerlink" title="Stream Grouping消息流组"></a>Stream Grouping消息流组</h3><p>Stream Grouping消息流组定义一个流如何分配Tuple到Bolt。Storm包含6中流分组类型。<br>1、随机分组：随机分发Tuple到Bolt任务，保证每个任务获取相同的Tople。<br>2、字段分组：指定字段分割数据流并分组，相同的字段分到相同的Bolt，不同字段分配到不同的Bolt。<br>3、全部分组：对于每个Tuple来说，所有Bolt都会收到，所有Tuple复制到Bolt的所有任务上，需谨慎使用。<br>4、全局分组：全部流都分配到Bolt的同一个任务，就是分配到ID最小的Task上。<br>5、无分组：目前等效于随机分组<br>6、直接分组：Tuple生产者决定Tuple消费者任务接收。改分组仅被声明为direct stream的流使用。Tuple必须通过emitDirect直接发射。</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务为了解决Tuple在处理失败后重新发送提出.事务拓扑是指Storm以并行和顺序混合的方式处理Tuple，为了实现对消息的精确处理。<br>事务拓扑的目的是满足对消息处理有着极其严格要求的场景，要求结果完全精确。可以通过修改transactional.zookeeper中server和port指定其他ZooKeeper。</p>
+<h3 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h3><p>数据流处理如下<br>定义数据 -&gt; 定义数据处理 -&gt; 定义数据节点处理 -&gt; 定义数据处理任务实例 -&gt; 读取数据源头产生的数据 -&gt; 节点上运行任务实例 -&gt; 下一个节点运行任务实例 -&gt; … -&gt; 输出结果</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/09/SpringBoot集成swagger/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/08/09/SpringBoot集成swagger/" itemprop="url">SpringBoot集成swagger</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-09T11:08:00+08:00">
+                2017-08-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringBoot/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringBoot</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <blockquote>
+<p>Swagger 是一款RESTFUL接口的文档在线自动生成+功能测试功能软件。参考 <em><a href="https://swagger.io/" target="_blank" rel="external">官方地址</a></em></p>
+</blockquote>
+<h3 id="在SpringBoot中集成swagger"><a href="#在SpringBoot中集成swagger" class="headerlink" title="在SpringBoot中集成swagger"></a>在SpringBoot中集成swagger</h3><h4 id="创建maven项目，pom-xml添加依赖"><a href="#创建maven项目，pom-xml添加依赖" class="headerlink" title="创建maven项目，pom.xml添加依赖"></a>创建maven项目，pom.xml添加依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">parent</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-parent<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.5.4.RELEASE<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">parent</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-web<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="添加启动，以及配置"><a href="#添加启动，以及配置" class="headerlink" title="添加启动，以及配置"></a>添加启动，以及配置</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动类SpringBootMain</span></span><br><span class="line"><span class="meta">@SpringBootApplication</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMain</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SpringApplication.run(SpringBootMainConfig.class, args);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//spring 配置SpringBootMainConfig</span></span><br><span class="line"><span class="meta">@ComponentScan</span>(<span class="string">"com.whh"</span>)</span><br><span class="line"><span class="meta">@EnableAutoConfiguration</span></span><br><span class="line"><span class="meta">@EnableAsync</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SpringBootMainConfig</span> </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//Swagger配置</span></span><br><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="comment">//控制不同环境执行该配置</span></span><br><span class="line"><span class="meta">@Profile</span>(value = &#123;<span class="string">"dev"</span>, <span class="string">"beta"</span>&#125;)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">api</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .select()</span><br><span class="line">                .apis(RequestHandlerSelectors.basePackage(<span class="string">"com.whh"</span>))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//api controller</span></span><br><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"demoApi"</span>)</span><br><span class="line"><span class="meta">@Api</span>(value = <span class="string">"测试接口"</span>, description = <span class="string">"这个是测试用的接口"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoApiController</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, String&gt; data = <span class="keyword">new</span> ConcurrentHashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        data.put(<span class="string">"111"</span>, <span class="string">"aaa"</span>);</span><br><span class="line">        data.put(<span class="string">"222"</span>, <span class="string">"bbb"</span>);</span><br><span class="line">        data.put(<span class="string">"333"</span>, <span class="string">"ccc"</span>);</span><br><span class="line">        data.put(<span class="string">"444"</span>, <span class="string">"ddd"</span>);</span><br><span class="line">        data.put(<span class="string">"555"</span>, <span class="string">"eee"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@ApiOperation</span>(value = <span class="string">"所有数据"</span>, response = Map.class)</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/allData"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Map&lt;String, String&gt; <span class="title">allData</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@ApiOperation</span>(value = <span class="string">"展示数据"</span>, response = String.class)</span><br><span class="line">    <span class="meta">@ApiResponses</span>(value = &#123;</span><br><span class="line">            <span class="meta">@ApiResponse</span>(code = <span class="number">200</span>, message = <span class="string">"数据正常"</span>),</span><br><span class="line">            <span class="meta">@ApiResponse</span>(code = <span class="number">404</span>, message = <span class="string">"页面找不到"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/show/&#123;key&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">value</span><span class="params">(@PathVariable String key)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> data.get(key);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/add"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">add</span><span class="params">(@RequestParam String key, @RequestParam String value)</span></span>&#123;</span><br><span class="line">        data.put(key, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Add OK"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/update/&#123;key&#125;"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">update</span><span class="params">(@RequestParam String value, @PathVariable String key)</span></span>&#123;</span><br><span class="line">        data.put(key, value);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Update OK"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/remove/&#123;key&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ResponseEntity&lt;String&gt; <span class="title">remove</span><span class="params">(@PathVariable String key)</span></span>&#123;</span><br><span class="line">        data.remove(key);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> ResponseEntity&lt;&gt;(<span class="string">"Remove"</span>, HttpStatus.OK);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="添加swaggerUI"><a href="#添加swaggerUI" class="headerlink" title="添加swaggerUI"></a>添加swaggerUI</h4><p>下载swaggerUI，<a href="https://github.com/swagger-api/swagger-ui" target="_blank" rel="external">github swagger-ui官方地址</a>，把文件夹dist 放入springboot项目resource/statis下。改名为swagger-ui。修改文件index.html js中SwaggerUIBundle的url为<a href="http://localhost:7070/v2/api-docs。" target="_blank" rel="external">http://localhost:7070/v2/api-docs。</a></p>
+<h4 id="添加springboot配置文件"><a href="#添加springboot配置文件" class="headerlink" title="添加springboot配置文件"></a>添加springboot配置文件</h4><p>在resource下添加目录coufig，添加文件application.properties<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#配置文件环境</span><br><span class="line">spring.profiles.active=dev</span><br><span class="line">#server 启动端口</span><br><span class="line">server.port=7070</span><br><span class="line">#thymeleaf 模板缓存</span><br><span class="line">spring.thymeleaf.cache=false</span><br><span class="line">#spring.mvc 配置静态文件为准</span><br><span class="line">spring.mvc.static-path-pattern=/static/**</span><br></pre></td></tr></table></figure></p>
+<p>启动main方法，访问地址<a href="http://localhost:7070/static/swagger-ui/index.html" target="_blank" rel="external">http://localhost:7070/static/swagger-ui/index.html</a> ，大功告成</p>
+<blockquote>
+<p>如果需要直接通过配置文件。直接生产restful风格代码，可以使用<a href="https://editor.swagger.io/" target="_blank" rel="external">swagger edit</a>。</p>
+</blockquote>
+<h3 id="传统SpringMVC添加swagger"><a href="#传统SpringMVC添加swagger" class="headerlink" title="传统SpringMVC添加swagger"></a>传统SpringMVC添加swagger</h3><h4 id="添加pom依赖"><a href="#添加pom依赖" class="headerlink" title="添加pom依赖"></a>添加pom依赖</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>io.springfox<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>springfox-swagger2<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.6.1<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">scope</span>&gt;</span>compile<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<h4 id="添加swagger配置文件"><a href="#添加swagger配置文件" class="headerlink" title="添加swagger配置文件"></a>添加swagger配置文件</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Configuration</span></span><br><span class="line"><span class="meta">@EnableSwagger</span>2</span><br><span class="line"><span class="meta">@EnableWebMvc</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SwaggerConfig</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Bean</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Docket <span class="title">api</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> Docket(DocumentationType.SWAGGER_2)</span><br><span class="line">                .select()</span><br><span class="line">                .apis(RequestHandlerSelectors.basePackage(<span class="string">"com.whh"</span>))</span><br><span class="line">                .paths(PathSelectors.any())</span><br><span class="line">                .build();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果确实jackson类，需要添加jackson依赖</p>
+</blockquote>
+<p>后续操作和SpringBoot一样，添加ui和配置js地址等。</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/08/01/Storm学习（二）：安装使用Storm/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1595,348 +1935,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2016/12/28/springmvc-restfull风格/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/12/28/springmvc-restfull风格/" itemprop="url">SpringMVC RESTful风格</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-12-28T09:57:02+08:00">
-                2016-12-28
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/RESTfull/" itemprop="url" rel="index">
-                    <span itemprop="name">RESTfull</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="RESTfull简介"><a href="#RESTfull简介" class="headerlink" title="RESTfull简介"></a>RESTfull简介</h2><p>REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。<br>简单来说URL—&gt;资源，method—&gt;操作。</p>
-<h2 id="java例子（基于springMVC）"><a href="#java例子（基于springMVC）" class="headerlink" title="java例子（基于springMVC）"></a>java例子（基于springMVC）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/rest"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestFullController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">post</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"post"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"get"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.DELETE)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"delete"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>同一个url只是对应的method不一样，这样对于数据的增删改查，方法是基于请求时method。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2015/04/02/Git命令/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2015/04/02/Git命令/" itemprop="url">Git命令</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2015-04-02T17:07:45+08:00">
-                2015-04-02
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Git/" itemprop="url" rel="index">
-                    <span itemprop="name">Git</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <table>
-<thead>
-<tr>
-<th>命令</th>
-<th>解释</th>
-<th>备注</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>git init</td>
-<td>初始化一个Git仓库</td>
-</tr>
-<tr>
-<td>git add <file></file></td>
-<td>添加</td>
-<td>反复多次使用，添加多个文件</td>
-</tr>
-<tr>
-<td>git commit</td>
-<td>提交</td>
-</tr>
-<tr>
-<td>git status</td>
-<td>工作区的状态</td>
-</tr>
-<tr>
-<td>git diff</td>
-<td>查看修改内容</td>
-</tr>
-<tr>
-<td>git reset –hard commit_id</td>
-<td>返回到某版本</td>
-<td>HEAD指向的版本就是当前版本</td>
-</tr>
-<tr>
-<td>git log</td>
-<td>查看提交历史</td>
-<td>以便确定要回退到哪个版本</td>
-</tr>
-<tr>
-<td>git reflog</td>
-<td>查看命令历史</td>
-<td>以便确定要回到未来的哪个版本</td>
-</tr>
-<tr>
-<td>git checkout – file</td>
-<td>直接丢弃工作区的修改</td>
-<td>未add</td>
-</tr>
-<tr>
-<td>git reset HEAD file</td>
-<td>去掉暂存区，之后还要进行上面步骤</td>
-<td>已经add，未commit</td>
-</tr>
-</tbody>
-</table>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1987,7 +1985,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2009,7 +2007,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">85</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

@@ -282,6 +282,373 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/26/Java设计模式-命令模式（Command-Pattern）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/26/Java设计模式-命令模式（Command-Pattern）/" itemprop="url">Java设计模式-命令模式（Command Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-26T20:07:13+08:00">
+                2017-10-26
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><blockquote>
+<p>将一个请求封装为一个对象，从而让我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。</p>
+</blockquote>
+<p>UML类图如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.28.37.png" alt=""><br><img src="http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.44.24.png" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 抽象命令</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="comment">//命令执行方法</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 调用者</span><br><span class="line"> * 用于发起命令</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Invoker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Command command;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Invoker</span><span class="params">(Command command)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.command = command;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 业务方法，用于调用命令</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        command.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 具体命令类</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="comment">//接收者</span></span><br><span class="line">    <span class="keyword">private</span> Receiver receiver;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ConcreteCommand</span><span class="params">(Receiver receiver)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.receiver = receiver;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        receiver.action();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 接收者</span><br><span class="line">   常常会将Command实现类直接实现具体的逻辑和这个角色有重合</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Receiver</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">action</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"执行"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//接收者</span></span><br><span class="line">        Receiver receiver = <span class="keyword">new</span> Receiver();</span><br><span class="line">        <span class="comment">//命令</span></span><br><span class="line">        Command command = <span class="keyword">new</span> ConcreteCommand(receiver);</span><br><span class="line">        <span class="comment">//客户端直接执行具体命令方式</span></span><br><span class="line"><span class="comment">//        command.execute();</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//客户端通过调用者来执行命令</span></span><br><span class="line">        Invoker invoker = <span class="keyword">new</span> Invoker(command);</span><br><span class="line">        invoker.call();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>Command（抽象命令类）:Command（抽象命令类）：抽象命令类一般是一个抽象类或接口，在其中声明了用于执行请求的execute()等方法，通过这些方法可以调用请求接收者的相关操作。</li>
+<li>ConcreteCommand（具体命令类）：具体命令类是抽象命令类的子类，实现了在抽象命令类中声明的方法，它对应具体的接收者对象，将接收者对象的动作绑定其中。在实现execute()方法时，将调用接收者对象的相关操作(Action)。</li>
+<li>Invoker（调用者）：调用者即请求发送者，它通过命令对象来执行请求。一个调用者并不需要在设计时确定其接收者，因此它只与抽象命令类之间存在关联关系。在程序运行时可以将一个具体命令对象注入其中，再调用具体命令对象的execute()方法，从而实现间接调用请求接收者的相关操作。</li>
+<li>Receiver（接收者）：接收者执行与请求相关的操作，它具体实现对请求的业务处理。</li>
+</ul>
+<p>命令模式的本质是对请求进行封装，一个请求对应于一个命令，将发出命令的责任和执行命令的责任分割开。每一个命令都是一个操作：请求的一方发出请求要求执行一个操作；接收的一方收到请求，并执行相应的操作。命令模式允许请求的一方和接收的一方独立开来，使得请求的一方不必知道接收请求的一方的接口，更不必知道请求如何被接收、操作是否被执行、何时被执行，以及是怎么被执行的。</p>
+<p>命令模式的关键在于引入了抽象命令类，请求发送者针对抽象命令类编程，只有实现了抽象命令类的具体命令才与请求接收者相关联。在最简单的抽象命令类中只包含了一个抽象的execute()方法，每个具体命令类将一个Receiver类型的对象作为一个实例变量进行存储，从而具体指定一个请求的接收者，不同的具体命令类提供了execute()方法的不同实现，并调用不同接收者的请求处理方法。</p>
+<h4 id="宏命令"><a href="#宏命令" class="headerlink" title="宏命令"></a>宏命令</h4><p>宏命令(Macro Command)又称为组合命令，它是组合模式和命令模式联用的产物。宏命令是一个具体命令类，它拥有一个集合属性，在该集合中包含了对其他命令对象的引用。通常宏命令不直接与请求接收者交互，而是通过它的成员来调用接收者的方法。当调用宏命令的execute()方法时，将递归调用它所包含的每个成员命令的execute()方法，一个宏命令的成员可以是简单命令，还可以继续是宏命令。执行一个宏命令将触发多个具体命令的执行，从而实现对命令的批处理。<br>新增命令队列：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 命令队列，批量执行命令</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">MacroCommand</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> List&lt;Command&gt;commandList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">addCommand</span><span class="params">(Command command)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> commandList.add(command);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">removeComand</span><span class="params">(Command command)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> commandList.remove(command);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        commandList.forEach(Command::execute);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>修改调用者Invoker：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 调用者</span><br><span class="line"> * 用于发起命令</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Invoker</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> MacroCommand macroCommand;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Invoker</span><span class="params">(MacroCommand macroCommand)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.macroCommand = macroCommand;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 业务方法，用于调用命令</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        macroCommand.execute();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="实际举例"><a href="#实际举例" class="headerlink" title="实际举例"></a>实际举例</h4><p>需要一个库存项目，对外提供库存新增、扣减等操作。因为库存的频繁查询，实际库存是放入缓存中，为了避免数据库频繁更新，影响接口效率，更新缓存后，记录更新日志，方便日后查询，已经数据恢复。设计如下代码，采用命令设计模式把数据库操作抽象为相应的命令，对于数据库的操作封装好数据后放入队列，由其他线程处理队列中数据库操作命令，在实际应用中，为了避免因数据库宕机导致队列丢失，可以把命令修改操作放入消息中间件。<br>UML类图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午11.08.46.png" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 抽象命令</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="comment">//命令共有方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateCache</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//更新缓存，封装参数等，为后续操作做准备</span></span><br><span class="line">        System.out.println(<span class="string">"更新缓存"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//命令执行方法</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 库存新增</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IncreaseCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DBLog dbLog;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">IncreaseCommand</span><span class="params">(DBLog dbLog)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dbLog = dbLog;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"缓存库存添加！！！"</span>);</span><br><span class="line">        dbLog.insertLog();</span><br><span class="line">        System.out.println(<span class="string">"其他操作！！！"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 库存扣减</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DecreaseCommand</span> <span class="keyword">extends</span> <span class="title">Command</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> DBLog dbLog;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DecreaseCommand</span><span class="params">(DBLog dbLog)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.dbLog = dbLog;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">execute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"缓存库存扣减！！！"</span>);</span><br><span class="line">        dbLog.insertLog();</span><br><span class="line">        System.out.println(<span class="string">"其他操作"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 库存调用</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Invoker</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> BlockingQueue&lt;Command&gt; queue = <span class="keyword">new</span> LinkedBlockingQueue&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">put</span><span class="params">(Command command)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        command.updateCache();</span><br><span class="line">        queue.put(command);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">call</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    queue.take().execute();</span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;).start();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 数据库操作</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DBLog</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String arg;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DBLog</span><span class="params">(String name, String arg)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.arg = arg;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertLog</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(name + <span class="string">"：数据库日志插入！！参数："</span> + arg);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        DBLog increase = <span class="keyword">new</span> DBLog(<span class="string">"增加库存"</span>, <span class="string">"1"</span>);</span><br><span class="line">        DBLog decrease = <span class="keyword">new</span> DBLog(<span class="string">"扣减库存"</span>, <span class="string">"1"</span>);</span><br><span class="line"></span><br><span class="line">        Command increaseCommand = <span class="keyword">new</span> IncreaseCommand(increase);</span><br><span class="line">        Command decreaseCommand = <span class="keyword">new</span> DecreaseCommand(decrease);</span><br><span class="line"></span><br><span class="line">        Invoker invoker = <span class="keyword">new</span> Invoker();</span><br><span class="line">        invoker.put(increaseCommand);</span><br><span class="line">        invoker.put(increaseCommand);</span><br><span class="line">        invoker.put(decreaseCommand);</span><br><span class="line"></span><br><span class="line">        invoker.call();</span><br><span class="line">        invoker.put(decreaseCommand);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在实际应用中，在用JAVA写GUI时，一个按钮有相应的功能，如果需要做到用户自定义按钮功能，也可以使用命令模式。</p>
+<h3 id="JDK中命令模式使用"><a href="#JDK中命令模式使用" class="headerlink" title="JDK中命令模式使用"></a>JDK中命令模式使用</h3><p>在JDK中ThreadPoolExecutor可以视为命令模式，UML类图如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.35.31.png" alt=""><br>在ThreadPoolExecutor中：</p>
+<ul>
+<li>ThreadPoolExecutor：调用者</li>
+<li>Runnable：抽象命令</li>
+<li>BlockingQueue：命令队列</li>
+</ul>
+<p>在需要执行命令时，由客户端实现Runnable提交到ThreadPoolExecutor由JVM执行执行。</p>
+<h3 id="命令模式总结"><a href="#命令模式总结" class="headerlink" title="命令模式总结"></a>命令模式总结</h3><p>命令模式是一种使用频率非常高的设计模式，它可以将请求发送者与接收者解耦，请求发送者通过命令对象来间接引用请求接收者，使得系统具有更好的灵活性和可扩展性。在基于GUI的软件开发，无论是在电脑桌面应用还是在移动应用中，命令模式都得到了广泛的应用。</p>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>GUI 中每一个按钮都是一条命令。</li>
+<li>系统需要将请求调用者和请求接收者解耦，使得调用者和接收者不直接交互。请求调用者无须知道接收者的存在，也无须知道接收者是谁，接收者也无须关心何时被调用。</li>
+<li>系统需要在不同的时间指定请求、将请求排队和执行请求。一个命令对象和请求的初始调用者可以有不同的生命期，换言之，最初的请求发出者可能已经不在了，而命令对象本身仍然是活动的，可以通过该命令对象去调用请求接收者，而无须关心请求调用者的存在性，可以通过请求日志文件等机制来具体实现。</li>
+<li>系统需要支持命令的撤销(Undo)操作和恢复(Redo)操作。</li>
+<li>系统需要将一组操作组合在一起形成宏命令。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>降低系统的耦合度。由于请求者与接收者之间不存在直接引用，因此请求者与接收者之间实现完全解耦，相同的请求者可以对应不同的接收者，同样，相同的接收者也可以供不同的请求者使用，两者之间具有良好的独立性。</li>
+<li>新的命令可以很容易地加入到系统中。由于增加新的具体命令类不会影响到其他类，因此增加新的具体命令类很容易，无须修改原有系统源代码，甚至客户类代码，满足“开闭原则”的要求。</li>
+<li>在需要的情况下，可以比较容易的将命令记入日志。</li>
+<li>可以比较容易地设计一个命令队列或宏命令（组合命令）。</li>
+<li>为请求的撤销(Undo)和恢复(Redo)操作提供了一种设计和实现方案（如之前库存通过日志恢复）。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>使用命令模式可能会导致某些系统有过多的具体命令类。因为针对每一个对请求接收者的调用操作都需要设计一个具体命令类，因此在某些系统中可能需要提供大量的具体命令类，这将影响命令模式的使用。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/20/Java设计模式-职责链模式（Chain-of-Responsibility-Pattern）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/20/Java设计模式-职责链模式（Chain-of-Responsibility-Pattern）/" itemprop="url">Java设计模式-职责链模式（Chain of Responsibility Pattern）</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-20T10:04:02+08:00">
+                2017-10-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/设计模式/" itemprop="url" rel="index">
+                    <span itemprop="name">设计模式</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="职责链模式（责任链模式）"><a href="#职责链模式（责任链模式）" class="headerlink" title="职责链模式（责任链模式）"></a>职责链模式（责任链模式）</h3><blockquote>
+<p>避免请求发送者与接收者耦合在一起，让多个对象都有可能接收请求，将这些对象连接成一条链，并且沿着这条链传递请求，直到有对象处理它为止。职责链模式是一种对象行为型模式。</p>
+</blockquote>
+<p>职责链模式结构的核心在于引入了一个抽象处理者。UML类图如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171020屏幕快照2017-10-20上午10.53.12.png" alt=""></p>
+<ul>
+<li>Handler（抽象处理者）：它定义了一个处理请求的接口，一般设计为抽象类，由于不同的具体处理者处理请求的方式不同，因此在其中定义了抽象请求处理方法。因为每一个处理者的下家还是一个处理者，因此在抽象处理者中定义了一个抽象处理者类型的对象（如结构图中的successor），作为其对下家的引用。通过该引用，处理者可以连成一条链。</li>
+<li>ConcreteHandler（具体处理者）：它是抽象处理者的子类，可以处理用户请求，在具体处理者类中实现了抽象处理者中定义的抽象请求处理方法，在处理请求之前需要进行判断，看是否有相应的处理权限，如果可以处理请求就处理它，否则将请求转发给后继者；在具体处理者中可以访问链中下一个对象，以便请求的转发。</li>
+</ul>
+<p>在职责链模式里，很多对象由每一个对象对其下家的引用而连接起来形成一条链。请求在这个链上传递，直到链上的某一个对象决定处理此请求。发出这个请求的客户端并不知道链上的哪一个对象最终处理这个请求，这使得系统可以在不影响客户端的情况下动态地重新组织链和分配责任。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Handler</span></span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> Handler successor;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSuccessor</span><span class="params">(Handler successor)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.successor = successor;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">handleRequest</span><span class="params">(String request)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteHandlerA</span> <span class="keyword">extends</span> <span class="title">Handler</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">handleRequest</span><span class="params">(String request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(<span class="string">"满足A"</span>.equals(request))&#123;</span><br><span class="line">            System.out.println(<span class="string">"A处理"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            successor.handleRequest(request);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ConcreteHandlerB</span> <span class="keyword">extends</span> <span class="title">Handler</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">handleRequest</span><span class="params">(String request)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">"满足B"</span>.equals(request))&#123;</span><br><span class="line">            System.out.println(<span class="string">"B处理"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            successor.handleRequest(request);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>此处属于最简单的职责链，实际使用过程中，可能并没有怎么简单。</p>
+<p>在使用职责链的时候分为纯职责链、不纯的职责链模式</p>
+<ul>
+<li>纯职责链：一个纯的职责链模式要求一个具体处理者对象只能在两个行为中选择一个：要么承担全部责任，要么将责任推给下家，不允许出现某一个具体处理者对象在承担了一部分或全部责任后又将责任向下传递的情况。而且在纯的职责链模式中，要求一个请求必须被某一个处理者对象所接收，不能出现某个请求未被任何一个处理者对象处理的情况。</li>
+<li>不纯的职责链：在一个不纯的职责链模式中允许某个请求被一个具体处理者部分处理后再向下传递，或者一个具体处理者处理完某请求后其后继处理者可以继续处理该请求，而且一个请求可以最终不被任何处理者对象所接收。</li>
+</ul>
+<h3 id="在java-web中应用"><a href="#在java-web中应用" class="headerlink" title="在java web中应用"></a>在java web中应用</h3><p>在java web中filter就使用了职责链模式。<br>这里模仿filter实现：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 这里request、response、filterChain原本是使用的接口，这里使用的是类，为了简化模型</span><br><span class="line"> * request请求</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Request</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String header;</span><br><span class="line">    <span class="keyword">private</span> String body;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Request</span><span class="params">(String header, String body)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.header = header;</span><br><span class="line">        <span class="keyword">this</span>.body = body;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHeader</span><span class="params">(String header)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.header = header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBody</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> body;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBody</span><span class="params">(String body)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.body = body;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * response请求</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Response</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String header;</span><br><span class="line">    <span class="keyword">private</span> String body;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Response</span><span class="params">(String header, String body)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.header = header;</span><br><span class="line">        <span class="keyword">this</span>.body = body;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getHeader</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setHeader</span><span class="params">(String header)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.header = header;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getBody</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> body;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBody</span><span class="params">(String body)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.body = body;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 拦截器</span><br><span class="line"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="comment">//指定拦截url</span></span><br><span class="line">    <span class="keyword">protected</span> String urlPattern;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Filter</span><span class="params">(String urlPattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.urlPattern = urlPattern;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 拦截</span><br><span class="line">     *</span><br><span class="line">     * <span class="doctag">@param</span> request</span><br><span class="line">     * <span class="doctag">@param</span> response</span><br><span class="line">     * <span class="doctag">@param</span> filterChain</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(Request request, Response response, FilterChain filterChain)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> <span class="keyword">boolean</span> <span class="title">valid</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> str.startsWith(urlPattern);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 避免Xss攻击，消息转义</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">XSSFilter</span> <span class="keyword">extends</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">XSSFilter</span><span class="params">(String urlPattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(urlPattern);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(Request request, Response response, FilterChain filterChain)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"消息转义拦截器处理！！！"</span>);</span><br><span class="line">        request.setBody(request.getBody()</span><br><span class="line">                .replaceAll(<span class="string">"&lt;"</span>, <span class="string">"&amp;lt;"</span>)</span><br><span class="line">                .replaceAll(<span class="string">"&gt;"</span>, <span class="string">"&amp;gt;"</span>)</span><br><span class="line">                .replaceAll(<span class="string">"&amp;"</span>, <span class="string">"&amp;amp;"</span>));</span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 登陆拦截器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LoginFilter</span> <span class="keyword">extends</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LoginFilter</span><span class="params">(String urlPattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(urlPattern);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(Request request, Response response, FilterChain filterChain)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"登陆拦截器处理！！！"</span>);</span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * API接口拦截器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ApiFilter</span> <span class="keyword">extends</span> <span class="title">Filter</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ApiFilter</span><span class="params">(String urlPattern)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">super</span>(urlPattern);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(Request request, Response response, FilterChain filterChain)</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"API接口拦截器处理！！！"</span>);</span><br><span class="line">        filterChain.doFilter(request, response);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 过滤器链</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">FilterChain</span> </span>&#123;</span><br><span class="line">    <span class="comment">//所有过滤器</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;Filter&gt; filters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">private</span> Iterator&lt;Filter&gt; filterIterator = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">addFilter</span><span class="params">(Filter filter)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> filters.add(filter);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//过滤器开始执行</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doFilter</span><span class="params">(Request request, Response response)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (filterIterator == <span class="keyword">null</span>) &#123;</span><br><span class="line">            filterIterator = filters.iterator();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (filterIterator.hasNext()) &#123;</span><br><span class="line">            filterIterator.next().doFilter(request, response, <span class="keyword">this</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//配置拦截器</span></span><br><span class="line">        XSSFilter xssFilter = <span class="keyword">new</span> XSSFilter(<span class="string">"/"</span>);</span><br><span class="line">        LoginFilter loginFilter = <span class="keyword">new</span> LoginFilter(<span class="string">"/user/"</span>);</span><br><span class="line">        ApiFilter apiFilter = <span class="keyword">new</span> ApiFilter(<span class="string">"/api"</span>);</span><br><span class="line">        List&lt;Filter&gt; filters = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        filters.add(xssFilter);</span><br><span class="line">        filters.add(loginFilter);</span><br><span class="line">        filters.add(apiFilter);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        String url = <span class="string">"/user/xxxx"</span>;</span><br><span class="line">        Request request = <span class="keyword">new</span> Request(url, <span class="string">"&lt;script&gt;alert(1)&lt;/script&gt;"</span>);</span><br><span class="line">        <span class="comment">//通过URL生产拦截器链</span></span><br><span class="line">        FilterChain filterChain = <span class="keyword">new</span> FilterChain();</span><br><span class="line">        filters.forEach(filter -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (filter.valid(request.getHeader()))&#123;</span><br><span class="line">                filterChain.addFilter(filter);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        filterChain.doFilter(request, <span class="keyword">null</span>);</span><br><span class="line">        System.out.println(request.getBody());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>UML类图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171020屏幕快照2017-10-20下午1.56.52.png" alt=""><br>代码中通过请求URL来获取需要的拦截器组成拦截器链，在实际web中url-pattern配置FilterConfig。</p>
+<p>在spring中FilterChain实现有多种，有维护List（集合）、维护nextFilterChain（链表）。</p>
+<h3 id="拦截器总结"><a href="#拦截器总结" class="headerlink" title="拦截器总结"></a>拦截器总结</h3><p>在平常项目中，大量使用了else if，每个else if中有大量逻辑等，可以改造成职责链模式。<br>如：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当前可以参加的所有套装活动</span></span><br><span class="line"><span class="keyword">if</span> (<span class="string">"单品多件"</span>.equals(type))&#123;</span><br><span class="line">    <span class="comment">//单品多件筛选逻辑</span></span><br><span class="line">&#125;<span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"固定搭配"</span>.equals(type))&#123;</span><br><span class="line">    <span class="comment">//固定搭配筛选逻辑</span></span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">"自由组合"</span>.equals(type))&#123;</span><br><span class="line">    <span class="comment">//自由组合筛选逻辑</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这样每次通过添加else if判断处理相关内容，业务变更，后续代码添加，导致代码特别长，无法灵活使用。</p>
+<p>职责链模式通过建立一条链来组织请求的处理者，请求将沿着链进行传递，请求发送者无须知道请求在何时、何处以及如何被处理，实现了请求发送者与处理者的解耦。</p>
+<p><strong>应用场景：</strong></p>
+<ul>
+<li>有多个对象可以处理同一个请求，具体哪个对象处理该请求待运行时刻再确定，客户端只需将请求提交到链上，而无须关心请求的处理对象是谁以及它是如何处理的。</li>
+<li>在不明确指定接收者的情况下，向多个对象中的一个提交一个请求。</li>
+<li>可动态指定一组对象处理请求，客户端可以动态创建职责链来处理请求，还可以改变链中处理者之间的先后次序。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>职责链模式使得一个对象无须知道是其他哪一个对象处理其请求，对象仅需知道该请求会被处理即可，接收者和发送者都没有对方的明确信息，且链中的对象不需要知道链的结构，由客户端负责链的创建，降低了系统的耦合度。</li>
+<li>请求处理对象仅需维持一个指向其后继者的引用，而不需要维持它对所有的候选处理者的引用，可简化对象的相互连接。</li>
+<li>在给对象分派职责时，职责链可以给我们更多的灵活性，可以通过在运行时对该链进行动态的增加或修改来增加或改变处理一个请求的职责。</li>
+<li>在系统中增加一个新的具体请求处理者时无须修改原有系统的代码，只需要在客户端重新建链即可，从这一点来看是符合“开闭原则”的。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>由于一个请求没有明确的接收者，那么就不能保证它一定会被处理，该请求可能一直到链的末端都得不到处理；一个请求也可能因职责链没有被正确配置而得不到处理。</li>
+<li>对于比较长的职责链，请求的处理可能涉及到多个处理对象，系统性能将受到一定影响，而且在进行代码调试时不太方便。</li>
+<li>如果建链不当，可能会造成循环调用，将导致系统陷入死循环。</li>
+</ul>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/10/18/Java设计模式-代理模式（Proxy-Pattern）/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1826,349 +2193,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/20/Java设计模式-桥接模式（Bridge-Pattern）/" itemprop="url">Java设计模式-桥接模式（Bridge Pattern）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-20T19:16:12+08:00">
-                2017-09-20
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="处理多维度变化–桥接模式"><a href="#处理多维度变化–桥接模式" class="headerlink" title="处理多维度变化–桥接模式"></a>处理多维度变化–桥接模式</h3><blockquote>
-<p>将抽象部分与它的实现部分分离，使它们都可以独立地变化。它是一种对象结构型模式，又称为柄体(Handle and Body)模式或接口(Interface)模式。</p>
-</blockquote>
-<p>桥接模式用一种巧妙的方式处理多层继承存在的问题，用抽象关联取代了传统的多层继承，将类之间的静态继承关系转换为动态的对象组合关系，使得系统更加灵活，并易于扩展，同时有效控制了系统中类的个数。</p>
-<p>错误示范：<br>要设计武器，要有基本武器，还有附魔武器。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午7.49.52.png" alt=""></p>
-<p>采用桥接模式：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.06.56.png" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line">**</span><br><span class="line"> * 武器</span><br><span class="line"> */</span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Weapon</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 轻攻击</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">lightAttack</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 重攻击</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">heavyAttack</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 附魔</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Enchantment</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 激活</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onActivate</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 使用</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 失效</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">onDeactivate</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 出血附魔</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">BleedingEnchantment</span> <span class="keyword">implements</span> <span class="title">Enchantment</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"激活出血效果"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"出血伤害"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDeactivate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"取消出血效果"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 暴击附魔</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StrikeEnchantment</span> <span class="keyword">implements</span> <span class="title">Enchantment</span></span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onActivate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"激活暴击效果"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">apply</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"暴击伤害"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onDeactivate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"取消暴击效果"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 剑</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sword</span> <span class="keyword">implements</span> <span class="title">Weapon</span></span>&#123;</span><br><span class="line">    <span class="comment">//附魔</span></span><br><span class="line">    <span class="keyword">private</span> Enchantment enchantment;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Sword</span><span class="params">(Enchantment enchantment)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.enchantment = enchantment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightAttack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onActivate();</span><br><span class="line">            enchantment.apply();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"剑轻攻击"</span>);</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onDeactivate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heavyAttack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onActivate();</span><br><span class="line">            enchantment.apply();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"剑重攻击"</span>);</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onDeactivate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 大锤</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Hammer</span> <span class="keyword">implements</span> <span class="title">Weapon</span></span>&#123;</span><br><span class="line">    <span class="comment">//附魔</span></span><br><span class="line">    <span class="keyword">private</span> Enchantment enchantment;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Hammer</span><span class="params">(Enchantment enchantment)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.enchantment = enchantment;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">lightAttack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onActivate();</span><br><span class="line">            enchantment.apply();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"大锤轻攻击"</span>);</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onDeactivate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">heavyAttack</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onActivate();</span><br><span class="line">            enchantment.apply();</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"大锤重攻击"</span>);</span><br><span class="line">        <span class="keyword">if</span> (enchantment != <span class="keyword">null</span>)&#123;</span><br><span class="line">            enchantment.onDeactivate();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Enchantment strikeEnchantment = <span class="keyword">new</span> StrikeEnchantment();</span><br><span class="line">        Weapon hammer = <span class="keyword">new</span> Hammer(strikeEnchantment);</span><br><span class="line">        hammer.heavyAttack();</span><br><span class="line"></span><br><span class="line">        Enchantment bleedingEnchantment = <span class="keyword">new</span> BleedingEnchantment();</span><br><span class="line">        Weapon sword = <span class="keyword">new</span> Sword(bleedingEnchantment);</span><br><span class="line">        sword.lightAttack();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<h3 id="Java中使用的桥接"><a href="#Java中使用的桥接" class="headerlink" title="Java中使用的桥接"></a>Java中使用的桥接</h3><p>java.util.logging.Handler中Formatter，采用的是桥接设计模式。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.49.05.png" alt=""><br>Handler子类有ConsoleHandler、FileHandler、SocketHandler等<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.52.39.png" alt=""><br>Formatter子类有XMLFormatter、SimpleFormatter等</p>
-<p>在Handler子类中有实现publish中，有需要使用Formatter来格式化输出，如图<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.55.23.png" alt=""></p>
-<p>JDBC连接核心也是使用的桥接模式，如下：<br>Class.forName(“com.mysql.jdbc.Driver”);<br>DriverManager.getConnection(“url”);<br>在com.mysql.jdbc.Driver类加载的时候有个静态方法，把当前对象加载到DriverManager.registeredDrivers中<br>在使用getConnection的时候，获取到之前的驱动连接数据库。如图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午9.05.37.png" alt=""><br><img src="http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午9.05.47.png" alt=""></p>
-<p>JDBC连接桥接模式，相对之前，只是属性设置不一样。</p>
-<h3 id="桥接模式总结"><a href="#桥接模式总结" class="headerlink" title="桥接模式总结"></a>桥接模式总结</h3><p>桥接模式和适配器模式用于设计的不同阶段，桥接模式用于系统的初步设计，对于存在两个独立变化维度的类可以将其分为抽象化和实现化两个角色，使它们可以分别进行变化；而在初步设计完成之后，当发现系统与已有类无法协同工作时，可以采用适配器模式。但有时候在设计初期也需要考虑适配器模式，特别是那些涉及到大量第三方应用接口的情况。</p>
-<p>在软件开发中如果一个类或一个系统有多个变化维度时，都可以尝试使用桥接模式对其进行设计。桥接模式为多维度变化的系统提供了一套完整的解决方案，并且降低了系统的复杂度。</p>
-<p><strong>使用场景：</strong></p>
-<ul>
-<li>如果一个系统需要在抽象化和具体化之间增加更多的灵活性，避免在两个层次之间建立静态的继承关系，通过桥接模式可以使它们在抽象层建立一个关联关系。</li>
-<li>拆分后两部分互不影响。</li>
-<li>一个类有多个变化维度，且多个纬度都需要进行独立扩展。</li>
-<li>不希望使用多继承，导致类增多情况。</li>
-</ul>
-<p><strong>优点 ：</strong></p>
-<ul>
-<li>分离抽象接口及其实现部分，使各自都有自己子类，方便组合。</li>
-<li>在有的情况下可以取代多继承，多层继承方案违背了“单一职责原则”，复用性较差，且类的个数非常多，桥接模式是比多层继承方案更好的解决方法，它极大减少了子类的个数。</li>
-<li>桥接模式提高了系统的可扩展性，在两个变化维度中任意扩展一个维度，都不需要修改原有系统，符合“开闭原则”。</li>
-</ul>
-<p><strong>缺点：</strong></p>
-<ul>
-<li>桥接模式的使用会增加系统的理解与设计难度，由于关联关系建立在抽象层，要求开发者一开始就针对抽象层进行设计与编程。</li>
-<li>不容易识别系统的独立变化纬度，需要一定经验积累。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.xuzhuowhh.com/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/09/15/Java设计模式-适配器模式（Adapter-Pattern）/" itemprop="url">Java设计模式-适配器模式（Adapter Pattern）</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-15T14:12:06+08:00">
-                2017-09-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/设计模式/" itemprop="url" rel="index">
-                    <span itemprop="name">设计模式</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="不兼容结构的协调–适配器模式"><a href="#不兼容结构的协调–适配器模式" class="headerlink" title="不兼容结构的协调–适配器模式"></a>不兼容结构的协调–适配器模式</h3><blockquote>
-<p>适配器模式把一个类的接口变换成客户端所期待的另一种接口，从而使原本因接口不匹配而无法在一起工作的两个类能够在一起工作。</p>
-</blockquote>
-<p>当客户类调用适配器的方法时，在适配器类的内部将调用适配者类的方法，而这个过程对客户类是透明的，客户类并不直接访问适配者类。因此，适配器让那些由于接口不兼容而不能交互的类可以一起工作。适配器的特点在于兼容。<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.17.05.png" alt=""></p>
-<ul>
-<li>Target是用户使用的目标类</li>
-<li>Adaptee是需要适配的第三方类</li>
-<li>Adapter是适配器类</li>
-</ul>
-<p>举例如下：<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.11.35.png" alt=""><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 插入充电</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 双孔插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoubleEndedPlug</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"双孔插头充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 3孔插座</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeHoleSocket</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"三孔插座充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 对象适配器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoublePlugAdapter</span> <span class="keyword">extends</span> <span class="title">DoubleEndedPlug</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> ThreeHoleSocket socket;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DoublePlugAdapter</span><span class="params">(ThreeHoleSocket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.socket = socket;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//封装数据等操作，使适配器适配</span></span><br><span class="line">        System.out.println(<span class="string">"双孔适配插入三孔插座"</span>);</span><br><span class="line">        socket.charge();</span><br><span class="line">        <span class="comment">//封装返回值等操作，使适配器适配</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Plug plug = <span class="keyword">new</span> DoubleEndedPlug();</span><br><span class="line">        <span class="comment">//默认双孔充电</span></span><br><span class="line">        plug.charge();</span><br><span class="line">        Plug plugAdapter = <span class="keyword">new</span> DoublePlugAdapter(<span class="keyword">new</span> ThreeHoleSocket());</span><br><span class="line">        <span class="comment">//使用适配器三孔充电</span></span><br><span class="line">        plugAdapter.charge();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用适配器后，可以使用双孔充电器插入双孔插座充电。<br>在JDK中InputStreamReader(InputStream)就是使用的装饰适配器设计模式<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//字节流</span></span><br><span class="line">InputStream fileInputStream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"tmp.txt"</span>));</span><br><span class="line">StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"><span class="keyword">int</span> tmp;</span><br><span class="line"><span class="keyword">while</span> ((tmp = fileInputStream.read()) != -<span class="number">1</span>)&#123;</span><br><span class="line">    sb.append((<span class="keyword">char</span>)tmp);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(sb);</span><br><span class="line">fileInputStream.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">//使用适配器模式，转换为字符流，读取单个字符</span></span><br><span class="line">InputStream inputStream = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"tmp.txt"</span>));</span><br><span class="line">InputStreamReader inputStreamReader = <span class="keyword">new</span> InputStreamReader(inputStream);</span><br><span class="line">sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line"><span class="keyword">while</span> ((tmp = inputStreamReader.read()) != -<span class="number">1</span>)&#123;</span><br><span class="line">    sb.append((<span class="keyword">char</span>)tmp);</span><br><span class="line">&#125;</span><br><span class="line">System.out.println(sb);</span><br></pre></td></tr></table></figure></p>
-<p>InputStreamReader父类Reader是面向字符流的读取接口，使用适配器设计模式后，从字节流中读取数据。</p>
-<h3 id="类适配器"><a href="#类适配器" class="headerlink" title="类适配器"></a>类适配器</h3><p>除了对象适配器模式之外，还有类适配器。类适配器模式和对象适配器模式最大的区别在于适配器和适配者之间的关系不同，对象适配器模式中适配器和适配者之间是关联关系，而类适配器模式中适配器和适配者是继承关系。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span><br><span class="line"> * 插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line">    <span class="comment">/**</span><br><span class="line">     * 插入充电</span><br><span class="line">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 双孔插头</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoubleEndedPlug</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"双孔插头充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 3孔插座</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ThreeHoleSocket</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"三孔插座充电"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span><br><span class="line"> * 类适配器</span><br><span class="line"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DoublePlugAdapter</span> <span class="keyword">extends</span> <span class="title">ThreeHoleSocket</span> <span class="keyword">implements</span> <span class="title">Plug</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">charge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="comment">//封装数据等操作，使适配器适配</span></span><br><span class="line">        System.out.println(<span class="string">"双孔适配插入三孔插座"</span>);</span><br><span class="line">        <span class="keyword">super</span>.charge();</span><br><span class="line">        <span class="comment">//封装返回值等操作，使适配器适配</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Plug plug = <span class="keyword">new</span> DoubleEndedPlug();</span><br><span class="line">        <span class="comment">//默认双孔充电</span></span><br><span class="line">        plug.charge();</span><br><span class="line">        Plug plugAdapter = <span class="keyword">new</span> DoublePlugAdapter();</span><br><span class="line">        <span class="comment">//使用适配器三孔充电</span></span><br><span class="line">        plugAdapter.charge();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>因为java不支持多继承，在使用类适配器的时候，会受到很多限制。如果目标类没有接口，无法使用类适配器。</p>
-<h3 id="双向适配器"><a href="#双向适配器" class="headerlink" title="双向适配器"></a>双向适配器</h3><p>双向适配器其实就是在适配器中同时拥有双方的对象，只是对适配器的一种扩充，使用相对较少。</p>
-<h3 id="缺省适配器"><a href="#缺省适配器" class="headerlink" title="缺省适配器"></a>缺省适配器</h3><p>缺省适配器是适配器模式的一种变种。</p>
-<blockquote>
-<p>当不需要实现一个接口所提供的所有方法时，可先设计一个抽象类实现该接口，并为接口中每个方法提供一个默认实现（空方法），那么该抽象类的子类可以选择性地覆盖父类的某些方法来实现需求，它适用于不想使用一个接口中的所有方法的情况，又称为单接口适配器模式。</p>
-</blockquote>
-<p><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.27.08.png" alt=""></p>
-<p>如java.awt.event中WindowAdapter就是使用的缺省适配器设计模式<br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.11.png" alt=""><br><img src="http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.29.18.png" alt=""></p>
-<p>在处理窗口事件的时候，可以使用WindowListener接口，但是需要实现接口中所有方法，但是在使用过程中不需要，所以就可以使用WindowAdapter来完成相同的事情。WindowAdapter中实现的方法都为空方法。</p>
-<h3 id="适配器设计模式总结"><a href="#适配器设计模式总结" class="headerlink" title="适配器设计模式总结"></a>适配器设计模式总结</h3><p>优点：</p>
-<ul>
-<li>适配器设计模式是讲现有方法转换为所需要的方法，实现了对类的复用。</li>
-<li>适配器实现了目标类和适配者的解耦</li>
-<li>修改适配器可以在不修改源代码的情况下实现，符合“开闭原则”<br>缺点：</li>
-<li>过多使用适配器会导致系统混乱。</li>
-<li>final无法适配</li>
-<li>不支持多继承，适配有限制<br>适配器一般多用于后期系统扩展、修改。</li>
-</ul>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -2219,7 +2243,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-count">44</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -2241,7 +2265,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">81</span>
+                <span class="site-state-item-count">85</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
