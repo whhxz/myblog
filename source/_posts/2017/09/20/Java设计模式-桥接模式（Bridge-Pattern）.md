@@ -13,7 +13,7 @@ tags: ['设计模式', '桥接模式', 'Bridge Pattern']
 错误示范：
 要设计武器，要有基本武器，还有附魔武器。
 ![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午7.49.52.png)
-
+<!-- more -->
 采用桥接模式：
 ![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.06.56.png)
 ```Java

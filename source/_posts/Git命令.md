@@ -17,3 +17,4 @@ git log | 查看提交历史 | 以便确定要回退到哪个版本
 git reflog | 查看命令历史 | 以便确定要回到未来的哪个版本
 git checkout -- file | 直接丢弃工作区的修改 | 未add
 git reset HEAD file | 去掉暂存区，之后还要进行上面步骤 | 已经add，未commit
+<!-- more -->

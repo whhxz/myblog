@@ -22,3 +22,4 @@ Error response from daemon: conflict: unable to delete 1c4475fbe64f (must be for
 ```
 但是使用`docker ps`未显示任何数据
 解决办法先`docker rm a4f0c195cff5` 之后`docker rmi 1c4475fbe64f`
+<!-- more -->

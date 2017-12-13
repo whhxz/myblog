@@ -7,7 +7,7 @@ categories: ['RESTfull']
 ## RESTfull简介
 REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。
 简单来说URL--->资源，method--->操作。
-
+<!-- more -->
 ## java例子（基于springMVC）
 ``` java
 @Controller

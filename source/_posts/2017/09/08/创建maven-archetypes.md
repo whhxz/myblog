@@ -33,6 +33,7 @@ tags: ['maven', '脚手架', '快速搭建项目', 'archetypes']
   </build>
 </project>
 ```
+<!-- more -->
 #### 配置相关文件
 目录结构如下
 ![](http://otxnth5wx.bkt.clouddn.com/20170908%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-08%E4%B8%8A%E5%8D%8810.13.35.png)

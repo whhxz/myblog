@@ -12,7 +12,7 @@ docker install centos
 需要下载JRE和Tomcat，Jre在Oracle官网下载Jre8和Tomcat官网下载。
 
 Jre下载解压后不需要做相应改动。
-Tomcat在解压后，删除 **`webroot/ROOT`** 下所有文件。修改 **`conf/server.xml`**，在Host节点下添加 ** `&lt;Context docBase="/home/webdata/webroot/manage.war" path="" reloadable="true" /&gt;` ** 。`manage.war`表示这次配置的项目。
+Tomcat在解压后，删除 **`webroot/ROOT`** 下所有文件。修改 **`conf/server.xml`**，在Host节点下添加 ** `&lt;Context docBase="/home/webdata/webroot/manage.war" path="" reloadable="true" /&gt;` ** 。`manage.war`表示这次配置的项目。<!-- more -->
 ### 配置Dockerfile
 ```file
 # 使用centos镜像

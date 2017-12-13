@@ -12,7 +12,7 @@ tags: ["Spring", "SpringMVC", "Mybatis", "基础"]
 2. 添加所需要的目录
 3. 配置maven使用的相关插件
 * 使用maven-archetype-webapp可以快速创建web目录结构项目，省去自己创建相关目录
-
+<!-- more -->
 操作：
 创建空白项目后，添加日志依赖slf4j-log4j12；因为是web项目，想要添加servlet相关依赖：javax.servlet.servlet-api、javax.servlet.jsp.jsp-api、jstl、javax.servlet-api(web 3.0使用)；
 > 注意点：servlet-api和jsp-api这个scope需要设置为provided，因为项目部署的容器中，一般都有这两个jar包。

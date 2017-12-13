@@ -20,6 +20,7 @@ function jsonp(data){
   alert(data)
 }
 ```
+<!-- more -->
 后台服务器：
 ```
 @Controller

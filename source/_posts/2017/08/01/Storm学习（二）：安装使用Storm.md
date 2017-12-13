@@ -13,6 +13,7 @@ tags: ['Storm安装', 'Storm本地调用', 'Storm']
 ## Zookeeper安装
 Zookeeper官网下载解压，安装参考[Zookeeper安装配置](https://taoistwar.gitbooks.io/spark-operationand-maintenance-management/content/spark_relate_software/zookeeper_install.html)，或者[官方文档](https://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)
 
+<!-- more -->
 ## Storm启动安装
 ### 本地模式
 本地模式在一个进程中使用现场模拟Storm集群的所有功能，用于本地开调试。本地模式运行Topology于在集群上运行Topology类似，但是提交Topology任务是在本地机器上。

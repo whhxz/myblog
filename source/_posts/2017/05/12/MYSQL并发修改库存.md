@@ -15,3 +15,4 @@ tags: ['MYSQL', '并发修改']
 > 在并发扣除库存时，库存数量不能扣到小于0。
 
 使用`UPDATE TABLE SET A = A - a WHERE A >= a AND ID = 'xx'`，通过SQL返回值是否大于0，判断是否操作成功。
+<!-- more -->
