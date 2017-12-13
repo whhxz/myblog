@@ -17,7 +17,7 @@ https_proxy=http://proxy.com:8080
 export http_proxy
 export https_proxy
 ```
-执行命令：
+执行命令：<!-- more -->
 ```sh
 source ~/.bash_profile
 ```

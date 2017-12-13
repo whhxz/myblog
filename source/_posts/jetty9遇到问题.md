@@ -5,7 +5,7 @@ categories: 编程
 ---
 
 ## 端口修改
-    
+
 在jetty9中修改$JETTY_HOME/start.d/http.ini中修改
 
 ``` bash
@@ -16,7 +16,7 @@ http.timeout=30000
 ## jetty9中原来jar
 
 因为在部署项目时，为了避免war包过大，使用在生成war包的时候，不吧依赖jar添加进去，在jetty使用中，一般是一个jetty使用一个项目，所以需要把依赖jar包放入jetty目录 **$JETTY_HOME/lib/ext** 中
-
+<!-- more -->
 ## IllegalStateException: No LoginService
 
 因为在web.xml中添加了权限验证，所以在jetty中也需要相应的配置，在**$JETTY_HOME/etc/jetty.xml**中添加：

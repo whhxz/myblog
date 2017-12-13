@@ -9,7 +9,7 @@ tags: ['设计模式', '工厂方法', 'Factory Method Pattern']
 > 定义一个用于创建对象的接口，让子类决定将哪一个类实例化。工厂方法模式让一个类的实例化延迟到其子类。工厂方法模式提供一个抽象接口来声明抽象工厂方法，而由其子类来具体实现工厂方法，创建具体的产品对象。
 
 如图工厂方法：
-![](http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8A%E5%8D%8810.14.46.png)
+![](http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8A%E5%8D%8810.14.46.png)<!-- more -->
 * Logger：抽象日志类
 * FileLogger：文件日志
 * ConsoleLogger：控制台日志

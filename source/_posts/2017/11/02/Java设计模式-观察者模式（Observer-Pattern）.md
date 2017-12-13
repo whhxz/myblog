@@ -14,7 +14,7 @@ tags: ['设计模式', '观察者模式', 'Observer Pattern']
 
 UML类图如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20171104屏幕快照2017-11-02上午10.58.18.png)
-
+<!-- more -->
 ```java
 /**
  * 目标类

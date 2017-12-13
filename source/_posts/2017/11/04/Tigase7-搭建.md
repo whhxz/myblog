@@ -17,7 +17,7 @@ cd tigase-server
 #切换到最新tag
 git checkout tigase-server-7.1.2
 ```
-
+<!-- more -->
 ### 通过命令配置启动
 采用Mysql作为Tigase的数据库
 

@@ -12,6 +12,7 @@ tags: ['设计模式', '状态模式', 'State Pattern']
 
 UML类图如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20171109屏幕快照2017-11-09上午11.07.00.png)
+<!-- more -->
 ```java
 /**
  * 上下文环境类
