@@ -42,7 +42,7 @@ process代码写习惯业务逻辑。注解表示该插件的唯一ID，以及�
 在配置文件init-mysql.properties中，添加--sm-plugins=+DEMO，如果已经有该配置，在后面添加+DEMO即可。这里+表示添加插件，默认为+，修改为-表示去除插件，可以在SessionManagerConfig类中查看默认加载的插件。
 
 配置tigase.server.XMPPServer启动项目即可。
-
+<!-- more -->
 ### 添加组件
 项目中添加Java文件DemoComponent
 ```Java

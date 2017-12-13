@@ -14,12 +14,13 @@ Logstash下载：https://www.elastic.co/cn/products/logstash
 
 ### 启动服务
 **启动elasticsearch**
-``` 
+```
 cd elasticsearch
-./bin/./elasticsearch 
+./bin/./elasticsearch
 ```
 > 如果需要其他机器访问需要修改配置文件./config/elasticearch.yml中network.host
 
+<!-- more -->
 ** 启动kibana **
 ```
 cd kibana
@@ -75,4 +76,3 @@ output {
 
 ### 参考
 * [买好车搜索的Elasticsearch实践：初体验](http://suclogger.com/%E4%B9%B0%E5%A5%BD%E8%BD%A6%E6%90%9C%E7%B4%A2%E7%9A%84Elasticsearch%E5%AE%9E%E8%B7%B5%EF%BC%9A%E5%88%9D%E4%BD%93%E9%AA%8C/)
-

@@ -18,6 +18,7 @@ tags: ['Storm概念', 'Storm']
 ### Tuple元组
 > Tuple 是Storm中使用的最基本单元、数据模型和元组。Tuple就是一个值列表，Tuple默认值类型有：integer、float、double、long、short、string、byte、binary[byte[]]。如果需要使用其他类型，需要序列化该类型。
 
+<!-- more -->
 Tuple可以理解为键值对，键为declareOutputFields中的Fields，值为emit发送的Values。
 Tuple由Spout中的nextTuple来获取下一个Tuple，通过emit将生成的Tuple发送出去。
 

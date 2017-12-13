@@ -16,7 +16,7 @@ tags: ['设计模式', '抽象工厂', 'Abstract Factory Pattern']
 * Clothes：衣服
 * Coat:上衣
 * Trousers：裤子
-Java代码如下：
+Java代码如下：<!-- more -->
 ```java
 interface Clothes{
     void coth();

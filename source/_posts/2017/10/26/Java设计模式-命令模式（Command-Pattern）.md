@@ -11,6 +11,7 @@ tags: ['设计模式', '命令模式', 'Command Pattern']
 UML类图如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.28.37.png)
 ![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.44.24.png)
+<!-- more -->
 ```Java
 /**
  * 抽象命令

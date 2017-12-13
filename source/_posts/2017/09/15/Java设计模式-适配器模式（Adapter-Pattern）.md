@@ -12,7 +12,7 @@ tags: ['设计模式', '适配器模式', 'Adapter Pattern']
 * Target是用户使用的目标类
 * Adaptee是需要适配的第三方类
 * Adapter是适配器类
-
+<!-- more -->
 
 举例如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20170918%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-18%E4%B8%8B%E5%8D%883.11.35.png)

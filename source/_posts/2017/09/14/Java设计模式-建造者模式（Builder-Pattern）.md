@@ -10,7 +10,7 @@ tags: ['设计模式', '建造者模式', 'Builder Pattern']
 例子：
 举例设计LOL角色，角色包含皮肤、技能、属性、性别
 ![](http://otxnth5wx.bkt.clouddn.com/20170914%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-14%E4%B8%8B%E5%8D%885.04.14.png)
-
+<!-- more -->
 Java实现：
 ```Java
 /**

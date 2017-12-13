@@ -14,6 +14,7 @@ tags: ['访问者模式', '设计模式', 'Visitor Pattern']
 
 UML类图如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20171113屏幕快照2017-11-10上午9.55.04.png)
+<!-- more -->
 ```java
 import java.util.List;
 

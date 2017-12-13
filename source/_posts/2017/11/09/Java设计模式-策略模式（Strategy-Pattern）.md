@@ -12,6 +12,7 @@ tags: ['策略模式', '设计模式', 'Strategy Pattern']
 
 UML类图如下：
 ![](http://otxnth5wx.bkt.clouddn.com/20171109屏幕快照2017-11-09下午4.14.50.png)
+<!-- more -->
 ```java
 
 /**

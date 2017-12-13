@@ -30,6 +30,7 @@ tags: ['SpringBoot', 'swagger']
 </dependency>
 
 ```
+<!-- more -->
 #### 添加启动，以及配置
 ```java
 //启动类SpringBootMain
