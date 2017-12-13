@@ -104,7 +104,7 @@
 <meta property="og:description" content="使用hexo-htemo-kael后出现样式不对一般在部署到whhxz.github.io上不会出现问题，如果部署在whhxz.github.io/myblog上，会出现本地静态文件如js、css等出错
 解决办法：修改hexo-htemo-kael中head.ejs，添加
 1234var reg = /myblog\/$/;if(reg.exec(config.root) == null)&amp;#12">
-<meta property="og:updated_time" content="2016-05-07T02:54:24.000Z">
+<meta property="og:updated_time" content="2017-12-13T09:23:53.365Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hexo部署静态文件位置修改">
 <meta name="twitter:description" content="使用hexo-htemo-kael后出现样式不对一般在部署到whhxz.github.io上不会出现问题，如果部署在whhxz.github.io/myblog上，会出现本地静态文件如js、css等出错
@@ -357,7 +357,7 @@
         <h2 id="使用hexo-htemo-kael后出现样式不对"><a href="#使用hexo-htemo-kael后出现样式不对" class="headerlink" title="使用hexo-htemo-kael后出现样式不对"></a>使用hexo-htemo-kael后出现样式不对</h2><p>一般在部署到whhxz.github.io上不会出现问题，如果部署在whhxz.github.io/myblog上，会出现本地静态文件如js、css等出错</p>
 <p>解决办法：修改hexo-htemo-kael中head.ejs，添加</p>
 <figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reg = <span class="regexp">/myblog\/$/</span>;</span><br><span class="line"><span class="keyword">if</span>(reg.exec(config.root) == <span class="literal">null</span>)&#123;</span><br><span class="line">    config.root = config.root + <span class="string">"myblog/"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>设置config.root后面添加博客地址，在生成html后，就会自动添加上去，而且为了避免多次添加，所以使用正则表达式判断是否已经存在</p>
+<p>设置config.root后面添加博客地址，在生成html后，就会自动添加上去，而且为了避免多次添加，所以使用正则表达式判断是否已经存在<br><a id="more"></a></p>
 
       
     </div>
@@ -467,7 +467,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -489,7 +489,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

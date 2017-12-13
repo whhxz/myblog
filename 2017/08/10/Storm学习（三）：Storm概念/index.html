@@ -128,7 +128,7 @@ Topology 是Stream Grouping连接起来的Spout和Bolt节点网络
 
 Tuple元组
 Tuple">
-<meta property="og:updated_time" content="2017-08-10T10:23:59.000Z">
+<meta property="og:updated_time" content="2017-12-13T09:15:48.237Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Storm学习（三）：Storm概念">
 <meta name="twitter:description" content="对于Storm，其核心概念有包括：
@@ -428,6 +428,7 @@ Tuple">
 <h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><blockquote>
 <p>Tuple 是Storm中使用的最基本单元、数据模型和元组。Tuple就是一个值列表，Tuple默认值类型有：integer、float、double、long、short、string、byte、binary[byte[]]。如果需要使用其他类型，需要序列化该类型。</p>
 </blockquote>
+<a id="more"></a>
 <p>Tuple可以理解为键值对，键为declareOutputFields中的Fields，值为emit发送的Values。<br>Tuple由Spout中的nextTuple来获取下一个Tuple，通过emit将生成的Tuple发送出去。</p>
 <h3 id="Spout数据源"><a href="#Spout数据源" class="headerlink" title="Spout数据源"></a>Spout数据源</h3><p>Spout最源头的接口为IComponent，由Spout发出的Tuple，可以是可靠的，可以是不可靠的。可靠的Tuple会保证被Storm成功处理。处理失败后会重新发送。一个Spout可以发射多个流。在使用Spout时可以实现IRichSpout或者继承BaseRichSpout。<br>在Spout.declareOutputFields声明发送的Tuple包含的字段。</p>
 <h3 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h3><p>Bolt属于被动处理，元组输入Bolt，然后产生新的Tuple。<br>Bolt流程如下：<br>创建Bolt -&gt; 序列化Bolt -&gt; 提交集群开启Worker进程处理 -&gt; 反序列化Bolt -&gt; 调用prepare处理Tuple</p>
@@ -571,7 +572,7 @@ Tuple">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -593,7 +594,7 @@ Tuple">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

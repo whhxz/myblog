@@ -104,7 +104,7 @@
 <meta property="og:description" content="使用前准备1pip install selenium
 下载PhantomJS，ChromeDriver
 使用selenium12345678910111213141516171819202122232425262728293031323334from selenium import webdriver# 通过phantomjs使用，phantomjs是无界面浏览器def use_phantom()">
-<meta property="og:updated_time" content="2017-09-12T01:36:08.000Z">
+<meta property="og:updated_time" content="2017-12-13T09:23:04.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python selenium 初次使用">
 <meta name="twitter:description" content="使用前准备1pip install selenium
@@ -390,6 +390,7 @@
         <h3 id="使用前准备"><a href="#使用前准备" class="headerlink" title="使用前准备"></a>使用前准备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
 <p>下载PhantomJS，ChromeDriver</p>
 <h3 id="使用selenium"><a href="#使用selenium" class="headerlink" title="使用selenium"></a>使用selenium</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过phantomjs使用，phantomjs是无界面浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_phantom</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 设置代理</span></span><br><span class="line">    service_args = [<span class="string">'--proxy=proxy3.fn.com:8080'</span>, <span class="string">'--proxy-type=http'</span>]</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.PhantomJS(executable_path=<span class="string">"/Users/xuzhuo/SOFT/phantomjs/phantomjs-2.1.1-macosx/bin/phantomjs"</span>,</span><br><span class="line">                                 service_args=service_args)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"phantomjsGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用chrome浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_chrome</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 获取chrome参数配置</span></span><br><span class="line">    chrome_options = webdriver.ChromeOptions()</span><br><span class="line">    <span class="comment"># 使用代理</span></span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-server=proxy3.fn.com:8080"</span>)</span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-type=http"</span>)</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.Chrome(executable_path=<span class="string">"/Users/xuzhuo/SOFT/chromedriver/chromedriver"</span>,</span><br><span class="line">                              chrome_options=chrome_options)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"chromeGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use_phantom()</span><br><span class="line">use_chrome()</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
 
       
     </div>
@@ -511,7 +512,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -533,7 +534,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

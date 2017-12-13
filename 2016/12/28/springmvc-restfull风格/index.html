@@ -94,19 +94,16 @@
 
 
 
-<meta name="description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。
-java">
+<meta name="description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC RESTful风格">
 <meta property="og:url" content="http://blog.whhxz.com/2016/12/28/springmvc-restfull风格/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。
-java">
-<meta property="og:updated_time" content="2017-08-02T02:15:11.000Z">
+<meta property="og:description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。">
+<meta property="og:updated_time" content="2017-12-13T09:23:59.596Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringMVC RESTful风格">
-<meta name="twitter:description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。
-java">
+<meta name="twitter:description" content="RESTfull简介REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。简单来说URL—&amp;gt;资源，method—&amp;gt;操作。">
 
 
 
@@ -373,7 +370,7 @@ java">
       
 
       
-        <h2 id="RESTfull简介"><a href="#RESTfull简介" class="headerlink" title="RESTfull简介"></a>RESTfull简介</h2><p>REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。<br>简单来说URL—&gt;资源，method—&gt;操作。</p>
+        <h2 id="RESTfull简介"><a href="#RESTfull简介" class="headerlink" title="RESTfull简介"></a>RESTfull简介</h2><p>REST全称是(Representational State Transfer)，简单来说指的是一种设计风格，一种规范。在设计时，可以把服务器看做一种资源文件服务器，每条URL代表对应的静态资源，而请求的method，表示最资源的操作,如：GET（获取资源）、PUT（添加资源）、DELETE（删除资源）等操作。<br>简单来说URL—&gt;资源，method—&gt;操作。<br><a id="more"></a></p>
 <h2 id="java例子（基于springMVC）"><a href="#java例子（基于springMVC）" class="headerlink" title="java例子（基于springMVC）"></a>java例子（基于springMVC）</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Controller</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/rest"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">RestFullController</span> </span>&#123;</span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.POST)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">post</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"post"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.GET)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">get</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"get"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@RequestMapping</span>(value = <span class="string">"/test/&#123;id&#125;"</span>, method = RequestMethod.DELETE)</span><br><span class="line">    <span class="meta">@ResponseBody</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">(@PathVariable String id)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"delete"</span> + id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>同一个url只是对应的method不一样，这样对于数据的增删改查，方法是基于请求时method。</p>
 
@@ -497,7 +494,7 @@ java">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -519,7 +516,7 @@ java">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

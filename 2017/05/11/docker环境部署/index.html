@@ -104,7 +104,7 @@ docker配置阿里云参考阿里云加速器进行配置。
 <meta property="og:description" content="docker安装使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。安装最新版docker需要添加docker源，参考Docker Community Edition for Ubuntu。
 docker配置阿里云参考阿里云加速器进行配置。
 初步使用docker时出现问题在使用docker build时强行停止后，在使用docker im">
-<meta property="og:updated_time" content="2017-08-02T02:15:11.000Z">
+<meta property="og:updated_time" content="2017-12-13T09:23:47.239Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker环境部署">
 <meta name="twitter:description" content="docker安装使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。安装最新版docker需要添加docker源，参考Docker Community Edition for Ubuntu。
@@ -380,7 +380,7 @@ docker配置阿里云参考阿里云加速器进行配置。
 <h2 id="docker配置阿里云"><a href="#docker配置阿里云" class="headerlink" title="docker配置阿里云"></a>docker配置阿里云</h2><p>参考<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="external">阿里云加速器</a>进行配置。</p>
 <h2 id="初步使用docker时出现问题"><a href="#初步使用docker时出现问题" class="headerlink" title="初步使用docker时出现问题"></a>初步使用docker时出现问题</h2><p>在使用docker build时强行停止后，在使用<code>docker image</code>出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;none&gt;              &lt;none&gt;              1c4475fbe64f        5 minutes ago       194 MB</span><br></pre></td></tr></table></figure></p>
 <p>使用<code>docker rmi 1c4475fbe64f</code>命令删除该无用image出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error response from daemon: conflict: unable to delete 1c4475fbe64f (must be forced) - image is being used by stopped container a4f0c195cff5</span><br></pre></td></tr></table></figure></p>
-<p>但是使用<code>docker ps</code>未显示任何数据<br>解决办法先<code>docker rm a4f0c195cff5</code> 之后<code>docker rmi 1c4475fbe64f</code></p>
+<p>但是使用<code>docker ps</code>未显示任何数据<br>解决办法先<code>docker rm a4f0c195cff5</code> 之后<code>docker rmi 1c4475fbe64f</code><br><a id="more"></a></p>
 
       
     </div>
@@ -500,7 +500,7 @@ docker配置阿里云参考阿里云加速器进行配置。
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">47</span>
+                <span class="site-state-item-count">48</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -522,7 +522,7 @@ docker配置阿里云参考阿里云加速器进行配置。
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">92</span>
+                <span class="site-state-item-count">95</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
