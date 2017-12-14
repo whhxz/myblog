@@ -105,7 +105,7 @@
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.21.02.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.29.08.png">
 <meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午11.56.09.png">
-<meta property="og:updated_time" content="2017-12-14T07:24:45.110Z">
+<meta property="og:updated_time" content="2017-12-14T07:28:27.795Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存模型">
 <meta name="twitter:description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。
@@ -458,6 +458,7 @@
 <h3 id="hanpens-before"><a href="#hanpens-before" class="headerlink" title="hanpens-before"></a>hanpens-before</h3><p>编译器和处理器为了优化程序性能，可能会对指令顺序重排序，在单线程下，重排序并不会影响运行结果，但是再多线程下，重排序会导致各种问题出现。为了避免这种问题，JMM使用了hanpens-before这一规则。<br>happens-before规则对于会改变查询执行结果的重排序（指单线程和正确同步的多线程），禁止编译器和处理器重排序。对于不会改变执行结果的重排序，并不禁止。<br>其他概念参考：<a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">http://blog.csdn.net/ns_code/article/details/17348313</a></p>
 <h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>可参考：<a href="http://gee.cs.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="external">http://gee.cs.oswego.edu/dl/jmm/cookbook.html</a></p>
 <p>并不是非常理解这一部分：<br>相关资料：<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/" target="_blank" rel="external">http://www.cs.umd.edu/~pugh/java/memoryModel/</a></p>
+<p>参考：<a href="http://www.infoq.com/cn/articles/java-memory-model-1" target="_blank" rel="external">http://www.infoq.com/cn/articles/java-memory-model-1</a><br>参考：《深入Java虚拟机》</p>
 
       
     </div>
