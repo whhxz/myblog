@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="多线程,同步,JMM,内存模型," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。
+在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存模型">
+<meta property="og:url" content="http://blog.whhxz.com/2017/12/14/Java内存模型/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。
+在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件">
+<meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.21.02.png">
+<meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.29.08.png">
+<meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午11.56.09.png">
+<meta property="og:updated_time" content="2017-12-14T07:24:45.110Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java内存模型">
+<meta name="twitter:description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。
+在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件">
+<meta name="twitter:image" content="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.21.02.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.whhxz.com/2017/12/14/Java内存模型/"/>
+
+
+
+
+
+  <title>Java内存模型 | WHH</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WHH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">MY BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/12/14/Java内存模型/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java内存模型</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-14T09:33:49+08:00">
+                2017-12-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/多线程学习/" itemprop="url" rel="index">
+                    <span itemprop="name">多线程学习</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。</p>
+<p>在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在不同平台都能达到一致的内存访问效果。（JDK1.5之后内存模型才相对完善）</p>
+<p>在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享（代指实例域，静态域和数组元素）。局部变量（Local variables），方法定义参数（java语言规范称之为formal method parameters）和异常处理器参数（exception handler parameters）不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。</p>
+<p>Java内存模型规定了共享变量存储在主内存中，每条线程都有自己的工作内存（线程本地内存），工作内存中存储被该线程使用到的变量的主内存的副本（不是整个对象的内存复制，对象的引用、线程访问的字段）。如图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.21.02.png" alt=""><br><a id="more"></a><br>在该图中，如果线程A修改了本地变量，然后把本地变量更新到主内存中，然后线程B把主内存中变量同步到本地内存中。<br>内存图：<br><img src="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午10.29.08.png" alt=""><br><img src="http://otxnth5wx.bkt.clouddn.com/20171214屏幕快照2017-12-14上午11.56.09.png" alt=""></p>
+<p>这样就引出两个问题：</p>
+<ol>
+<li>线程A修改了本地变量，怎么同步到主内存中</li>
+<li>线程B怎么同步主内存数据到本地内存中</li>
+</ol>
+<h3 id="内存交互"><a href="#内存交互" class="headerlink" title="内存交互"></a>内存交互</h3><p>对于工作内存与主内存之间交互协议，Java内存模型定义了8种操作来完成，虚拟机实现时，必须保证每种操作都是原子（对于double、long，允许 load、store、read、write操作在某些平台上例外）。</p>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th style="text-align:left">作用域</th>
+<th style="text-align:left">用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>lock（锁定）</td>
+<td style="text-align:left">主内存变量</td>
+<td style="text-align:left">把一个变量标识为一条线程独占</td>
+</tr>
+<tr>
+<td>unlock（解锁）</td>
+<td style="text-align:left">主内存的变量</td>
+<td style="text-align:left">把一个处于锁定状态的变量释放，释放后的变量才可以被别的变量锁定</td>
+</tr>
+<tr>
+<td>read（读取）</td>
+<td style="text-align:left">主内存的变量</td>
+<td style="text-align:left">把一个变量值从主内存中传输到线程的工作内存中，以便后续load使用</td>
+</tr>
+<tr>
+<td>load（载入）</td>
+<td style="text-align:left">工作内存变量</td>
+<td style="text-align:left">把read操作从主内存中得到的变量放入工作内存变量副本中</td>
+</tr>
+<tr>
+<td>use（使用）</td>
+<td style="text-align:left">工作内存变量</td>
+<td style="text-align:left">把工作内存中变量传递到执行引擎，当虚拟机遇到需要使用该变量值的字节码指令时，会执行该操作</td>
+</tr>
+<tr>
+<td>assign（赋值）</td>
+<td style="text-align:left">工作内存变量</td>
+<td style="text-align:left">把执行引擎接收到的值，赋值给工作内存的变量，当虚拟机遇到一个给变量赋值的字节码指令时执行该操作</td>
+</tr>
+<tr>
+<td>store（存储）</td>
+<td style="text-align:left">工作内存变量</td>
+<td style="text-align:left">把工作内存中的变量值传送到主内存中，以便随后write使用</td>
+</tr>
+<tr>
+<td>write（写入）</td>
+<td style="text-align:left">主内存变量</td>
+<td style="text-align:left">把store操作从工作内存中获取的变量写入到主内存中</td>
+</tr>
+</tbody>
+</table>
+<p>Java中定义了改8种操作，如果把主内存中数据复制到工作内存中，必须顺序执行read–&gt;load（并不一定连续，中间可插入其他指令），同时还规定了必须满足以下规则。</p>
+<ul>
+<li>read、load、store、write不能单独出现，不能read后没有load，store后没有write。</li>
+<li>不能丢弃assign</li>
+<li>不能没有assign操作，之后同步工作内存到主内存</li>
+<li>新变量只能在主内存中出现，不允许在工作内存中使用未初始化变量（未执行load、assign），也就是必须先load或者assign、才能操作use或者store</li>
+<li>一个变量同一时间只能一个线程进行lock，lock可以被同一线程多次执行，多次执行lock后需要多次执行unlock才解锁</li>
+<li>未lock不能unlock，不允许unlock其他线程锁定的变量</li>
+<li>对变量unlock之前，必须先把改变量同步到主内存中。</li>
+</ul>
+<p>对于long和double（64位数据类型），虚拟机允许没有没volatile修饰的变量读写操作（load、store、read、write）拆分为2次32位操作来进行（非原子性协议）。虽然Java内存模型允许不把long和double的读写实现为原子操作，但允许虚拟机把改操作实现为原子操作，当前个平台几乎都是作为原子操作实现。</p>
+<h3 id="原子性、可见性、有序性"><a href="#原子性、可见性、有序性" class="headerlink" title="原子性、可见性、有序性"></a>原子性、可见性、有序性</h3><p>Java内存模型在并发过程中主要围绕原子性、可见性、有序性：</p>
+<ul>
+<li>原子性：由内存模型直接保证原子性，所以常用的读写是具备原子性，如果需要大范围原子性，需要使用到lock、unlock，用户无法直接使用lock和unlock，但是提供了字节码指令monitorenter、monitorexit，隐式使用lock、unlock，synchronized编译后就是使用的该字节码指令。</li>
+<li>可见性：当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。Java内存模型是通过在变量修改后将新值同步回主内存中，在变量读取前，从主内存中刷新变量值这种依赖主内存作为传递媒介的方式来实现可见性。Java中除了volatile外还有synchronized和final实现可见性，synchronized通过unlock前必须同步到主内存中实现。final实现的关键字在构造器中一旦初始化完成，并且构造器没有把this应用传递出去，那么其他线程中就能看见final字段的值(具体可搜索final可见性、JSR-133final增强)。</li>
+<li>有序性：一个线程观察其他线程中的指令执行顺序，由于指令重排序的存在，该观察结果一般杂乱无序。但是在本线程内观察，所有操作都是有序的。volatile和synchronized两个关键字保证了线程之间操作的有序性。</li>
+</ul>
+<h3 id="hanpens-before"><a href="#hanpens-before" class="headerlink" title="hanpens-before"></a>hanpens-before</h3><p>编译器和处理器为了优化程序性能，可能会对指令顺序重排序，在单线程下，重排序并不会影响运行结果，但是再多线程下，重排序会导致各种问题出现。为了避免这种问题，JMM使用了hanpens-before这一规则。<br>happens-before规则对于会改变查询执行结果的重排序（指单线程和正确同步的多线程），禁止编译器和处理器重排序。对于不会改变执行结果的重排序，并不禁止。<br>其他概念参考：<a href="http://blog.csdn.net/ns_code/article/details/17348313" target="_blank" rel="external">http://blog.csdn.net/ns_code/article/details/17348313</a></p>
+<h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>可参考：<a href="http://gee.cs.oswego.edu/dl/jmm/cookbook.html" target="_blank" rel="external">http://gee.cs.oswego.edu/dl/jmm/cookbook.html</a></p>
+<p>并不是非常理解这一部分：<br>相关资料：<a href="http://www.cs.umd.edu/~pugh/java/memoryModel/" target="_blank" rel="external">http://www.cs.umd.edu/~pugh/java/memoryModel/</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/多线程/" rel="tag"># 多线程</a>
+          
+            <a href="/tags/同步/" rel="tag"># 同步</a>
+          
+            <a href="/tags/JMM/" rel="tag"># JMM</a>
+          
+            <a href="/tags/内存模型/" rel="tag"># 内存模型</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/13/Java并发同步基础/" rel="next" title="Java并发同步基础">
+                <i class="fa fa-chevron-left"></i> Java并发同步基础
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.bmp"
+               alt="WHH" />
+          <p class="site-author-name" itemprop="name">WHH</p>
+           
+              <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">49</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">97</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/whhxz" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#内存交互"><span class="nav-number">1.</span> <span class="nav-text">内存交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原子性、可见性、有序性"><span class="nav-number">2.</span> <span class="nav-text">原子性、可见性、有序性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hanpens-before"><span class="nav-number">3.</span> <span class="nav-text">hanpens-before</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#内存屏障"><span class="nav-number">4.</span> <span class="nav-text">内存屏障</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WHH</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
