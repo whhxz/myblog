@@ -12,7 +12,13 @@ tags: ['多线程', '同步', '锁']
 只能子类构造。
 
 ### AbstractQueuedSynchronizer
-抽象队列同步，继承AbstractOwnableSynchronizer。通过队列先进先出来实现等待队列的阻塞，内部维护一个线程链表Node。
+抽象队列同步，继承AbstractOwnableSynchronizer。通过队列先进先出来实现等待队列的阻塞，内部维护一个线程链表Node。在获取锁失败后，会生成Node节点，并放入链表末尾，直到等待超时或者线程中断或被上一个节点唤醒。其节点等待状态waitStatus有：
+* 0：节点刚被初始化状态，或者可能已经完成状态
+* CANCELLED（1）：取消状态，需要取消该节点时设置的状态
+* SIGNAL（-1）：节点等待状态
+* CONDITION（-2）：节点在等待队列中，在调用Condition.signal()之后会变为SIGNAL状态进入等待获取锁队列
+* PROPAGATE（-3）：共享同步状态
+
 AbstractQueuedSynchronizer内部通过Unsafe.compareAndSet（原子操作int）来操作内存，保证线程的同步。其他API可查看相关文档。
 
 ### AbstractQueuedLongSynchronizer
