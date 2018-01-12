@@ -182,7 +182,7 @@ private final Node<K,V>[] initTable() {
         else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
             try {
                 if ((tab = table) == null || tab.length == 0) {
-                    //判断sc值，也就是之前构造函数传入初始化容器打小生成的sizeCtl值
+                    //判断sc值，也就是之前构造函数传入初始化容器打小生成的sizeCtl值,默认为16
                     int n = (sc > 0) ? sc : DEFAULT_CAPACITY;
                     @SuppressWarnings("unchecked")
                     Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n];
