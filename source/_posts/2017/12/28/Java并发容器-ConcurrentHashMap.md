@@ -15,7 +15,7 @@ jdk1.7中ConcurrentHashMap与jdk1.8中实现不一致，1.7中采用的事分段
 * ForwardingNode：Node子类，辅助节点，用于扩容操作。
 
 在ConcurrentHashMap中，最开始是采用链表存储数据，当数据过长（TREEIFY_THRESHOLD默认长度8），就会转换为红黑树来处理，将原有Node节点包装成TreeNode放入TreeBin中，然后由TreeBin完成红黑树的转换。
-
+<!-- more -->
 ### 源码分析
 容器构造方法：
 ```java
@@ -199,6 +199,60 @@ private final Node<K,V>[] initTable() {
     }
     return tab;
 }
+
+/**
+ * Adds to count, and if table is too small and not already
+ * resizing, initiates transfer. If already resizing, helps
+ * perform transfer if work is available.  Rechecks occupancy
+ * after a transfer to see if another resize is already needed
+ * because resizings are lagging additions.
+ * 新增统计，如果table太小还准备调整大小，初始化扩容。如果已经调整大小，帮助扩容。在扩容完毕后重新检查容量，因为扩容相对落后
+ * @param x 需要增加的值
+ * @param check 如果小于0，不检查调整，如果小于等于1只需要检查是否存在竞争 if <0, don't check resize, if <= 1 only check if uncontended
+ */
+private final void addCount(long x, int check) {
+    CounterCell[] as; long b, s;
+    if ((as = counterCells) != null ||
+        !U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
+        //counterCells不为null或者CAS修改baseCount值失败（并发的时候可能会出现失败）
+        CounterCell a; long v; int m;
+        boolean uncontended = true;
+        if (as == null || (m = as.length - 1) < 0 ||
+            (a = as[ThreadLocalRandom.getProbe() & m]) == null ||
+            !(uncontended =
+              U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
+            //as为null 或者 as长度小于1 或者修改CounterCell失败，
+            //查看LongAdder
+            fullAddCount(x, uncontended);
+            return;
+        }
+        if (check <= 1)
+            return;
+        //统计长度
+        s = sumCount();
+    }
+    //扩容操作
+    if (check >= 0) {
+        Node<K,V>[] tab, nt; int n, sc;
+        while (s >= (long)(sc = sizeCtl) && (tab = table) != null &&
+               (n = tab.length) < MAXIMUM_CAPACITY) {
+            int rs = resizeStamp(n);
+            if (sc < 0) {
+                if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
+                    sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
+                    transferIndex <= 0)
+                    break;
+                if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
+                    transfer(tab, nt);
+            }
+            else if (U.compareAndSwapInt(this, SIZECTL, sc,
+                                         (rs << RESIZE_STAMP_SHIFT) + 2))
+                transfer(tab, null);
+            s = sumCount();
+        }
+    }
+}
+
 ```
 简述put，如果map未初始化，先初始化map。获取key的hash，依据hash与table.size - 1计算相对table的偏移量（(n - 1) & hash)），通过unsafe获取该偏移处的值，如果为null，表示可以直接插入，如果不为空，判断当前是否正在扩容，如果是帮助先帮助扩容，如果不是，把获取的值加锁，判断当前是否链表，之后判断该值hash是否和table一样。如果一样替换，否则在链表末尾添加。如果不是链表依据树添加节点，之后判断如果是链表的话，是否超过最大链表长度8，超过转换为红黑树。最后map长度+1。
 
@@ -339,10 +393,14 @@ final long sumCount() {
     }
     return sum;
 }
-```
-在上述put代码中，在代码末尾有addCount操作，里面就有更新当前map长度。因为在使用size的时候，在此期间是可能存在put等其他操作，可能会出现结果不准。
 
-在JDK1.8之后，如果需要返回size建议使用mappingCount()。
+
+```
+在上述put代码中，在代码末尾有addCount操作，里面就有更新当前map长度。因为在使用size的时候，在此期间是可能存在put等其他操作，可能会出现结果不准。addCount中会判断当前是否需要扩容。
+
+在JDK1.8 之后，如果需要返回size建议使用mappingCount()。
+
+ConcurrentHashMap主要数据放入了table数组中，通过传入的key进行2次hash计算获取当前key应该存储在该数组所在位置，如果该位置为null，那么通过CAS设置值，如果该位置有值说明出现了hash碰撞，那么判断当前的key和已经存在的key是否一致，如果一致修改值，如果不一致放入链表末尾。当链表长度大于8时，会把该链表转换为红黑树。
 
 参考：
 http://cmsblogs.com/?p=2283
