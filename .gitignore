@@ -1,0 +1,7 @@
+.deploy_git/
+.ipynb_checkpoints/
+*.ipynb
+debug.log
+node_modules/
+public/
+themes/

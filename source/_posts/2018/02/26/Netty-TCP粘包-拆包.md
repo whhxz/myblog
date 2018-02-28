@@ -222,3 +222,5 @@ System.out.printf("Now is %s count is %d\n", msg, ++count);
 
 对于DelimiterBasedFrameDecoder而言如果在设定的长度下还没有获取到分隔符一样会抛出异常，避免因为异常码流导致缺失分隔符。
 对于FixedLengthFrameDecoder而言，如果是半包消息，FixedLengthFrameDecoder会缓存半包消息并等待下一个包到达后进行拼包，直到读取到一个完整的包。
+
+* 参考：《Netty权威指南》
