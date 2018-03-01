@@ -110,7 +110,7 @@ A被拆分为A">
 A、B分开发送，服务端正常分两次收到两个包
 A、B被一起发送、服务端一次收到两个包AB
 A被拆分为A">
-<meta property="og:updated_time" content="2018-02-26T12:54:34.652Z">
+<meta property="og:updated_time" content="2018-02-26T13:07:00.669Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty TCP粘包 拆包">
 <meta name="twitter:description" content="在平常使用tcp连接时，可能会出现tcp粘包的现象。在客户端与服务端建立连接后，客户端提交数据后，如果发送的数据较大，该数据包会被拆分为几个小的包进行发送，如果数据比较小，可能会等待一会，把后续的多个小包封装成一个大点的包一起发送。服务端获取客户端的数据可能出现如下情况：服务端发送A、B两个包
@@ -414,6 +414,9 @@ A被拆分为A">
 <p>这里通过LineBasedFrameDecoder、StringDecoder、StringEncoder组合就是按行来做粘包拆包处理，在发送的字符串末尾添加换行符。</p>
 <p>除了使用LineBasedFrameDecoder解决之前的问题，在Netty中还提供了两种方案：<br>1、DelimiterBasedFrameDecoder：自动完成以分隔符作为码流结束标识的消息解码。<br>2、FixedLengthFrameDecoder：固定长度解码器，按照指定长度对消息进行自动解码。</p>
 <p>对于DelimiterBasedFrameDecoder而言如果在设定的长度下还没有获取到分隔符一样会抛出异常，避免因为异常码流导致缺失分隔符。<br>对于FixedLengthFrameDecoder而言，如果是半包消息，FixedLengthFrameDecoder会缓存半包消息并等待下一个包到达后进行拼包，直到读取到一个完整的包。</p>
+<ul>
+<li>参考：《Netty权威指南》</li>
+</ul>
 
       
     </div>
@@ -459,6 +462,10 @@ A被拆分为A">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/01/SSM结合Servelt-3-0-模块化开发/" rel="prev" title="SSM结合Servelt 3.0 模块化开发">
+                SSM结合Servelt 3.0 模块化开发 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -535,7 +542,7 @@ A被拆分为A">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">64</span>
+                <span class="site-state-item-count">65</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -546,7 +553,7 @@ A被拆分为A">
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">33</span>
+                <span class="site-state-item-count">34</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -557,7 +564,7 @@ A被拆分为A">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">125</span>
+                <span class="site-state-item-count">128</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
