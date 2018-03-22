@@ -282,6 +282,311 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/09/12/Python-selenium-初次使用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/12/Python-selenium-初次使用/" itemprop="url">Python selenium 初次使用</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-12T09:18:48+08:00">
+                2017-09-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/python/selenium/" itemprop="url" rel="index">
+                    <span itemprop="name">selenium</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h3 id="使用前准备"><a href="#使用前准备" class="headerlink" title="使用前准备"></a>使用前准备</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install selenium</span><br></pre></td></tr></table></figure>
+<p>下载PhantomJS，ChromeDriver</p>
+<h3 id="使用selenium"><a href="#使用selenium" class="headerlink" title="使用selenium"></a>使用selenium</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> selenium <span class="keyword">import</span> webdriver</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 通过phantomjs使用，phantomjs是无界面浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_phantom</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 设置代理</span></span><br><span class="line">    service_args = [<span class="string">'--proxy=proxy3.fn.com:8080'</span>, <span class="string">'--proxy-type=http'</span>]</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.PhantomJS(executable_path=<span class="string">"/Users/xuzhuo/SOFT/phantomjs/phantomjs-2.1.1-macosx/bin/phantomjs"</span>,</span><br><span class="line">                                 service_args=service_args)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"phantomjsGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用chrome浏览器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">use_chrome</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="comment"># 获取chrome参数配置</span></span><br><span class="line">    chrome_options = webdriver.ChromeOptions()</span><br><span class="line">    <span class="comment"># 使用代理</span></span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-server=proxy3.fn.com:8080"</span>)</span><br><span class="line">    chrome_options.add_argument(<span class="string">"--proxy-type=http"</span>)</span><br><span class="line">    <span class="comment"># 设置路径</span></span><br><span class="line">    driver = webdriver.Chrome(executable_path=<span class="string">"/Users/xuzhuo/SOFT/chromedriver/chromedriver"</span>,</span><br><span class="line">                              chrome_options=chrome_options)</span><br><span class="line">    driver.get(<span class="string">"https://www.google.com"</span>)</span><br><span class="line">    <span class="comment"># 截图</span></span><br><span class="line">    driver.get_screenshot_as_file(<span class="string">"chromeGoogle.png"</span>)</span><br><span class="line">    driver.close()</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">use_phantom()</span><br><span class="line">use_chrome()</span><br></pre></td></tr></table></figure>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/12/Python-selenium-初次使用/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/09/08/创建maven-archetypes/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/09/08/创建maven-archetypes/" itemprop="url">创建maven archetypes</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-08T09:48:25+08:00">
+                2017-09-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/maven/" itemprop="url" rel="index">
+                    <span itemprop="name">maven</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <h2 id="建立maven-archetypes，后期快速搭建项目"><a href="#建立maven-archetypes，后期快速搭建项目" class="headerlink" title="建立maven archetypes，后期快速搭建项目"></a>建立maven archetypes，后期快速搭建项目</h2><h4 id="创建一个空的maven项目"><a href="#创建一个空的maven项目" class="headerlink" title="创建一个空的maven项目"></a>创建一个空的maven项目</h4><p>修改当前maven项目pom.xml<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">project</span> <span class="attr">xmlns</span>=<span class="string">"http://maven.apache.org/POM/4.0.0"</span> <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span><br><span class="line">  <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">modelVersion</span>&gt;</span>4.0.0<span class="tag">&lt;/<span class="name">modelVersion</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>com.whh.maven.archetypes<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>quick-ssm-webapp<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">packaging</span>&gt;</span>jar<span class="tag">&lt;/<span class="name">packaging</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">name</span>&gt;</span>quick-ssm-webapp Maven Webapp<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.apache.org<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">build</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">finalName</span>&gt;</span>quick-ssm-webapp<span class="tag">&lt;/<span class="name">finalName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">pluginManagement</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">plugins</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">plugin</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.maven.plugins<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>maven-archetype-plugin<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">version</span>&gt;</span>2.4<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">plugin</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">plugins</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">pluginManagement</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">build</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">project</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2017/09/08/创建maven-archetypes/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/08/31/Java设计模式之面向对象设计原则/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1511,309 +1816,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/05/12/MYSQL并发修改库存/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/12/MYSQL并发修改库存/" itemprop="url">MYSQL并发修改库存</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-12T18:05:26+08:00">
-                2017-05-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/MYSQL/" itemprop="url" rel="index">
-                    <span itemprop="name">MYSQL</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="MYSQL插入或更新"><a href="#MYSQL插入或更新" class="headerlink" title="MYSQL插入或更新"></a>MYSQL插入或更新</h2><blockquote>
-<p>问题：在数据库操作时，如果需要先判断数据是否存在，做插入或者更新操作。在并发情况下，容易出现异常。</p>
-</blockquote>
-<p>解决办法：使用<code>INSERT INTO TABLE(A, B, C) VALUES(&#39;a&#39;, &#39;b&#39;, &#39;c&#39;) ON DUPLICATE KEY UPDATE B = &#39;b&#39;, C=&#39;c&#39;</code>，此处A为唯一约束，在插入时，如果已经存在数据为a，则做更新操作。</p>
-<h2 id="并发修改数量"><a href="#并发修改数量" class="headerlink" title="并发修改数量"></a>并发修改数量</h2><blockquote>
-<p>在并发扣除库存时，库存数量不能扣到小于0。</p>
-</blockquote>
-<p>使用<code>UPDATE TABLE SET A = A - a WHERE A &gt;= a AND ID = &#39;xx&#39;</code>，通过SQL返回值是否大于0，判断是否操作成功。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/05/12/MYSQL并发修改库存/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/05/11/docker环境部署/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/05/11/docker环境部署/" itemprop="url">docker环境部署</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-11T18:31:56+08:00">
-                2017-05-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/docker/" itemprop="url" rel="index">
-                    <span itemprop="name">docker</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><p>使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。<br>安装最新版docker需要添加docker源，参考<a href="https://store.docker.com/editions/community/docker-ce-server-ubuntu?tab=description">Docker Community Edition for Ubuntu</a>。</p>
-<h2 id="docker配置阿里云"><a href="#docker配置阿里云" class="headerlink" title="docker配置阿里云"></a>docker配置阿里云</h2><p>参考<a href="https://cr.console.aliyun.com/#/accelerator">阿里云加速器</a>进行配置。</p>
-<h2 id="初步使用docker时出现问题"><a href="#初步使用docker时出现问题" class="headerlink" title="初步使用docker时出现问题"></a>初步使用docker时出现问题</h2><p>在使用docker build时强行停止后，在使用<code>docker image</code>出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;none&gt;              &lt;none&gt;              1c4475fbe64f        5 minutes ago       194 MB</span><br></pre></td></tr></table></figure></p>
-<p>使用<code>docker rmi 1c4475fbe64f</code>命令删除该无用image出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error response from daemon: conflict: unable to delete 1c4475fbe64f (must be forced) - image is being used by stopped container a4f0c195cff5</span><br></pre></td></tr></table></figure></p>
-<p>但是使用<code>docker ps</code>未显示任何数据<br>解决办法先<code>docker rm a4f0c195cff5</code> 之后<code>docker rmi 1c4475fbe64f</code><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2017/05/11/docker环境部署/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1864,7 +1866,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">67</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1875,7 +1877,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1886,7 +1888,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">128</span>
+                <span class="site-state-item-count">133</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>

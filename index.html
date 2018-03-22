@@ -282,6 +282,319 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/22/Java基础-String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/22/Java基础-String/" itemprop="url">Java基础-String</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-22T10:19:49+08:00">
+                2018-03-22
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java基础/" itemprop="url" rel="index">
+                    <span itemprop="name">Java基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>平常基本类型+String是在代码中使用最多的地方。分析下String特别的地方。</p>
+<h3 id="字符串替换"><a href="#字符串替换" class="headerlink" title="字符串替换"></a>字符串替换</h3><p>String的字符串替换有3个方法：replace、replaceFirst、replaceAll</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">replace</span><span class="params">(<span class="keyword">char</span> oldChar, <span class="keyword">char</span> newChar)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> String <span class="title">replace</span><span class="params">(CharSequence target, CharSequence replacement)</span></span></span><br></pre></td></tr></table></figure>
+<p>String.replace有两个重载方法，一个参数是char、一个是CharSequence<br>第一个replace是通过原有String中char数组生成一个新数组，然后把新数组中的oldChar替换为newChar，返回一个新的String</p>
+<ul>
+<li>注：如果oldChar==newChar返回的是this。</li>
+</ul>
+<p>第二个relace参数是CharSequence，String是其实现类，所以平常一般传的参数是String（不过StringBuffer、StringBuilder也是该接口实现类）。该replace实现虽然是通过Pattern，但是在使用Pattern的时候，设置了<code>Pattern.LITERAL和Matcher.quoteReplacement</code>，所以转义是不起效的。</p>
+<p>所以对于replace而言，就是 <strong>替换所有</strong> 符合的字符，无转义，无正则表达式（设置Pattern转义失效）。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/22/Java基础-String/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/19/Mysql优化思路/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/19/Mysql优化思路/" itemprop="url">Mysql优化思路</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-19T09:51:52+08:00">
+                2018-03-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在业务增长过程中，数据库中的数据量是越来越大，之前在国美时，公司都是用的oracle能承受的数据量比较大，那时候没感觉到数据库是瓶颈，基本上都是由dba直接做了数据库层的优化，基本上我们使用不需要做修改特别的优化，一般情况下都是优化sql，后期可能因为oracle太贵，部分数据存入mongodb和mysql中，在之后因为已经离职还未见到需要对mysql进行特别的优化。</p>
+<p>在现在公司中，特别倾向于对mysql进行分库分表，其实有时候并不一定需要，比如把大量的数据存入mysql中用于查询，这种情况不应该通过ELK来做日志采集和查询吗。</p>
+<p>在数据增长过程中，并不是直接就进行分库分表，可以分步骤进行。</p>
+<blockquote>
+<ol>
+<li>sql优化、索引</li>
+<li>热点数据缓存、redis、memcached</li>
+<li>读写分离</li>
+<li>垂直切分</li>
+<li>分区</li>
+<li>分库、分表</li>
+</ol>
+</blockquote>
+<p>参考：<a href="https://www.zhihu.com/question/19719997/answer/81930332">MySQL 对于千万级的大表要怎么优化？ - zhuqz的回答 - 知乎</a><br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/03/19/Mysql优化思路/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/01/SSM结合Servelt-3-0-模块化开发/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1414,310 +1727,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/01/15/Java线程池/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/15/Java线程池/" itemprop="url">Java线程池</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-15T11:08:58+08:00">
-                2018-01-15
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/多线程学习/" itemprop="url" rel="index">
-                    <span itemprop="name">多线程学习</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-          一般使用Thread创建线程，如果频繁的创建销毁线程，系统资源比较浪费，线程启动调用的native方法，任务不能立即执行。采用线程池可以通过重复利用已经创建的线程降低线程创建和销毁赵成的系统消耗，提高任务的响应速度，还可以对线程池中线程进行统一分配、调优和监控。
-ThreadPoolExecutor手动通过创建ThreadPoolExecutor创建线程池，其构造方法参数有：
-
-corePoolSize：池中所保存的线程数，包括空闲线程。（不能小于0）
-maximumPoolSize：池中允许的最大线程数。（不能小于等于0，不能小于corePoolSize）
-keepAliveTime：当线程数大于核心时，此为终止前多余的空闲线程等待新任务的最长时间。（不能小于0）
-unit：keepAliveTime 参数的时间单位
-workQueue：执行前用于保持任务的队列。此队列仅保持由 execute 方法提交的 Runnable 任务。（不能为null）
-threadFactory：执行程序创建新线程时使用的工厂。（不能为null）
-handler：
-          ...
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/15/Java线程池/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/01/11/sonar自定义规则/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/01/11/sonar自定义规则/" itemprop="url">sonar自定义规则</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-11T14:40:29+08:00">
-                2018-01-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/sonar/" itemprop="url" rel="index">
-                    <span itemprop="name">sonar</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>公司准备使用sonar作为代码质量管理，在代码中string不允许直接定义和环境相关的String，只能从配置文件中读取key，需要自己写一个sonar规则。<br>因为检测的是java文件，直接用java开发个自定义组件。<br>查看各种规则可以使用的语言：<a href="https://docs.sonarqube.org/display/DEV/Adding+Coding+Rules">Support of Custom Rules by Language</a></p>
-<p>编写规则的时候官方有demo：<a href="https://github.com/SonarSource/sonar-custom-rules-examples/tree/master/java-custom-rules">Sonar Java Custom Rules</a><br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/01/11/sonar自定义规则/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1768,7 +1777,7 @@ handler：
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">65</span>
+                <span class="site-state-item-count">67</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1779,7 +1788,7 @@ handler：
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">34</span>
+                <span class="site-state-item-count">36</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -1790,7 +1799,7 @@ handler：
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">128</span>
+                <span class="site-state-item-count">133</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
