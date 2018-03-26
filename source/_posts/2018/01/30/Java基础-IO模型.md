@@ -1,8 +1,8 @@
 ---
-title: JavaNIO基础
+title: Java基础-IO模型
 date: 2018-01-30 20:33:28
-categories: ['NIO', 'Netty']
-tags: ['NIO', 'Netty', 'AIO', 'BIO']
+categories: ['Java基础', 'NIO', 'Netty']
+tags: ['NIO', 'Netty', 'AIO', 'BIO', 'IO', '基础']
 ---
 
 Unix网络编程中对I/O模型做了5种分类：阻塞I/O模型、非阻塞I/O模型、I/O复用模型、信号驱动I/O模型、异步I/O模型。
