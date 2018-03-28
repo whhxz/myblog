@@ -1,0 +1,97 @@
+---
+title: Java基础-泛型
+date: 2018-03-27 09:37:38
+categories: ['Java基础']
+tags: ['基础', '泛型']
+---
+
+泛型是JDK 1.5的一项新特性，它的本质是参数化类型（Parameterized Type）的应用，也就是说所操作的数据类型被指定为一个参数，在用到的时候在指定具体的类型。这种参数类型可以用在类、接口和方法的创建中，分别称为泛型类、泛型接口和泛型方法。
+```java
+List<String> list = new ArrayList();
+list.add("xxx");
+String str = list.get(0);
+```
+最常用的泛型使用，反编译后如下：
+```javap
+public class com.whh.netty.Main {
+  public com.whh.netty.Main();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]) throws java.lang.Exception;
+    Code:
+       0: new           #2                  // class java/util/ArrayList
+       3: dup
+       4: invokespecial #3                  // Method java/util/ArrayList."<init>":()V
+       7: astore_1
+       8: aload_1
+       9: ldc           #4                  // String xxx
+      11: invokeinterface #5,  2            // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+      16: pop
+      17: aload_1
+      18: iconst_0
+      19: invokeinterface #6,  2            // InterfaceMethod java/util/List.get:(I)Ljava/lang/Object;
+      24: checkcast     #7                  // class java/lang/String
+      27: astore_2
+      28: return
+}
+```
+上述第11、19行可以看出一个传入的是Object一个返回的是Object，并不是像是返回的String字段。在使用String接收返回值时，还是通过`checkcast`对返回的Object进行转换。
+
+所以在Java中泛型在编译后，泛型已经不复存在，使用的是Object，由编译器保证放入集合的数据是同一类型。为了证明这一说法，通过修改字节码强行在集合中放入其他类型。
+```java
+class ListUtil {
+    public static void add(List<String> strList) {
+        strList.add("xxxx");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) throws Exception {
+        ClassPool pool = ClassPool.getDefault();
+        CtClass ctClass = pool.get("com.whh.netty.ListUtil");
+        for (CtMethod method : ctClass.getMethods()) {
+            if ("add".equals(method.getName())) {
+                method.insertBefore("$1.add(Integer.valueOf(1));");
+                continue;
+            }
+        }
+        Class clazz = ctClass.toClass();
+        Method add = clazz.getMethod("add", List.class);
+        List<String> list = new ArrayList<>();
+        add.invoke(null, list);
+        System.out.println(list);
+        for (String s : list) {
+            System.out.println(s);
+        }
+    }
+}
+```
+如上，通过修改javassist第三方jar对集合中插入Integer类型，在输出的时候正常，但是在遍历的时候会报类型转换异常，因为集合中存在Integer无法转换为String。
+
+### 泛型类
+自定义泛型类：
+```java
+class Person<T> {
+    private T val;
+}
+```
+通过命令`javap -p Person.class`后如下：
+```javap
+class com.whh.netty.Person<T> {
+  private T val;
+  com.whh.netty.Person();
+  public T getVal();
+  public void setVal(T);
+}
+```
+编译后对生成的字节码获取类中的属性和方法，发现泛型还是存在的，并不如网上人员所说的T被转换为Object了。
+
+### 泛型方法
+```java
+public <E> void test(List<E> list) {
+
+}
+```
