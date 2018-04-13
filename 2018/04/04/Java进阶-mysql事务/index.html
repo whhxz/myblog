@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="事务,mysql," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="在使用数据库时，因为存在不同的用户操作同一条数据，数据库可能出现如下问题：
+
+脏读：表示一个事务正在访问数据，并且对数据进行了修改，而这种修改还么提交到数据库，这个时候，另一个事务也访问了这个数据，然后获取到了该事务未提交的数据。
+不可重复读：是指在一个事务内，多次读取同一数据。在这个事务还没结束时，另一个事务也访问并修改了改数据（已经提交事务），第一个事务再次读取数据发现两次读取的数据不一样。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java进阶-mysql事务">
+<meta property="og:url" content="http://blog.whhxz.com/2018/04/04/Java进阶-mysql事务/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="在使用数据库时，因为存在不同的用户操作同一条数据，数据库可能出现如下问题：
+
+脏读：表示一个事务正在访问数据，并且对数据进行了修改，而这种修改还么提交到数据库，这个时候，另一个事务也访问了这个数据，然后获取到了该事务未提交的数据。
+不可重复读：是指在一个事务内，多次读取同一数据。在这个事务还没结束时，另一个事务也访问并修改了改数据（已经提交事务），第一个事务再次读取数据发现两次读取的数据不一样。">
+<meta property="og:updated_time" content="2018-04-04T03:07:23.792Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java进阶-mysql事务">
+<meta name="twitter:description" content="在使用数据库时，因为存在不同的用户操作同一条数据，数据库可能出现如下问题：
+
+脏读：表示一个事务正在访问数据，并且对数据进行了修改，而这种修改还么提交到数据库，这个时候，另一个事务也访问了这个数据，然后获取到了该事务未提交的数据。
+不可重复读：是指在一个事务内，多次读取同一数据。在这个事务还没结束时，另一个事务也访问并修改了改数据（已经提交事务），第一个事务再次读取数据发现两次读取的数据不一样。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.whhxz.com/2018/04/04/Java进阶-mysql事务/"/>
+
+
+
+
+
+  <title>Java进阶-mysql事务 | WHH</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WHH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">MY BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/04/Java进阶-mysql事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java进阶-mysql事务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-04T08:57:05+08:00">
+                2018-04-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java进阶/" itemprop="url" rel="index">
+                    <span itemprop="name">Java进阶</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Java进阶/mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在使用数据库时，因为存在不同的用户操作同一条数据，数据库可能出现如下问题：</p>
+<ul>
+<li>脏读：表示一个事务正在访问数据，并且对数据进行了修改，而这种修改还么提交到数据库，这个时候，另一个事务也访问了这个数据，然后获取到了该事务未提交的数据。</li>
+<li>不可重复读：是指在一个事务内，多次读取同一数据。在这个事务还没结束时，另一个事务也访问并修改了改数据（已经提交事务），第一个事务再次读取数据发现两次读取的数据不一样。</li>
+<li>幻读：一个事务计划对表中数据进行修改，同时第二个事务向表中插入了一条数据（提交事务），符合第一个事务中的条件，之后第一个事务对表进行修改，那么对于操作第一个事务的用户而言，会发现表中还有其他数据（第二个事务），如同幻觉。<a id="more"></a>
+<h3 id="事务导致的问题"><a href="#事务导致的问题" class="headerlink" title="事务导致的问题"></a>事务导致的问题</h3></li>
+</ul>
+<h4 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">-- 开启第一个连接</span><br><span class="line">-- 先设置数据库事务未最低级别</span><br><span class="line">mysql1&gt; set SESSION  transaction ISOLATION LEVEL READ UNCOMMITTED;</span><br><span class="line">-- 设置事务不自动提交</span><br><span class="line">mysql1&gt; set autocommit = 0;</span><br><span class="line">mysql1&gt; start transaction;</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line"></span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      1 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line"></span><br><span class="line">-- 开启第二个连接</span><br><span class="line">-- 设置事务不自动提交</span><br><span class="line">mysql2&gt; set autocommit = 0;</span><br><span class="line">-- 开启事务不提交事务</span><br><span class="line">mysql2&gt; start transaction;</span><br><span class="line">mysql2&gt; update item set status = 2 where i = 1;</span><br><span class="line"></span><br><span class="line">-- 切换到第一个事务查询数据</span><br><span class="line">mysql1&gt; select * from item;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      2 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line"></span><br><span class="line">-- 查询到了第二个事务未提交的数据</span><br><span class="line"></span><br><span class="line">-- 切换到第二个事务回滚</span><br><span class="line">mysql2&gt; rollback;</span><br></pre></td></tr></table></figure>
+<p>如上操作，事务1读取到了事务2未提交的数据。在有些情况下<code>脏读</code>比较危险，如：A转账给B，A转账后，还有后续逻辑，都在一个事务里面，这时B去查账，查询到了余额的增加，如果B中某个耗时逻辑发送了错误导致事务回滚，这样实际是没有成功，对于B而言之前是已经看见成功了。</p>
+<p>在使用自增ID时，此时自增ID为1，如果一个事务提交了insert，生成的自增加ID为2，另外一个事务也提交了insert，生成的自增ID为3，因为第一个事务并未提交，第二个事务却生成的自增ID为3。这勉强可以视为脏的读，只不过这种情况是为了在并发时提升数据库性能做的操作。</p>
+<h4 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h4><p>不可重复读和脏读的区别在于，在事务内，一个是读取到了另一个事务未提交的数据；一个是读取了另一个已经提交的数据，前后读取的数据不一致。<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">mysql1&gt; set SESSION  transaction ISOLATION LEVEL READ COMMITTED;</span><br><span class="line">mysql1&gt; commit;</span><br><span class="line">mysql1&gt; start transaction;</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      1 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line"></span><br><span class="line">-- 切换事务二，修改数据</span><br><span class="line">mysql2&gt; set SESSION  transaction ISOLATION LEVEL READ COMMITTED;</span><br><span class="line">mysql2&gt; commit;</span><br><span class="line">mysql2&gt; start transaction;</span><br><span class="line">mysql2&gt; update item set status = 2 where id=1;</span><br><span class="line"></span><br><span class="line">-- 切换事务一，查询数据。</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      1 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">-- 事务查询正常，没查到未提交数据</span><br><span class="line">-- 切换事务二，提交事务</span><br><span class="line">mysql2&gt; commit;</span><br><span class="line">-- 切换事务一，查询数据。</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      2 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">mysql1&gt; commit;</span><br></pre></td></tr></table></figure></p>
+<p>如上操作，事务一在自己事务内读取到的数据前后不一致。</p>
+<h4 id="幻读"><a href="#幻读" class="headerlink" title="幻读"></a>幻读</h4><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">-- 事务一，修改数据</span><br><span class="line">mysql1&gt; set SESSION  transaction ISOLATION LEVEL REPEATABLE READ ;</span><br><span class="line">mysql1&gt; commit;</span><br><span class="line">mysql1&gt; start transaction;</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      2 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">-- 事务二插入操作</span><br><span class="line">mysql2&gt; set SESSION  transaction ISOLATION LEVEL REPEATABLE READ ;</span><br><span class="line">mysql2&gt; commit;</span><br><span class="line">mysql2&gt; start transaction;</span><br><span class="line">mysql2&gt; insert into item(serial_num, sku_code, num, status) VALUES ('000002', 'K00006', 5, 1);</span><br><span class="line">mysql2&gt; commit;</span><br><span class="line">-- 事务2修改数据后，事务一查看数据</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      2 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">-- 此时并未查询到事务二已经提交的事务，此时修改数据库数据</span><br><span class="line">mysql1&gt; update item set status=4 where sku_code = 'K00006';</span><br><span class="line">mysql1&gt; SELECT * FROM item order by id desc;</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">| id | serial_num | sku_code | num | status |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">|  2 | 000002     | K00006   |   5 |      4 |</span><br><span class="line">|  1 | 000001     | K00006   |   5 |      4 |</span><br><span class="line">+----+------------+----------+-----+--------+</span><br><span class="line">-- 在事务一内原本只有一条数据的，结果更新后更新了2条数据，而且在查询时，把事务二的数据查询出来了</span><br><span class="line">mysql1&gt; commit;</span><br></pre></td></tr></table></figure>
+<p>在原本事务一中只有一条数据，在事务二插入提交后，事务一中对数据进行更新，此时事务二中提交的数据被修改查询出来。</p>
+<h3 id="事务隔离级别"><a href="#事务隔离级别" class="headerlink" title="事务隔离级别"></a>事务隔离级别</h3><p>在上述例子中，每个例子都是使用的不同的事务隔离级别。</p>
+<p>设置事务隔离级别命令<br><code>SET [SESSION | GLOBAL] TRANSACTION ISOLATION LEVEL {READ UNCOMMITTED | READ COMMITTED | REPEATABLE READ | SERIALIZABLE}</code></p>
+<p>不同的事务隔离级别用于解决不同的问题：</p>
+<table>
+<thead>
+<tr>
+<th>—</th>
+<th style="text-align:left">脏读</th>
+<th style="text-align:left">不可重复读</th>
+<th style="text-align:left">幻读</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ UNCOMMITTED</td>
+<td style="text-align:left">可能</td>
+<td style="text-align:left">可能</td>
+<td style="text-align:left">可能</td>
+</tr>
+<tr>
+<td>READ COMMITTED</td>
+<td style="text-align:left">不可能</td>
+<td style="text-align:left">可能</td>
+<td style="text-align:left">可能</td>
+</tr>
+<tr>
+<td>REPEATABLE READ（mysql InnoDB 默认）</td>
+<td style="text-align:left">不可能</td>
+<td style="text-align:left">不可能</td>
+<td style="text-align:left">可能</td>
+</tr>
+<tr>
+<td>SERIALIZABLE</td>
+<td style="text-align:left">不可能</td>
+<td style="text-align:left">不可能</td>
+<td style="text-align:left">不可能</td>
+</tr>
+</tbody>
+</table>
+<p>对于<code>SERIALIZABLE</code>并没有举例，在使用<code>SERIALIZABLE</code>实际上是自己锁住了数据，其他数据需要修改只能等待锁释放。</p>
+<p>参考：<a href="http://www.cnblogs.com/zhoujinyi/p/3437475.html" target="_blank" rel="external">MySQL 四种事务隔离级的说明</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/事务/" rel="tag"># 事务</a>
+          
+            <a href="/tags/mysql/" rel="tag"># mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/01/工作问题-并发事务/" rel="next" title="工作问题-并发事务">
+                <i class="fa fa-chevron-left"></i> 工作问题-并发事务
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/10/算法-全排列/" rel="prev" title="算法-全排列">
+                算法-全排列 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.bmp"
+               alt="WHH" />
+          <p class="site-author-name" itemprop="name">WHH</p>
+           
+              <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">156</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/whhxz" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#事务导致的问题"><span class="nav-number">1.</span> <span class="nav-text">事务导致的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#脏读"><span class="nav-number">1.1.</span> <span class="nav-text">脏读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#不可重复读"><span class="nav-number">1.2.</span> <span class="nav-text">不可重复读</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#幻读"><span class="nav-number">1.3.</span> <span class="nav-text">幻读</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#事务隔离级别"><span class="nav-number">2.</span> <span class="nav-text">事务隔离级别</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WHH</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

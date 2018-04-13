@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="工作,事务,并发," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="现在开发过程中有个需求，商品没货了需要补货，简略版如下：1、发现商品没货，生成补货单2、如果现在有未处理补货单，先删除当前补货单，之后生成新的补货单，如果当前的补货单已经开始处理，那么忽略3、提供API接口供修改状态
+现在数据库设计，状态分为：0：待处理，1：已经认领，2：处理完毕，4：取消简略版数据库如下：1234567891011create table test.item(	id int a">
+<meta property="og:type" content="article">
+<meta property="og:title" content="工作问题-并发事务">
+<meta property="og:url" content="http://blog.whhxz.com/2018/04/01/工作问题-并发事务/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="现在开发过程中有个需求，商品没货了需要补货，简略版如下：1、发现商品没货，生成补货单2、如果现在有未处理补货单，先删除当前补货单，之后生成新的补货单，如果当前的补货单已经开始处理，那么忽略3、提供API接口供修改状态
+现在数据库设计，状态分为：0：待处理，1：已经认领，2：处理完毕，4：取消简略版数据库如下：1234567891011create table test.item(	id int a">
+<meta property="og:image" content="http://otxnth5wx.bkt.clouddn.com/20180408屏幕快照2018-04-01下午2.36.31.png">
+<meta property="og:updated_time" content="2018-04-08T04:10:27.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="工作问题-并发事务">
+<meta name="twitter:description" content="现在开发过程中有个需求，商品没货了需要补货，简略版如下：1、发现商品没货，生成补货单2、如果现在有未处理补货单，先删除当前补货单，之后生成新的补货单，如果当前的补货单已经开始处理，那么忽略3、提供API接口供修改状态
+现在数据库设计，状态分为：0：待处理，1：已经认领，2：处理完毕，4：取消简略版数据库如下：1234567891011create table test.item(	id int a">
+<meta name="twitter:image" content="http://otxnth5wx.bkt.clouddn.com/20180408屏幕快照2018-04-01下午2.36.31.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.whhxz.com/2018/04/01/工作问题-并发事务/"/>
+
+
+
+
+
+  <title>工作问题-并发事务 | WHH</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WHH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">MY BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/01/工作问题-并发事务/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">工作问题-并发事务</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-01T13:53:03+08:00">
+                2018-04-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作问题/" itemprop="url" rel="index">
+                    <span itemprop="name">工作问题</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/工作问题/事务/" itemprop="url" rel="index">
+                    <span itemprop="name">事务</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>现在开发过程中有个需求，商品没货了需要补货，简略版如下：<br>1、发现商品没货，生成补货单<br>2、如果现在有未处理补货单，先删除当前补货单，之后生成新的补货单，如果当前的补货单已经开始处理，那么忽略<br>3、提供API接口供修改状态</p>
+<p>现在数据库设计，状态分为：0：待处理，1：已经认领，2：处理完毕，4：取消<br>简略版数据库如下：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.item</span><br><span class="line">(</span><br><span class="line">	<span class="keyword">id</span> <span class="built_in">int</span> auto_increment</span><br><span class="line">		primary <span class="keyword">key</span>,</span><br><span class="line">	sku_code <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	<span class="keyword">num</span> <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	<span class="keyword">status</span> <span class="built_in">int</span> <span class="keyword">not</span> <span class="literal">null</span>,</span><br><span class="line">	<span class="keyword">constraint</span> item_id_uindex</span><br><span class="line">		<span class="keyword">unique</span> (<span class="keyword">id</span>)</span><br><span class="line">)</span><br><span class="line">;</span><br></pre></td></tr></table></figure></p>
+<a id="more"></a>
+<h3 id="项目验证"><a href="#项目验证" class="headerlink" title="项目验证"></a>项目验证</h3><p>创建Spring项目，配置SpringMVC，Spring、Mybatis</p>
+<p>数据库操作如下：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">mapper</span> <span class="attr">namespace</span>=<span class="string">"com.whh.mapper.ItemMapper"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--查询列表--&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--通过ID查询数据--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"query"</span> <span class="attr">resultType</span>=<span class="string">"com.whh.vo.SearchItemVo"</span>&gt;</span></span><br><span class="line">        select id, sku_code as skuCode,num, status from item</span><br><span class="line">        <span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">"where"</span> <span class="attr">suffixOverrides</span>=<span class="string">"and"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"id != null"</span>&gt;</span></span><br><span class="line">                id = #&#123;id&#125; and</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"skuCode != null and skuCode != ''"</span>&gt;</span></span><br><span class="line">                sku_code = #&#123;skuCode&#125; and</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"num != null"</span>&gt;</span></span><br><span class="line">                num = #&#123;num&#125; and</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"status != null"</span>&gt;</span></span><br><span class="line">                status = #&#123;status&#125; and</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"notStatus != null"</span>&gt;</span></span><br><span class="line">                status != #&#123;notStatus&#125; and</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--新增数据，插入对象ID会自动设置为自增的ID--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"insert"</span> <span class="attr">parameterType</span>=<span class="string">"com.whh.pojo.Item"</span> <span class="attr">useGeneratedKeys</span>=<span class="string">"true"</span> <span class="attr">keyProperty</span>=<span class="string">"id"</span>&gt;</span></span><br><span class="line">        INSERT INTO item (sku_code,num, status) VALUES (#&#123;skuCode&#125;,#&#123;num&#125;, #&#123;status&#125;)</span><br><span class="line">    <span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!--关系数据--&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"update"</span> <span class="attr">parameterType</span>=<span class="string">"com.whh.pojo.Item"</span>&gt;</span></span><br><span class="line">        update item set</span><br><span class="line">        <span class="tag">&lt;<span class="name">trim</span> <span class="attr">suffixOverrides</span>=<span class="string">","</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"skuCode != null"</span>&gt;</span></span><br><span class="line">                sku_code = #&#123;skuCode&#125;,</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"num != null"</span>&gt;</span></span><br><span class="line">                num = #&#123;num&#125;,</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"status != null"</span>&gt;</span></span><br><span class="line">                status = #&#123;status&#125;</span><br><span class="line">            <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">        where id = #&#123;id&#125;</span><br><span class="line">    <span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mapper</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>先展示错误的示范：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span>(rollbackFor = Exception.class)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">createTask</span><span class="params">(String skuCode, Integer num)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//查询数据库是否存在</span></span><br><span class="line">    SearchItemVo params = <span class="keyword">new</span> SearchItemVo();</span><br><span class="line">    params.setSkuCode(skuCode);</span><br><span class="line">    params.setNotStatus(<span class="number">4</span>);</span><br><span class="line">    List&lt;Item&gt; itemList = itemMapper.query(params);</span><br><span class="line">    <span class="comment">//数据库不存在时insert</span></span><br><span class="line">    <span class="keyword">if</span> (itemList == <span class="keyword">null</span> || itemList.isEmpty()) &#123;</span><br><span class="line">        Item item = <span class="keyword">new</span> Item(skuCode, num, <span class="number">0</span>);</span><br><span class="line">        result = itemMapper.insert(item);</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        Item item = itemList.get(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//数据库存在，且状态为0，设置状态为4，同时生成新的数据</span></span><br><span class="line">        item.setStatus(<span class="number">4</span>);</span><br><span class="line">        result = itemMapper.update(item);</span><br><span class="line">        <span class="keyword">if</span> (result == <span class="number">1</span>) &#123;</span><br><span class="line">            item.setStatus(<span class="number">0</span>);</span><br><span class="line">            item.setNum(num);</span><br><span class="line">            result = itemMapper.insert(item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编写Test<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath*:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ItemServiceTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> ItemService itemService;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createTask</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> num = random.nextInt(<span class="number">100</span>);</span><br><span class="line">            itemService.createTask(<span class="string">"K000001"</span>, num);</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动Test测试，查询数据库数据。<br><img src="http://otxnth5wx.bkt.clouddn.com/20180408屏幕快照2018-04-01下午2.36.31.png" alt=""><br>数据库中同一个商品非4状态的只有一条。<br>这样存在一个问题，如果出现并发访问，那么数据库中数据就会查询问题<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">concurrentCreateTask</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> String skuCode = <span class="string">"K000001"</span>;</span><br><span class="line">    <span class="keyword">int</span> threadNum = <span class="number">10</span>;</span><br><span class="line">    Thread[] threads = <span class="keyword">new</span> Thread[<span class="number">10</span>];</span><br><span class="line">    CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line">    <span class="comment">//设置多线程创建</span></span><br><span class="line">    IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        IntStream.range(<span class="number">0</span>, <span class="number">100</span>).forEach((j) -&gt; itemService.createTask(skuCode, random.nextInt(<span class="number">10</span>)));</span><br><span class="line">        downLatch.countDown();</span><br><span class="line">    &#125;));</span><br><span class="line">    <span class="comment">//启动线程</span></span><br><span class="line">    Arrays.stream(threads).forEach((Thread::start));</span><br><span class="line">    downLatch.await();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//查询验证最终生成的非4数量</span></span><br><span class="line">    SearchItemVo searchItemVo = <span class="keyword">new</span> SearchItemVo();</span><br><span class="line">    searchItemVo.setSkuCode(skuCode);</span><br><span class="line">    searchItemVo.setNotStatus(<span class="number">4</span>);</span><br><span class="line">    List&lt;Item&gt; itemList = itemMapper.query(searchItemVo);</span><br><span class="line">    <span class="keyword">assert</span> itemList != <span class="keyword">null</span> &amp;&amp; itemList.size() == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动Test开始测试，结论是肯定的，测试不通过。</p>
+<h4 id="分析原因"><a href="#分析原因" class="headerlink" title="分析原因"></a>分析原因</h4><p>因为在代码中，我们是先查询的数据，之后在做的判断，在并发访问时，可能出现多线程同时查询，都为发现数据库无数据，之后执行后续的插入逻辑。后面判断状态也是同理。</p>
+<p>解决办法：<br><code>INSERT ... ON DUPLICATE KEY UPDATE</code>，表示如果存在就更新，如果不存在就插入，刚刚好这需求之前的要求。<br>但是此处并不适合这个，因为<code>ON DUPLICATE KEY UPDATE</code>判断重复是依据唯一索引，但是在数据库中，<code>sku_code</code>和<code>status</code>无法建立唯一索引，因为可能会出现一个<code>sku_code</code>对应多个重复的<code>status</code>。</p>
+<p>那先解决如果存在在插入数据库。<br>改进sql，在mapper中新增方法<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"insertNotExist"</span> <span class="attr">parameterType</span>=<span class="string">"com.whh.pojo.Item"</span> <span class="attr">useGeneratedKeys</span>=<span class="string">"true"</span> <span class="attr">keyProperty</span>=<span class="string">"id"</span>&gt;</span></span><br><span class="line">    INSERT INTO item (sku_code, num, status) SELECT</span><br><span class="line">                                                #&#123;skuCode&#125;,</span><br><span class="line">                                                #&#123;num&#125;,</span><br><span class="line">                                                #&#123;status&#125;</span><br><span class="line">                                                FROM DUAL</span><br><span class="line">                                                WHERE NOT exists(SELECT id</span><br><span class="line">                                                                FROM item</span><br><span class="line">                                                                WHERE sku_code = #&#123;skuCode&#125; AND status != 4)</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>DUAL</code>为临时表。</li>
+</ul>
+<p>通过查询<code>skuCode</code>和<code>status != 4</code>，使用<code>not exists</code>，获取返回的第一条数据，然后进行插入。</p>
+<p>在Mysql中<code>not exists</code>只会返回<code>true</code>或者<code>false</code>，如果返回的是<code>true</code>表示不存在该<code>sku_code</code>且<code>status</code>不为4的数据;反之则返回<code>false</code>，那么将无法插入数据。<br>测试该方法是生效<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="meta">@Rollback</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">insertNotExist</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    String skuCode = <span class="string">"K000002"</span>;</span><br><span class="line">    Item item = <span class="keyword">new</span> Item(skuCode, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">//判断第一次插入是否成功</span></span><br><span class="line">    <span class="keyword">assert</span> itemMapper.insertNotExist(item) != <span class="number">0</span>;</span><br><span class="line">    <span class="comment">//判断第二次插入是否从</span></span><br><span class="line">    <span class="keyword">assert</span> itemMapper.insertNotExist(item) == <span class="number">0</span>;</span><br><span class="line">    SearchItemVo searchItemVo = <span class="keyword">new</span> SearchItemVo();</span><br><span class="line">    searchItemVo.setNotStatus(<span class="number">4</span>);</span><br><span class="line">    searchItemVo.setSkuCode(skuCode);</span><br><span class="line">    <span class="comment">//判断数据中非4的数据是否只有1条</span></span><br><span class="line">    <span class="keyword">assert</span> itemMapper.query(searchItemVo).size() == <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行单元测试，验证该方法是生效的。</p>
+<p>解决了数据只有不存在时才插入。<br>下一步就是如果存在数据状态为0，那么需要修改为4<br>Mapper新增update操作：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">update</span> <span class="attr">id</span>=<span class="string">"updateInfo"</span>&gt;</span></span><br><span class="line">    UPDATE item set</span><br><span class="line">    <span class="tag">&lt;<span class="name">trim</span> <span class="attr">suffixOverrides</span>=<span class="string">","</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"newInfo.skuCode != null"</span>&gt;</span></span><br><span class="line">            sku_code = #&#123;newInfo.skuCode&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"newInfo.num != null"</span>&gt;</span></span><br><span class="line">            num = #&#123;newInfo.num&#125;,</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"newInfo.status != null"</span>&gt;</span></span><br><span class="line">            status = #&#123;newInfo.status&#125;</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">trim</span> <span class="attr">prefix</span>=<span class="string">"where"</span> <span class="attr">suffixOverrides</span>=<span class="string">"and"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"oldInfo.id != null"</span>&gt;</span></span><br><span class="line">            id = #&#123;oldInfo.id&#125; and</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"oldInfo.skuCode != null"</span>&gt;</span></span><br><span class="line">            sku_code = #&#123;oldInfo.skuCode&#125; and</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"oldInfo.num != null"</span>&gt;</span></span><br><span class="line">            num = #&#123;oldInfo.num&#125; and</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"oldInfo.status != null"</span>&gt;</span></span><br><span class="line">            status = #&#123;oldInfo.status&#125; and</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">if</span> <span class="attr">test</span>=<span class="string">"oldInfo.id == null and oldInfo.skuCode == null and oldInfo.num == null and oldInfo.status"</span>&gt;</span></span><br><span class="line">            false</span><br><span class="line">        <span class="tag">&lt;/<span class="name">if</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">trim</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">update</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>注：最后设置如果传入的查询条件为null，那么就不做更新，避免因为没有查询条件导致更新整张表。</li>
+</ul>
+<p>在一般情况下，更新时只是通过主键直接更新值，这样在并发情况下会出现多个线程更新，且都更新成功。<br>如：现在一个线程更新状态为4，生成新数据，另一个线程更新状态为1，设置为认领，这样就会导致上一个线程更新后，下一个线程又直接修改了值，导致数据出现错误。<br>所以在处理这种情况时需要加入状态进行判断（CAS）。</p>
+<h4 id="改进代码"><a href="#改进代码" class="headerlink" title="改进代码"></a>改进代码</h4><p>修改之前逻辑为新代码，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">Transactional(rollbackFor = Exception.class)</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">createTaskImprove</span><span class="params">(String skuCode, Integer num)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">    Item item = <span class="keyword">new</span> Item(skuCode, num, <span class="number">0</span>);</span><br><span class="line">    result = itemMapper.insertNotExist(item);</span><br><span class="line">    <span class="keyword">if</span> (result == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">//构造旧数据用于查询，</span></span><br><span class="line">        Item oldItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">0</span>);</span><br><span class="line">        Item newItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">4</span>);</span><br><span class="line">        result = itemMapper.updateInfo(oldItem, newItem);</span><br><span class="line">        <span class="keyword">if</span> (result != <span class="number">0</span>)&#123;</span><br><span class="line">            result = itemMapper.insertNotExist(item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>开启并发测试，理论上是应该OK了，但是启动单元测试后，出现了错误。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">Exception in thread &quot;Thread-5&quot; Exception in thread &quot;Thread-9&quot; Exception in thread &quot;Thread-11&quot; org.springframework.dao.DeadlockLoserDataAccessException: </span><br><span class="line">### Error updating database.  Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">### The error may involve com.whh.mapper.ItemMapper.insertNotExist-Inline</span><br><span class="line">### The error occurred while setting parameters</span><br><span class="line">### SQL: INSERT INTO item (sku_code, num, status) SELECT                                                    ?,                                                    ?,                                                    ?                                                  FROM DUAL                                                  WHERE NOT exists(SELECT id                                                                   FROM item                                                                   WHERE sku_code = ? AND status != 4)</span><br><span class="line">### Cause: com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">; SQL []; Deadlock found when trying to get lock; try restarting transaction; nested exception is com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">	at org.springframework.jdbc.support.SQLErrorCodeSQLExceptionTranslator.doTranslate(SQLErrorCodeSQLExceptionTranslator.java:263)</span><br><span class="line">	at org.springframework.jdbc.support.AbstractFallbackSQLExceptionTranslator.translate(AbstractFallbackSQLExceptionTranslator.java:73)</span><br><span class="line">	at org.mybatis.spring.MyBatisExceptionTranslator.translateExceptionIfPossible(MyBatisExceptionTranslator.java:74)</span><br><span class="line">	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:421)</span><br><span class="line">	at com.sun.proxy.$Proxy20.insert(Unknown Source)</span><br><span class="line">	at org.mybatis.spring.SqlSessionTemplate.insert(SqlSessionTemplate.java:254)</span><br><span class="line">	at org.apache.ibatis.binding.MapperMethod.execute(MapperMethod.java:52)</span><br><span class="line">	at org.apache.ibatis.binding.MapperProxy.invoke(MapperProxy.java:53)</span><br><span class="line">	at com.sun.proxy.$Proxy24.insertNotExist(Unknown Source)</span><br><span class="line">	at com.whh.service.ItemService.createTaskImprove(ItemService.java:66)</span><br><span class="line">	at com.whh.service.ItemService$$FastClassBySpringCGLIB$$a83be025.invoke(&lt;generated&gt;)</span><br><span class="line">	at org.springframework.cglib.proxy.MethodProxy.invoke(MethodProxy.java:204)</span><br><span class="line">	at org.springframework.aop.framework.CglibAopProxy$DynamicAdvisedInterceptor.intercept(CglibAopProxy.java:651)</span><br><span class="line">	at com.whh.service.ItemService$$EnhancerBySpringCGLIB$$bc7432b6.createTaskImprove(&lt;generated&gt;)</span><br><span class="line">	at com.whh.service.ItemServiceTest.lambda$null$3(ItemServiceTest.java:80)</span><br><span class="line">	at java.util.stream.Streams$RangeIntSpliterator.forEachRemaining(Streams.java:110)</span><br><span class="line">	at java.util.stream.IntPipeline$Head.forEach(IntPipeline.java:557)</span><br><span class="line">	at com.whh.service.ItemServiceTest.lambda$null$4(ItemServiceTest.java:80)</span><br><span class="line">	at java.lang.Thread.run(Thread.java:745)</span><br><span class="line">Caused by: com.mysql.jdbc.exceptions.jdbc4.MySQLTransactionRollbackException: Deadlock found when trying to get lock; try restarting transaction</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)</span><br><span class="line">	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)</span><br><span class="line">	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)</span><br><span class="line">	at java.lang.reflect.Constructor.newInstance(Constructor.java:422)</span><br><span class="line">	at com.mysql.jdbc.Util.handleNewInstance(Util.java:409)</span><br><span class="line">	at com.mysql.jdbc.Util.getInstance(Util.java:384)</span><br><span class="line">	at com.mysql.jdbc.SQLError.createSQLException(SQLError.java:1064)</span><br><span class="line">	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4232)</span><br><span class="line">	at com.mysql.jdbc.MysqlIO.checkErrorPacket(MysqlIO.java:4164)</span><br><span class="line">	at com.mysql.jdbc.MysqlIO.sendCommand(MysqlIO.java:2615)</span><br><span class="line">	at com.mysql.jdbc.MysqlIO.sqlQueryDirect(MysqlIO.java:2776)</span><br><span class="line">	at com.mysql.jdbc.ConnectionImpl.execSQL(ConnectionImpl.java:2838)</span><br><span class="line">	at com.mysql.jdbc.PreparedStatement.executeInternal(PreparedStatement.java:2082)</span><br><span class="line">	at com.mysql.jdbc.PreparedStatement.execute(PreparedStatement.java:1307)</span><br><span class="line">	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:2931)</span><br><span class="line">	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_execute(FilterEventAdapter.java:440)</span><br><span class="line">	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:2929)</span><br><span class="line">	at com.alibaba.druid.filter.FilterEventAdapter.preparedStatement_execute(FilterEventAdapter.java:440)</span><br><span class="line">	at com.alibaba.druid.filter.FilterChainImpl.preparedStatement_execute(FilterChainImpl.java:2929)</span><br><span class="line">	at com.alibaba.druid.proxy.jdbc.PreparedStatementProxyImpl.execute(PreparedStatementProxyImpl.java:131)</span><br><span class="line">	at com.alibaba.druid.pool.DruidPooledPreparedStatement.execute(DruidPooledPreparedStatement.java:493)</span><br><span class="line">	at sun.reflect.GeneratedMethodAccessor23.invoke(Unknown Source)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:497)</span><br><span class="line">	at org.apache.ibatis.logging.jdbc.PreparedStatementLogger.invoke(PreparedStatementLogger.java:59)</span><br><span class="line">	at com.sun.proxy.$Proxy27.execute(Unknown Source)</span><br><span class="line">	at org.apache.ibatis.executor.statement.PreparedStatementHandler.update(PreparedStatementHandler.java:45)</span><br><span class="line">	at org.apache.ibatis.executor.statement.RoutingStatementHandler.update(RoutingStatementHandler.java:73)</span><br><span class="line">	at org.apache.ibatis.executor.SimpleExecutor.doUpdate(SimpleExecutor.java:49)</span><br><span class="line">	at org.apache.ibatis.executor.BaseExecutor.update(BaseExecutor.java:115)</span><br><span class="line">	at org.apache.ibatis.executor.CachingExecutor.update(CachingExecutor.java:75)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.update(DefaultSqlSession.java:170)</span><br><span class="line">	at org.apache.ibatis.session.defaults.DefaultSqlSession.insert(DefaultSqlSession.java:157)</span><br><span class="line">	at sun.reflect.GeneratedMethodAccessor27.invoke(Unknown Source)</span><br><span class="line">	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)</span><br><span class="line">	at java.lang.reflect.Method.invoke(Method.java:497)</span><br><span class="line">	at org.mybatis.spring.SqlSessionTemplate$SqlSessionInterceptor.invoke(SqlSessionTemplate.java:408)</span><br><span class="line">	... 15 more</span><br></pre></td></tr></table></figure></p>
+<p>从错误上看，出现了死锁，通过命令<code>show engine innodb status;</code>查询数据库<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">=====================================</span><br><span class="line">2018-04-01 19:17:11 700003efe000 INNODB MONITOR OUTPUT</span><br><span class="line">=====================================</span><br><span class="line">Per second averages calculated from the last 32 seconds</span><br><span class="line">-----------------</span><br><span class="line">BACKGROUND THREAD</span><br><span class="line">-----------------</span><br><span class="line">srv_master_thread loops: 84 srv_active, 0 srv_shutdown, 24429 srv_idle</span><br><span class="line">srv_master_thread log flush and writes: 24513</span><br><span class="line">----------</span><br><span class="line">SEMAPHORES</span><br><span class="line">----------</span><br><span class="line">OS WAIT ARRAY INFO: reservation count 474</span><br><span class="line">OS WAIT ARRAY INFO: signal count 548</span><br><span class="line">Mutex spin waits 10228, rounds 38291, OS waits 49</span><br><span class="line">RW-shared spins 1411, rounds 29858, OS waits 247</span><br><span class="line">RW-excl spins 201, rounds 6233, OS waits 70</span><br><span class="line">Spin rounds per wait: 3.74 mutex, 21.16 RW-shared, 31.01 RW-excl</span><br><span class="line">------------------------</span><br><span class="line">LATEST DETECTED DEADLOCK</span><br><span class="line">------------------------</span><br><span class="line">2018-04-01 19:17:02 700003fca000</span><br><span class="line">*** (1) TRANSACTION:</span><br><span class="line">TRANSACTION 170407, ACTIVE 0 sec setting auto-inc lock</span><br><span class="line">mysql tables in use 2, locked 2</span><br><span class="line">LOCK WAIT 4 lock struct(s), heap size 1184, 300 row lock(s)</span><br><span class="line">MySQL thread id 2659, OS thread handle 0x700003cde000, query id 49518 localhost 127.0.0.1 root executing</span><br><span class="line">INSERT INTO item (sku_code, num, status) SELECT</span><br><span class="line">                                                   &apos;K000001&apos;,</span><br><span class="line">                                                   2,</span><br><span class="line">                                                   0</span><br><span class="line">                                                 FROM DUAL</span><br><span class="line">                                                 WHERE NOT exists(SELECT id</span><br><span class="line">                                                                  FROM item</span><br><span class="line">                                                                  WHERE sku_code = &apos;K000001&apos; AND status != 4)</span><br><span class="line">*** (1) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">TABLE LOCK table `test`.`item` trx id 170407 lock mode AUTO-INC waiting</span><br><span class="line">*** (2) TRANSACTION:</span><br><span class="line">TRANSACTION 170402, ACTIVE 0 sec inserting</span><br><span class="line">mysql tables in use 2, locked 2</span><br><span class="line">7 lock struct(s), heap size 1184, 303 row lock(s)</span><br><span class="line">MySQL thread id 2660, OS thread handle 0x700003fca000, query id 49503 localhost 127.0.0.1 root executing</span><br><span class="line">INSERT INTO item (sku_code, num, status) SELECT</span><br><span class="line">                                                   &apos;K000001&apos;,</span><br><span class="line">                                                   4,</span><br><span class="line">                                                   0</span><br><span class="line">                                                 FROM DUAL</span><br><span class="line">                                                 WHERE NOT exists(SELECT id</span><br><span class="line">                                                                  FROM item</span><br><span class="line">                                                                  WHERE sku_code = &apos;K000001&apos; AND status != 4)</span><br><span class="line">*** (2) HOLDS THE LOCK(S):</span><br><span class="line">TABLE LOCK table `test`.`item` trx id 170402 lock mode AUTO-INC</span><br><span class="line">*** (2) WAITING FOR THIS LOCK TO BE GRANTED:</span><br><span class="line">RECORD LOCKS space id 96 page no 3 n bits 368 index `PRIMARY` of table `test`.`item` trx id 170402 lock_mode X insert intention waiting</span><br><span class="line">Record lock, heap no 1 PHYSICAL RECORD: n_fields 1; compact format; info bits 0</span><br><span class="line"> 0: len 8; hex 73757072656d756d; asc supremum;;</span><br><span class="line"></span><br><span class="line">*** WE ROLL BACK TRANSACTION (1)</span><br><span class="line">------------</span><br><span class="line">TRANSACTIONS</span><br><span class="line">------------</span><br><span class="line">Trx id counter 170788</span><br><span class="line">Purge done for trx&apos;s n:o &lt; 170787 undo n:o &lt; 0 state: running but idle</span><br><span class="line">History list length 1521</span><br><span class="line">LIST OF TRANSACTIONS FOR EACH SESSION:</span><br><span class="line">---TRANSACTION 170407, not started</span><br><span class="line">MySQL thread id 2659, OS thread handle 0x700003cde000, query id 49518 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170404, not started</span><br><span class="line">MySQL thread id 2661, OS thread handle 0x700003dee000, query id 49513 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170408, not started</span><br><span class="line">MySQL thread id 2660, OS thread handle 0x700003fca000, query id 49546 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170296, not started</span><br><span class="line">MySQL thread id 2666, OS thread handle 0x700003e76000, query id 49252 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170401, not started</span><br><span class="line">MySQL thread id 2658, OS thread handle 0x700003d66000, query id 49500 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170311, not started</span><br><span class="line">MySQL thread id 2667, OS thread handle 0x700003f42000, query id 49284 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170787, not started</span><br><span class="line">MySQL thread id 2663, OS thread handle 0x700003d22000, query id 50365 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170403, not started</span><br><span class="line">MySQL thread id 2662, OS thread handle 0x700003f86000, query id 49512 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170320, not started</span><br><span class="line">MySQL thread id 2665, OS thread handle 0x700003eba000, query id 49308 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 170405, not started</span><br><span class="line">MySQL thread id 2664, OS thread handle 0x700003daa000, query id 49514 localhost 127.0.0.1 root cleaning up</span><br><span class="line">---TRANSACTION 168759, not started</span><br><span class="line">MySQL thread id 2507, OS thread handle 0x700003efe000, query id 50372 localhost 127.0.0.1 root init</span><br><span class="line">show engine innodb status</span><br><span class="line">---TRANSACTION 169405, not started</span><br><span class="line">MySQL thread id 2498, OS thread handle 0x700003e32000, query id 46830 localhost 127.0.0.1 root cleaning up</span><br><span class="line">--------</span><br><span class="line">FILE I/O</span><br><span class="line">--------</span><br><span class="line">I/O thread 0 state: waiting for i/o request (insert buffer thread)</span><br><span class="line">I/O thread 1 state: waiting for i/o request (log thread)</span><br><span class="line">I/O thread 2 state: waiting for i/o request (read thread)</span><br><span class="line">I/O thread 3 state: waiting for i/o request (read thread)</span><br><span class="line">I/O thread 4 state: waiting for i/o request (read thread)</span><br><span class="line">I/O thread 5 state: waiting for i/o request (read thread)</span><br><span class="line">I/O thread 6 state: waiting for i/o request (write thread)</span><br><span class="line">I/O thread 7 state: waiting for i/o request (write thread)</span><br><span class="line">I/O thread 8 state: waiting for i/o request (write thread)</span><br><span class="line">I/O thread 9 state: waiting for i/o request (write thread)</span><br><span class="line">Pending normal aio reads: 0 [0, 0, 0, 0] , aio writes: 0 [0, 0, 0, 0] ,</span><br><span class="line"> ibuf aio reads: 0, log i/o&apos;s: 0, sync i/o&apos;s: 0</span><br><span class="line">Pending flushes (fsync) log: 0; buffer pool: 0</span><br><span class="line">631 OS file reads, 5249 OS file writes, 4212 OS fsyncs</span><br><span class="line">0.00 reads/s, 0 avg bytes/read, 11.03 writes/s, 7.66 fsyncs/s</span><br><span class="line">-------------------------------------</span><br><span class="line">INSERT BUFFER AND ADAPTIVE HASH INDEX</span><br><span class="line">-------------------------------------</span><br><span class="line">Ibuf: size 1, free list len 0, seg size 2, 0 merges</span><br><span class="line">merged operations:</span><br><span class="line"> insert 0, delete mark 0, delete 0</span><br><span class="line">discarded operations:</span><br><span class="line"> insert 0, delete mark 0, delete 0</span><br><span class="line">Hash table size 276671, node heap has 1 buffer(s)</span><br><span class="line">7.12 hash searches/s, 1.25 non-hash searches/s</span><br><span class="line">---</span><br><span class="line">LOG</span><br><span class="line">---</span><br><span class="line">Log sequence number 5988246706</span><br><span class="line">Log flushed up to   5988246706</span><br><span class="line">Pages flushed up to 5988246706</span><br><span class="line">Last checkpoint at  5988246706</span><br><span class="line">0 pending log writes, 0 pending chkp writes</span><br><span class="line">3847 log i/o&apos;s done, 7.38 log i/o&apos;s/second</span><br><span class="line">----------------------</span><br><span class="line">BUFFER POOL AND MEMORY</span><br><span class="line">----------------------</span><br><span class="line">Total memory allocated 137363456; in additional pool allocated 0</span><br><span class="line">Dictionary memory allocated 174719</span><br><span class="line">Buffer pool size   8191</span><br><span class="line">Free buffers       7672</span><br><span class="line">Database pages     518</span><br><span class="line">Old database pages 209</span><br><span class="line">Modified db pages  0</span><br><span class="line">Pending reads 0</span><br><span class="line">Pending writes: LRU 0, flush list 0, single page 0</span><br><span class="line">Pages made young 0, not young 0</span><br><span class="line">0.00 youngs/s, 0.00 non-youngs/s</span><br><span class="line">Pages read 446, created 72, written 2372</span><br><span class="line">0.00 reads/s, 0.03 creates/s, 9.19 writes/s</span><br><span class="line">Buffer pool hit rate 1000 / 1000, young-making rate 0 / 1000 not 0 / 1000</span><br><span class="line">Pages read ahead 0.00/s, evicted without access 0.00/s, Random read ahead 0.00/s</span><br><span class="line">LRU len: 518, unzip_LRU len: 0</span><br><span class="line">I/O sum[0]:cur[0], unzip sum[0]:cur[0]</span><br><span class="line">--------------</span><br><span class="line">ROW OPERATIONS</span><br><span class="line">--------------</span><br><span class="line">0 queries inside InnoDB, 0 queries in queue</span><br><span class="line">0 read views open inside InnoDB</span><br><span class="line">Main thread id 123145362894848, state: sleeping</span><br><span class="line">Number of rows inserted 2531, updated 2545, deleted 2095, read 1304134</span><br><span class="line">3.62 inserts/s, 3.62 updates/s, 0.00 deletes/s, 4112.25 reads/s</span><br><span class="line">----------------------------</span><br><span class="line">END OF INNODB MONITOR OUTPUT</span><br><span class="line">============================</span><br></pre></td></tr></table></figure></p>
+<p>重现deadlock。<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> item (sku_code, <span class="keyword">num</span>, <span class="keyword">status</span>) <span class="keyword">SELECT</span></span><br><span class="line">                                           <span class="string">'K000001'</span>,</span><br><span class="line">                                           <span class="number">8</span>,</span><br><span class="line">                                           <span class="number">0</span></span><br><span class="line">                                         <span class="keyword">FROM</span> DUAL</span><br><span class="line">                                         <span class="keyword">WHERE</span> <span class="keyword">NOT</span> <span class="keyword">exists</span>(<span class="keyword">SELECT</span> <span class="keyword">id</span></span><br><span class="line">                                                          <span class="keyword">FROM</span> item</span><br><span class="line">                                                          <span class="keyword">WHERE</span> sku_code = <span class="string">'K000001'</span> <span class="keyword">AND</span> <span class="keyword">status</span> != <span class="number">4</span>);</span><br></pre></td></tr></table></figure></p>
+<p>现在数据库中没有改条数据，启动3个session，设置事务不自动提交。步骤：<br>1、session1，执行sql，输入插入一条数据，但是事务未提交<br>2、seesion2，执行sql，<br>3、session3，执行sql，<br>4、session1回滚，这时就会发现session3中出现了deadlock。</p>
+<p>参考：<a href="http://www.ywnds.com/?p=11093" target="_blank" rel="external">两个INSERT发生死锁原因剖析</a></p>
+<p>解决办法，修改SQL如下：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;insert id="insertNotExist" parameterType="com.whh.pojo.Item" useGeneratedKeys="true" keyProperty="id"&gt;</span><br><span class="line">    INSERT DELAYED INTO item (sku_code, num, status) SELECT</span><br><span class="line">                                                #&#123;skuCode&#125;,</span><br><span class="line">                                                #&#123;num&#125;,</span><br><span class="line">                                                #&#123;status&#125;</span><br><span class="line">                                                FROM DUAL</span><br><span class="line">                                                WHERE NOT exists(SELECT id</span><br><span class="line">                                                                FROM item</span><br><span class="line">                                                                WHERE sku_code = #&#123;skuCode&#125; AND status != 4 for update)</span><br><span class="line">&lt;/insert&gt;</span><br></pre></td></tr></table></figure></p>
+<p>在select的后面添加<code>for update</code>，用于锁住数据，避免发生竞争导致死锁。这里通过上述启动3个事务方便执行，然后回滚的例子，并不会出现deadlock。</p>
+<ul>
+<li>此处需要添加索引，因为<code>for update</code>默认通过索引来锁数据。</li>
+</ul>
+<p>重新运行单元测试，启动正常。</p>
+<p>此处记录一个未解问题：<br>之前想优化下此处逻辑，先直接更新状态0–&gt;4，然后在插入。如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Transactional</span>()</span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">createTaskImprove1</span><span class="params">(String skuCode, Integer num)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> result = <span class="number">0</span>;</span><br><span class="line">    Item oldItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">0</span>);</span><br><span class="line">    Item newItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">4</span>);</span><br><span class="line">    result = itemMapper.updateInfo(oldItem, newItem);</span><br><span class="line"></span><br><span class="line">    Item item = <span class="keyword">new</span> Item(skuCode, num, <span class="number">0</span>);</span><br><span class="line">    result = itemMapper.insertNotExist(item);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此处在并发的时候是有问题的（业务也有问题，会出现数据丢失的情况），还是会出现死锁，难道是因为使用<code>update</code>的时候数据库的锁和<code>insert ... select</code>设置的锁，导致互锁？暂时还未弄明白。</p>
+<p>解决上述问题后，又出现一个问题，当并发执行<code>insert ... select</code>时，其他线程会等待该线程事务提交后才会执行，这样就会导致效率很低。<br>通过sql<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> r.trx_isolation_level, r.trx_id waiting_trx_id,r.trx_mysql_thread_id waiting_trx_thread,</span><br><span class="line">                              r.trx_state waiting_trx_state,lr.lock_mode waiting_trx_lock_mode,lr.lock_type waiting_trx_lock_type,</span><br><span class="line">                              lr.lock_table waiting_trx_lock_table,lr.lock_index waiting_trx_lock_index,r.trx_query waiting_trx_query,</span><br><span class="line">                              b.trx_id blocking_trx_id,b.trx_mysql_thread_id blocking_trx_thread,b.trx_state blocking_trx_state,</span><br><span class="line">                              lb.lock_mode blocking_trx_lock_mode,lb.lock_type blocking_trx_lock_type,lb.lock_table blocking_trx_lock_table,</span><br><span class="line">                              lb.lock_index blocking_trx_lock_index,b.trx_query blocking_query</span><br><span class="line"><span class="keyword">from</span> information_schema.innodb_lock_waits w <span class="keyword">inner</span> <span class="keyword">join</span> information_schema.innodb_trx b <span class="keyword">on</span> b.trx_id=w.blocking_trx_id</span><br><span class="line">  <span class="keyword">inner</span> <span class="keyword">join</span> information_schema.innodb_trx r <span class="keyword">on</span> r.trx_id=w.requesting_trx_id</span><br><span class="line">  <span class="keyword">inner</span> <span class="keyword">join</span> information_schema.innodb_locks lb <span class="keyword">on</span> lb.lock_trx_id=w.blocking_trx_id</span><br><span class="line">  <span class="keyword">inner</span> <span class="keyword">join</span> information_schema.innodb_locks lr <span class="keyword">on</span> lr.lock_trx_id=w.requesting_trx_id</span><br></pre></td></tr></table></figure></p>
+<p>这样可以查询出等待的锁，可以得出锁住的是之前创建的索引。</p>
+<p>在测试的时候，因为每次都是直接删除掉数据库数据后进行操作的，这样就会出现上述的等待锁的情况。后来发现当我数据库中存在<code>K000006</code>数据时，两个事物分别插入<code>K000001</code>和<code>K000007</code>并不会出现锁等待，提交事务后数据都插入了数据库，后来实验分别插入<code>K000006</code>两边的数据，结果都未发现锁等待的情况。这里猜测应该是数据库中索引使用的是<code>B+Tree</code>结构。这时删掉之前建立的索引，都会导致锁等待。</p>
+<h3 id="分布式流水号"><a href="#分布式流水号" class="headerlink" title="分布式流水号"></a>分布式流水号</h3><p>在应用生成分布式流水号，有两种方式，一种是通过数据表生成，一种是通过缓存生成。</p>
+<h4 id="Mysql生成流水号"><a href="#Mysql生成流水号" class="headerlink" title="Mysql生成流水号"></a>Mysql生成流水号</h4><p>在原先生成分布式流水号是通过先<code>select ... for update</code>来锁定数据库中某条值，之后对该值进行更新操作，这种就会出现一个问题，如果刚刚开始数据库就没有值，并发访问时，会出现同时对数据进行插入操作。如果建立了唯一索引数据并不会出现问题。</p>
+<p>设计数据库表如下：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> test.serial_number</span><br><span class="line">(</span><br><span class="line">	group_code <span class="built_in">varchar</span>(<span class="number">10</span>) <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'组，用于区分业务'</span>,</span><br><span class="line">	group_key <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'依据key生成流水号'</span>,</span><br><span class="line">	<span class="keyword">scope</span> <span class="built_in">varchar</span>(<span class="number">20</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'范围，如20180808表示天，2018080808表示小时'</span>,</span><br><span class="line">	<span class="keyword">sign</span> <span class="built_in">varchar</span>(<span class="number">5</span>) <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'重新计算标示，Y年，M月，D天，H小时，G全局'</span>,</span><br><span class="line">	<span class="keyword">num</span> <span class="built_in">int</span> <span class="keyword">default</span> <span class="string">'0'</span> <span class="keyword">not</span> <span class="literal">null</span> <span class="keyword">comment</span> <span class="string">'流水号'</span>,</span><br><span class="line">	<span class="keyword">constraint</span> serial_number_group_code_group_key_scope_step_uindex</span><br><span class="line">		<span class="keyword">unique</span> (group_code, group_key, <span class="keyword">scope</span>, <span class="keyword">sign</span>)</span><br><span class="line">)</span><br><span class="line">;</span><br></pre></td></tr></table></figure></p>
+<p>创建表，同时对<code>group_code、group_key、scope、sign、num</code>建立唯一索引。<br>mapper创建db操作：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">insert</span> <span class="attr">id</span>=<span class="string">"insertWithUpdateIncr"</span>&gt;</span></span><br><span class="line">    INSERT INTO serial_number (group_code, group_key, scope, sign, num)</span><br><span class="line">    VALUES (#&#123;serialNumber.groupCode&#125;, #&#123;serialNumber.groupKey&#125;, #&#123;serialNumber.scope&#125;, #&#123;serialNumber.sign&#125;, #&#123;inrc&#125;)</span><br><span class="line">    ON DUPLICATE KEY UPDATE num = num + #&#123;inrc&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">insert</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">select</span> <span class="attr">id</span>=<span class="string">"selectNum"</span> <span class="attr">parameterType</span>=<span class="string">"com.whh.pojo.SerialNumber"</span> <span class="attr">resultType</span>=<span class="string">"java.lang.Integer"</span>&gt;</span></span><br><span class="line">    SELECT num</span><br><span class="line">    FROM serial_number</span><br><span class="line">            WHERE</span><br><span class="line">        group_code = #&#123;groupCode&#125;</span><br><span class="line">        AND group_key = #&#123;groupKey&#125;</span><br><span class="line">        AND scope = #&#123;scope&#125;</span><br><span class="line">        AND sign = #&#123;sign&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">select</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>insertWithUpdateIncr</code>用来对数据进行更新和插入操作，如果存在指定数据，那么就对数据进行更新，更新的值为传入的值为原始值+传入值，如果不存在该数据，那么对该数据进行插入操作。（数据库默认num为0，为了避免生成默认值，需要在插入时指定传入的值，可以避免数据获取失败）<br><code>selectNum</code>用于插入更新后，查询数据库最新值。</p>
+<p>创建映射对象：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SerialNumber</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String groupCode;</span><br><span class="line">    <span class="keyword">private</span> String groupKey;</span><br><span class="line">    <span class="keyword">private</span> String scope;</span><br><span class="line">    <span class="keyword">private</span> SerialSignEnum sign;</span><br><span class="line">    <span class="keyword">private</span> Integer num;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> SerialSignEnum &#123;</span><br><span class="line">    G(<span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">scope</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">""</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    Y(<span class="number">366</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">scope</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyy"</span>).format(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    M(<span class="number">32</span> * <span class="number">24</span> * <span class="number">60</span> * <span class="number">6</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">scope</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMM"</span>).format(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;,</span><br><span class="line">    D(<span class="number">24</span> * <span class="number">60</span> * <span class="number">60</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">scope</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMdd"</span>).format(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    H(<span class="number">60</span> * <span class="number">60</span>) &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">scope</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="keyword">new</span> SimpleDateFormat(<span class="string">"yyyyMMdd"</span>).format(<span class="keyword">new</span> Date());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer expire;</span><br><span class="line"></span><br><span class="line">    SerialSignEnum(Integer expire) &#123;</span><br><span class="line">        <span class="keyword">this</span>.expire = expire;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getExpire</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> expire;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setExpire</span><span class="params">(Integer expire)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.expire = expire;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">abstract</span> String <span class="title">scope</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>创建service进行操作<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SerialNumberService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SerialNumberMapper serialNumberMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Transactional</span>(propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">mysqlSerialNumber</span><span class="params">(SerialNumber serialNumber, <span class="keyword">int</span> inrc)</span> </span>&#123;</span><br><span class="line">        serialNumberMapper.insertWithUpdateIncr(serialNumber, inrc);</span><br><span class="line">        <span class="keyword">return</span> serialNumberMapper.selectNum(serialNumber);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如上，直接对数据库数据进行插入更新操作，之后对数据进行查询，获取最新值。<br>这种在并发的时候也保证数据正常是因为之前设置了唯一索引，在对数据进行插入更新操作时会对当前数据进行加锁，此时如果存在其他事务中对该数据进行操作就会进入锁等待，直到上个事务释放锁，所以之后的查询操作保证了数据为当前更新后的最新值。如果是对不同数据进行操作，不会发生锁竞争。<br>注：此处事务传播级别采用的是<code>Propagation.REQUIRES_NEW</code>，创建一个于原先事务无关的事务，这样避免了因调用端事务执行时间过长导致其他线程一直等待。这种缺点在于如果在调用生成流水号后调用方出现异常，那么会导致序列化不连续。</p>
+<p>编写单元测试：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath*:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SerialNumberServiceTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SerialNumberService serialNumberService;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> SerialNumberMapper serialNumberMapper;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mysqlSerialNumber</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">final</span> SerialNumber serialNumber = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K000011"</span>, SerialSignEnum.D);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> incr = <span class="number">1</span>;</span><br><span class="line">        Integer oldNum = serialNumberMapper.selectNum(serialNumber);</span><br><span class="line">        <span class="keyword">if</span> (oldNum == <span class="keyword">null</span>)oldNum =<span class="number">0</span>;</span><br><span class="line">        serialNumberService.mysqlSerialNumber(serialNumber, incr);</span><br><span class="line">        <span class="keyword">assert</span> serialNumberMapper.selectNum(serialNumber) == oldNum + incr;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mysqlSerialNumberSingleKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> startTime = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">final</span> SerialNumber serialNumber = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K00005"</span>, SerialSignEnum.D);</span><br><span class="line">        Integer oldNum = serialNumberMapper.selectNum(serialNumber);</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> incr = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> threadNum = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> threadTime = <span class="number">100</span>;</span><br><span class="line">        Thread[] threads = <span class="keyword">new</span> Thread[threadNum];</span><br><span class="line">        CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line"></span><br><span class="line">        Integer[] serialNums = <span class="keyword">new</span> Integer[threadNum * threadTime];</span><br><span class="line">        IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="comment">//线程并发执行，返回值存入集合，空间换时间</span></span><br><span class="line">            IntStream.range(<span class="number">0</span>, threadTime).forEach((j) -&gt; serialNums[i * threadTime + j] = serialNumberService.mysqlSerialNumber(serialNumber, incr));</span><br><span class="line">            downLatch.countDown();</span><br><span class="line">        &#125;));</span><br><span class="line">        Arrays.stream(threads).forEach(Thread::start);</span><br><span class="line">        downLatch.await();</span><br><span class="line">        System.out.println(<span class="string">"耗时："</span> + (System.currentTimeMillis() - startTime));</span><br><span class="line">        <span class="comment">//验证最终值是否和理想一致</span></span><br><span class="line">        <span class="keyword">assert</span> serialNumberMapper.selectNum(serialNumber) == oldNum + threadNum * threadTime * incr;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//验证是否重复生成</span></span><br><span class="line">        Set&lt;Integer&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;(Arrays.asList(serialNums));</span><br><span class="line">        <span class="keyword">assert</span> set.size() == serialNums.length;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">mysqlSerialNumberRandomKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">long</span> startTime = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> incr = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> threadNum = <span class="number">10</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> threadTime = <span class="number">1000</span>;</span><br><span class="line">        <span class="keyword">final</span> <span class="keyword">int</span> itemNum = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">final</span> SerialNumber[] serialNumbers = <span class="keyword">new</span> SerialNumber[itemNum];</span><br><span class="line">        CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line">        <span class="comment">//随机设置值</span></span><br><span class="line">        IntStream.range(<span class="number">0</span>, itemNum).forEach((i) -&gt;&#123;</span><br><span class="line">            Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            DecimalFormat format = <span class="keyword">new</span> DecimalFormat(<span class="string">"00000"</span>);</span><br><span class="line">            serialNumbers[i] = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K"</span> + format.format(random.nextInt(itemNum) + <span class="number">1</span>), SerialSignEnum.D);</span><br><span class="line">        &#125;);</span><br><span class="line">        <span class="comment">//记录线程返回值</span></span><br><span class="line">        <span class="keyword">final</span> Integer[] signNums = <span class="keyword">new</span> Integer[threadNum * threadTime];</span><br><span class="line">        <span class="comment">//记录线程请求</span></span><br><span class="line">        <span class="keyword">final</span> SerialNumber[] signSerialNumbers = <span class="keyword">new</span> SerialNumber[threadNum * threadTime];</span><br><span class="line">        <span class="keyword">final</span> Thread[] threads = <span class="keyword">new</span> Thread[threadNum];</span><br><span class="line">        IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            IntStream.range(<span class="number">0</span>, threadTime).forEach((j) -&gt; &#123;</span><br><span class="line">                <span class="comment">//线程随机选择需要执行条件</span></span><br><span class="line">                Random random = <span class="keyword">new</span> Random();</span><br><span class="line">                SerialNumber serialNumber = serialNumbers[random.nextInt(<span class="number">20</span>)];</span><br><span class="line">                <span class="comment">//记录执行的请求、返回值</span></span><br><span class="line">                signNums[i * threadTime + j] = serialNumberService.mysqlSerialNumber(serialNumber, incr);</span><br><span class="line">                signSerialNumbers[i * threadTime + j] = serialNumber;</span><br><span class="line">            &#125;);</span><br><span class="line">            downLatch.countDown();</span><br><span class="line">        &#125;));</span><br><span class="line">        Arrays.stream(threads).forEach(Thread::start);</span><br><span class="line"></span><br><span class="line">        downLatch.await();</span><br><span class="line">        System.out.println(<span class="string">"耗时："</span> + (System.currentTimeMillis() - startTime));</span><br><span class="line"></span><br><span class="line">        <span class="comment">//汇总返回数据</span></span><br><span class="line">        Map&lt;String, List&lt;Integer&gt;&gt; serialNumMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; signNums.length; i++) &#123;</span><br><span class="line">            List&lt;Integer&gt; numList = serialNumMap.computeIfAbsent(signSerialNumbers[i].getGroupKey(), k -&gt; <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">            numList.add(signNums[i]);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//验证展示是否符合需求</span></span><br><span class="line">        serialNumMap.forEach((key, value) -&gt;&#123;</span><br><span class="line">            Set&lt;Integer&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;(value);</span><br><span class="line">            <span class="keyword">assert</span> set.size() == value.size();</span><br><span class="line">            System.out.printf(<span class="string">"key:"</span> + key);</span><br><span class="line">            value.sort(Integer::compareTo);</span><br><span class="line">            System.out.println(<span class="string">" num: "</span> + value);</span><br><span class="line"></span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>创建3个测试用例：<br>1、普通调用<br>2、多线程并发调同一条数据<br>3、多线程并发调随机调用不同数据</p>
+<h4 id="redis生成流水号"><a href="#redis生成流水号" class="headerlink" title="redis生成流水号"></a>redis生成流水号</h4><p>添加redis、spring-data-redis依赖，service新增方法。<br>spring配置redis如下<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"jedisPoolConfig"</span> <span class="attr">class</span>=<span class="string">"redis.clients.jedis.JedisPoolConfig"</span>/&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"jedisConnectionFactory"</span></span><br><span class="line">        <span class="attr">class</span>=<span class="string">"org.springframework.data.redis.connection.jedis.JedisConnectionFactory"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"hostName"</span> <span class="attr">value</span>=<span class="string">"localhost"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"port"</span> <span class="attr">value</span>=<span class="string">"6379"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"timeout"</span> <span class="attr">value</span>=<span class="string">"1800"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"poolConfig"</span> <span class="attr">ref</span>=<span class="string">"jedisPoolConfig"</span>/&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"usePool"</span> <span class="attr">value</span>=<span class="string">"true"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"redisTemplate"</span> <span class="attr">class</span>=<span class="string">"org.springframework.data.redis.core.StringRedisTemplate"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"connectionFactory"</span> <span class="attr">ref</span>=<span class="string">"jedisConnectionFactory"</span>/&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> RedisTemplate redisTemplate;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> Long <span class="title">redisSerialNumber</span><span class="params">(SerialNumber serialNumber, <span class="keyword">final</span> <span class="keyword">int</span> inrc)</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span>  (Long)redisTemplate.execute((RedisCallback&lt;Long&gt;) connection -&gt; &#123;</span><br><span class="line">        <span class="keyword">byte</span>[] keyBytes = (serialNumber.getGroupCode() + <span class="string">"_"</span> + serialNumber.getGroupKey() + <span class="string">"_"</span> + serialNumber.getScope()).getBytes();</span><br><span class="line">        Long incr = connection.incrBy(keyBytes, inrc);</span><br><span class="line">        <span class="keyword">if</span> (serialNumber.getSign().getExpire() != <span class="keyword">null</span> &amp;&amp; incr == inrc)&#123;</span><br><span class="line">            connection.expire(keyBytes, serialNumber.getSign().getExpire());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> incr;</span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里通过redis中<code>incrBy</code>方法对值进行递增，因为redis是单线程，所以保证线程的并发。<br>在构造key时，因为使用了scope确定了时间，当时间到下一个重新计算时，key会发生改变，计数又会从0开始。同时对</p>
+<p>添加测试用例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">redisSerialNumber</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> SerialNumber serialNumber = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K000011"</span>, SerialSignEnum.D);</span><br><span class="line">    Long num = serialNumberService.redisSerialNumber(serialNumber, <span class="number">10</span>);</span><br><span class="line">    System.out.println(num);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">redisSerialNumberSingleKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> startTime = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">final</span> SerialNumber serialNumber = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K00005"</span>, SerialSignEnum.D);</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> incr = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> threadNum = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> threadTime = <span class="number">100</span>;</span><br><span class="line">    Thread[] threads = <span class="keyword">new</span> Thread[threadNum];</span><br><span class="line">    CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line"></span><br><span class="line">    Long[] serialNums = <span class="keyword">new</span> Long[threadNum * threadTime];</span><br><span class="line">    IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        <span class="comment">//线程并发执行，返回值存入集合，空间换时间</span></span><br><span class="line">        IntStream.range(<span class="number">0</span>, threadTime).forEach((j) -&gt; serialNums[i * threadTime + j] = serialNumberService.redisSerialNumber(serialNumber, incr));</span><br><span class="line">        downLatch.countDown();</span><br><span class="line">    &#125;));</span><br><span class="line">    Arrays.stream(threads).forEach(Thread::start);</span><br><span class="line">    downLatch.await();</span><br><span class="line">    System.out.println(<span class="string">"耗时："</span> + (System.currentTimeMillis() - startTime));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//验证是否重复生成</span></span><br><span class="line">    Set&lt;Long&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;(Arrays.asList(serialNums));</span><br><span class="line">    <span class="keyword">assert</span> set.size() == serialNums.length;</span><br><span class="line">    Arrays.sort(serialNums);</span><br><span class="line">    System.out.println(Arrays.toString(serialNums));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">redisSerialNumberRandomKey</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">long</span> startTime = System.currentTimeMillis();</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> incr = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> threadNum = <span class="number">10</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> threadTime = <span class="number">10000</span>;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> itemNum = <span class="number">20</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">final</span> SerialNumber[] serialNumbers = <span class="keyword">new</span> SerialNumber[itemNum];</span><br><span class="line">    CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line">    <span class="comment">//随机设置值</span></span><br><span class="line">    IntStream.range(<span class="number">0</span>, itemNum).forEach((i) -&gt; &#123;</span><br><span class="line">        Random random = <span class="keyword">new</span> Random();</span><br><span class="line">        DecimalFormat format = <span class="keyword">new</span> DecimalFormat(<span class="string">"00000"</span>);</span><br><span class="line">        serialNumbers[i] = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001_K"</span> + format.format(random.nextInt(itemNum) + <span class="number">1</span>), SerialSignEnum.D);</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">//记录线程返回值</span></span><br><span class="line">    <span class="keyword">final</span> Long[] signNums = <span class="keyword">new</span> Long[threadNum * threadTime];</span><br><span class="line">    <span class="comment">//记录线程请求</span></span><br><span class="line">    <span class="keyword">final</span> SerialNumber[] signSerialNumbers = <span class="keyword">new</span> SerialNumber[threadNum * threadTime];</span><br><span class="line">    <span class="keyword">final</span> Thread[] threads = <span class="keyword">new</span> Thread[threadNum];</span><br><span class="line">    IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">        IntStream.range(<span class="number">0</span>, threadTime).forEach((j) -&gt; &#123;</span><br><span class="line">            <span class="comment">//线程随机选择需要执行条件</span></span><br><span class="line">            Random random = <span class="keyword">new</span> Random();</span><br><span class="line">            SerialNumber serialNumber = serialNumbers[random.nextInt(<span class="number">20</span>)];</span><br><span class="line">            <span class="comment">//记录执行的请求、返回值</span></span><br><span class="line">            signNums[i * threadTime + j] = serialNumberService.redisSerialNumber(serialNumber, incr);</span><br><span class="line">            signSerialNumbers[i * threadTime + j] = serialNumber;</span><br><span class="line">        &#125;);</span><br><span class="line">        downLatch.countDown();</span><br><span class="line">    &#125;));</span><br><span class="line">    Arrays.stream(threads).forEach(Thread::start);</span><br><span class="line"></span><br><span class="line">    downLatch.await();</span><br><span class="line">    System.out.println(<span class="string">"耗时："</span> + (System.currentTimeMillis() - startTime));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//汇总返回数据</span></span><br><span class="line">    Map&lt;String, List&lt;Long&gt;&gt; serialNumMap = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; signNums.length; i++) &#123;</span><br><span class="line">        List&lt;Long&gt; numList = serialNumMap.computeIfAbsent(signSerialNumbers[i].getGroupKey(), k -&gt; <span class="keyword">new</span> ArrayList&lt;&gt;());</span><br><span class="line">        numList.add(signNums[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//验证展示是否符合需求</span></span><br><span class="line">    serialNumMap.forEach((key, value) -&gt; &#123;</span><br><span class="line">        Set&lt;Long&gt; set = <span class="keyword">new</span> HashSet&lt;&gt;(value);</span><br><span class="line">        <span class="keyword">assert</span> set.size() == value.size();</span><br><span class="line">        System.out.printf(<span class="string">"key:"</span> + key);</span><br><span class="line">        value.sort(Long::compareTo);</span><br><span class="line">        System.out.println(<span class="string">" num: "</span> + value);</span><br><span class="line"></span><br><span class="line">    &#125;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>测试用例和之前一样，只是调用的方法改了。</p>
+<h4 id="两种流水号生成优缺点"><a href="#两种流水号生成优缺点" class="headerlink" title="两种流水号生成优缺点"></a>两种流水号生成优缺点</h4><p>mysql：使用方便，不需要而外维护其他应用，因为需要维护redis服务器比较麻烦。缺点是生成速度较慢，适合压力不大的地方。<br>redis：使用相对麻烦，需要专门维护redis服务器，优点是速度极快。</p>
+<h3 id="合并两个功能"><a href="#合并两个功能" class="headerlink" title="合并两个功能"></a>合并两个功能</h3><p>需求是需要生成流水号，然后和之前业务合并插入数据库。<br>在原先的item表中添加<code>serial_num</code>字段，mappper新增插入sql <code>insertNotExist2</code>。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Autowired</span></span><br><span class="line"><span class="keyword">private</span> SerialNumberService serialNumberService;</span><br><span class="line"><span class="meta">@Transactional</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">createItem</span><span class="params">(String skuCode, Integer num)</span></span>&#123;</span><br><span class="line">    <span class="comment">//构造流水号</span></span><br><span class="line">    SerialNumber serialNumber = <span class="keyword">new</span> SerialNumber(<span class="string">"ITEM"</span>, <span class="string">"1001"</span>, SerialSignEnum.D);</span><br><span class="line">    DecimalFormat format = <span class="keyword">new</span> DecimalFormat(<span class="string">"0000000"</span>);</span><br><span class="line">    String serialNum = serialNumber.getScope() + format.format(serialNumberService.mysqlSerialNumber(serialNumber, <span class="number">1</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//生成插入数据</span></span><br><span class="line">    Item item = <span class="keyword">new</span> Item(skuCode, num, <span class="number">0</span>);</span><br><span class="line">    item.setSerialNum(serialNum);</span><br><span class="line">    <span class="keyword">int</span> result = itemMapper.insertNotExist2(item);</span><br><span class="line">    <span class="keyword">if</span> (result == <span class="number">0</span>)&#123;</span><br><span class="line">        Item newItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">4</span>);</span><br><span class="line">        Item oldItem = <span class="keyword">new</span> Item(skuCode, <span class="keyword">null</span>, <span class="number">0</span>);</span><br><span class="line">        result = itemMapper.updateInfo(oldItem, newItem);</span><br><span class="line">        <span class="keyword">if</span> (result != <span class="number">0</span>)&#123;</span><br><span class="line">            result = itemMapper.insertNotExist2(item);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如上，先生成流水号，然后对业务数据进行插入。<br>创建单元测试如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">createItem</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> threadNum = <span class="number">20</span>;</span><br><span class="line">    <span class="keyword">final</span> String skuCode = <span class="string">"K000001"</span>;</span><br><span class="line">    Thread[]threads = <span class="keyword">new</span> Thread[threadNum];</span><br><span class="line">    CountDownLatch downLatch = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line">    IntStream.range(<span class="number">0</span>, threadNum).forEach((i) -&gt; threads[i] = <span class="keyword">new</span> Thread(() -&gt;&#123;</span><br><span class="line">        itemService.createItem(skuCode, <span class="number">3</span>);</span><br><span class="line">        downLatch.countDown();</span><br><span class="line">    &#125;));</span><br><span class="line">    Arrays.stream(threads).forEach(Thread::start);</span><br><span class="line">    downLatch.await();</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>启动20个线程，对数据库数据进行操作。</p>
+<p>此处结果是一直等待，直到sql等待超时。</p>
+<p>分析原因如下：<br>在之前使用数据库理解池使用的是最大20个数据库连接，因为启动了20个线程，消耗了掉了连接池中的连接，当执行到生成流水号时，因为之前流水号设置的事务传播级别是<code>Propagation.REQUIRES_NEW</code>，所以会向连接池申请新的连接，但是因为连接池中连接已经消耗完毕，只能等待连接释放，但此时连接池又全部被占用，这样互相等待导致超时发生。</p>
+<p>Spring事务传播级别：<br>方法a有事务，方法b有事务</p>
+<ul>
+<li>REQUIRED（默认）：支持当前已经存在的事务，如果还没有事务，就创建一个新事务。</li>
+<li>SUPPORTS：支持当前事务，如果没有事务那么就不在事务中运行。</li>
+<li>MANDATORY：支持当前已经存在的事务，如果还没有事务，就抛出一个异常。</li>
+<li>REQUIRES_NEW：挂起当前事务，创建一个新事务，如果还没有事务，就简单地创建一个新事务，和之前创建的事务无关。</li>
+<li>NOT_SUPPORTED：强制不在事务中运行，如果当前存在一个事务，则挂起该事务。</li>
+<li>NEVER：强制要求不在事务中运行，如果当前存在一个事务，则抛出异常。</li>
+<li>NESTED：在当前事务中创建一个嵌套事务，如果还没有事务，那么就简单地创建一个新事务。和REQUIRES_NEW区别是在于，该处创建的事务和之前事务是嵌套关系，在嵌套事务提交后，如果调用方抛出异常，子事务还是会回滚。</li>
+</ul>
+<p>参考：<a href="http://deltamaster.is-programmer.com/posts/28489.html" target="_blank" rel="external">Spring事务管理中@Transactional的propagation参数</a></p>
+<h4 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h4><p>修改事务传播级别为默认，这样导致的缺陷是流水号生成的事务较长，这样流水号生成速度会比较慢。采用redis生成流水号。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工作/" rel="tag"># 工作</a>
+          
+            <a href="/tags/事务/" rel="tag"># 事务</a>
+          
+            <a href="/tags/并发/" rel="tag"># 并发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/28/Java进阶-Spring-Bean/" rel="next" title="Java进阶-Spring Bean">
+                <i class="fa fa-chevron-left"></i> Java进阶-Spring Bean
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/04/Java进阶-mysql事务/" rel="prev" title="Java进阶-mysql事务">
+                Java进阶-mysql事务 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.bmp"
+               alt="WHH" />
+          <p class="site-author-name" itemprop="name">WHH</p>
+           
+              <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">156</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/whhxz" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#项目验证"><span class="nav-number">1.</span> <span class="nav-text">项目验证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#分析原因"><span class="nav-number">1.1.</span> <span class="nav-text">分析原因</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#改进代码"><span class="nav-number">1.2.</span> <span class="nav-text">改进代码</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式流水号"><span class="nav-number">2.</span> <span class="nav-text">分布式流水号</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Mysql生成流水号"><span class="nav-number">2.1.</span> <span class="nav-text">Mysql生成流水号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#redis生成流水号"><span class="nav-number">2.2.</span> <span class="nav-text">redis生成流水号</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#两种流水号生成优缺点"><span class="nav-number">2.3.</span> <span class="nav-text">两种流水号生成优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并两个功能"><span class="nav-number">3.</span> <span class="nav-text">合并两个功能</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决办法"><span class="nav-number">3.1.</span> <span class="nav-text">解决办法</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WHH</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

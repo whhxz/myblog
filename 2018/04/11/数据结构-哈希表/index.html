@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="哈希表,Hash一致," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。
+在Java中HashMap就是使用的哈希表。
+在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过(key == null) ? 0 : (h = key.hashCode()) ^ (h">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据结构-哈希表">
+<meta property="og:url" content="http://blog.whhxz.com/2018/04/11/数据结构-哈希表/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。
+在Java中HashMap就是使用的哈希表。
+在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过(key == null) ? 0 : (h = key.hashCode()) ^ (h">
+<meta property="og:updated_time" content="2018-04-11T07:52:12.939Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="数据结构-哈希表">
+<meta name="twitter:description" content="哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。
+在Java中HashMap就是使用的哈希表。
+在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过(key == null) ? 0 : (h = key.hashCode()) ^ (h">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.whhxz.com/2018/04/11/数据结构-哈希表/"/>
+
+
+
+
+
+  <title>数据结构-哈希表 | WHH</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">WHH</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">MY BLOG</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-commonweal">
+          <a href="/404.html" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            公益404
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/11/数据结构-哈希表/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据结构-哈希表</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-11T11:18:57+08:00">
+                2018-04-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。</p>
+<p>在Java中HashMap就是使用的哈希表。</p>
+<p>在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过<code>(key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)</code>获取hash，在数据存入table时，通过<code>(n - 1) &amp; hash</code>获取数据应该存入数组下角位置。如果该位置存在数据，在JDK1.8之前是通过一个链表存入，如果重复就会吧数据放入该链表后，在JDK1.8里面是先通过链表存储，如果链表长度超过<code>TREEIFY_THRESHOLD</code>8通过红黑树来存储的数据。在取值时通过比较值来判断获取的key是否是传入当然key。<br>在转换树时，通过判断<code>MIN_TREEIFY_CAPACITY</code>64，超过才会转换为树，为了避免在哈希表建立初期，多个键值对恰好被放入了同一个链表中而导致不必要的转化。</p>
+<p>在插入数据时，如果数据满了，当然不可能每次都放入链表或树中，这样在数据量较多的时候，会严重影响效率。在HashMap中有个扩容因子<code>DEFAULT_LOAD_FACTOR</code>，当插入数据后，数据大于该扩容因子，那么会把数据进行2倍的扩容，在扩容时，如果红黑树的长度小于<code>UNTREEIFY_THRESHOLD</code>6则会退化采用链表，同时把原有的数据重新插入。</p>
+<p>理想状态下哈希表的节点中，元素的数量遵守泊松分布。当负载因子为 0.75 时，泊松公式中 λ 约等于 0.5，因此箱子中元素个数和概率的关系如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">数量</th>
+<th style="text-align:center">概率</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0</td>
+<td style="text-align:center">0.60653066</td>
+</tr>
+<tr>
+<td style="text-align:center">1</td>
+<td style="text-align:center">0.30326533</td>
+</tr>
+<tr>
+<td style="text-align:center">2</td>
+<td style="text-align:center">0.07581633</td>
+</tr>
+<tr>
+<td style="text-align:center">3</td>
+<td style="text-align:center">0.01263606</td>
+</tr>
+<tr>
+<td style="text-align:center">4</td>
+<td style="text-align:center">0.00157952</td>
+</tr>
+<tr>
+<td style="text-align:center">5</td>
+<td style="text-align:center">0.00015795</td>
+</tr>
+<tr>
+<td style="text-align:center">6</td>
+<td style="text-align:center">0.00001316</td>
+</tr>
+<tr>
+<td style="text-align:center">7</td>
+<td style="text-align:center">0.00000094</td>
+</tr>
+<tr>
+<td style="text-align:center">8</td>
+<td style="text-align:center">0.00000006</td>
+</tr>
+</tbody>
+</table>
+<p>当数量为8时，概率极低，如果出现数量为8的情况，那么可能是因为hash函数设计导致问题，所以需要避免因为哈希函数导致性能问题，对链表转换为红黑树。</p>
+<p>在插入数据时，获取key的hash需要满足散列结果应当具有同一性（输出值尽量均匀）和雪崩效应（微小的输入值变化使得输出值发生巨大的变化）。这样就能减少出现hash碰撞的情况。</p>
+<p>通过python实现简单版hashmap<br><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">HashMap</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="comment"># 存储数据数组</span></span><br><span class="line">        self.table = [<span class="keyword">None</span>] * <span class="number">10</span></span><br><span class="line">        self.size = <span class="number">0</span></span><br><span class="line">        <span class="comment"># 触发扩容临界点</span></span><br><span class="line">        self.threshold = <span class="number">1.5</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># map放入数据</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, key, val)</span>:</span></span><br><span class="line">        add_node = self.__put_val(self.table, key, val)</span><br><span class="line">        <span class="comment"># 如果是新增节点长度增加，且检查扩容</span></span><br><span class="line">        <span class="keyword">if</span> add_node:</span><br><span class="line">            self.size += <span class="number">1</span></span><br><span class="line">            <span class="keyword">if</span> self.size * self.threshold &gt;= self.threshold * len(self.table):</span><br><span class="line">                self.resize()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__put_val</span><span class="params">(self, table, key, val)</span>:</span></span><br><span class="line">        add_node = <span class="keyword">False</span></span><br><span class="line">        <span class="comment"># 获取key对呀节点值</span></span><br><span class="line">        key_hash = self.key_hash(key)</span><br><span class="line">        node = table[key_hash]</span><br><span class="line">        <span class="comment"># 不存在直接插入数组</span></span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            table[key_hash] = LinkedNode(key_hash, key, val)</span><br><span class="line">            add_node = <span class="keyword">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 存在遍历链接</span></span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                <span class="comment"># key相同替换</span></span><br><span class="line">                <span class="keyword">if</span> node.key == key:</span><br><span class="line">                    node.val = val</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="comment"># 不存在key，加入末尾节点</span></span><br><span class="line">                <span class="keyword">if</span> node.next <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                    node.next = LinkedNode(key_hash, key, val)</span><br><span class="line">                    add_node = <span class="keyword">True</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    node = node.next</span><br><span class="line">        <span class="keyword">return</span> add_node</span><br><span class="line"></span><br><span class="line">    <span class="comment"># key获取值</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        key_hash = self.key_hash(key)</span><br><span class="line">        node = self.table[key_hash]</span><br><span class="line">        val = <span class="keyword">None</span></span><br><span class="line">        <span class="comment"># 遍历节点</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                <span class="comment"># 比较节点key</span></span><br><span class="line">                <span class="keyword">if</span> node.key == key:</span><br><span class="line">                    val = node.val</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    node = node.next</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> val</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 计算key哈希，只是简单存入数值，直接对数值长度取模</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">key_hash</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> key % len(self.table)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 扩容，直接创建新数组，迁移旧数组到新数组</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">resize</span><span class="params">(self)</span>:</span></span><br><span class="line">        new_table = [<span class="keyword">None</span>] * len(self.table) * <span class="number">2</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> self.table:</span><br><span class="line">            <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">                <span class="keyword">if</span> node <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">                    self.__put_val(new_table, node.key, node.val)</span><br><span class="line">                    node = node.next</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        self.table = new_table</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># map节点中存入的节点</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">LinkedNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, hash, key, val)</span>:</span></span><br><span class="line">        self.hash = hash</span><br><span class="line">        self.key = key</span><br><span class="line">        self.val = val</span><br><span class="line">        self.next = <span class="keyword">None</span></span><br></pre></td></tr></table></figure></p>
+<p>上述只是简单实现，在计算hash时直接通过取模来获取。</p>
+<p>上述使用hashmap有个缺点在于，如果数据量非常大，那么每次扩容迁移数据都得花费不少时间，因为要把旧数据迁移到新的数组中。</p>
+<h3 id="redis-hash扩容"><a href="#redis-hash扩容" class="headerlink" title="redis hash扩容"></a>redis hash扩容</h3><p>在上述扩容过程中比较慢，特别是数据量大时，但是在redis中hash扩容采用了另外一种机制。</p>
+<p>在redis中时间存储简单理解为：redis中存储有两个数组，数组ht[0]，存储原本的数据，数组ht[1]用于扩容，同时有个字段<code>rehashidx</code>用来标识扩容进度。扩容如下：<br>1、先创建一个比ht[0]更大的table ht[1]<br>2、将ht[0]中的数据一步步迁移到ht[1]中<br>3、迁移完毕后，将ht[0]中数据清除，释放内存，将ht[1]替换为ht[0]</p>
+<p>在扩容过程中，并不是一次性完成。避免因为服务器阻塞导致性能下降<br>1、_dictRehashStep被动迁移，一般是在插入、查找、删除都会触发执行，避免在一次操作中执行<br>2、dictRehashMilliseconds，服务器常规任务程序（server cron job）执行</p>
+<p>在迁移过程中，查找、删除会在ht[0]、ht[1]中进行，新增只会在ht[1]中进行，这样保证了ht[0]只减不增。</p>
+<p>除了扩容，还是缩容，操作与上述类型，创建一个小的table然后进行迁移。</p>
+<ul>
+<li>在redis扩容过程中，链表迁移时，会把数据放到链表前面，这样的好处是，插入较快，而且新插入的数据可能会频繁的获取。</li>
+</ul>
+<h3 id="动态hash"><a href="#动态hash" class="headerlink" title="动态hash"></a>动态hash</h3><p>参考：</p>
+<ul>
+<li><a href="https://bestswifter.com/hashtable/" target="_blank" rel="external">深入理解哈希表</a></li>
+<li><a href="http://origin.redisbook.com/internal-datastruct/dict.html" target="_blank" rel="external">字典</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/哈希表/" rel="tag"># 哈希表</a>
+          
+            <a href="/tags/Hash一致/" rel="tag"># Hash一致</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/11/算法-树/" rel="next" title="算法-树">
+                <i class="fa fa-chevron-left"></i> 算法-树
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.bmp"
+               alt="WHH" />
+          <p class="site-author-name" itemprop="name">WHH</p>
+           
+              <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">42</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">156</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/whhxz" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#redis-hash扩容"><span class="nav-number">1.</span> <span class="nav-text">redis hash扩容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#动态hash"><span class="nav-number">2.</span> <span class="nav-text">动态hash</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2014 - 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">WHH</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Gemini
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
