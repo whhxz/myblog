@@ -282,6 +282,132 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/17/记一次阿里云环境搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.bmp">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/04/17/记一次阿里云环境搭建/" itemprop="url">记一次阿里云环境搭建</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-04-17T16:10:03+08:00">
+                2018-04-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。</p>
+<p>在其中一台服务器上部署测试环境，同时搭建jenkins用来自动化打包和发布。</p>
+<p>先安装JDK、Tomcat、Nginx，不会有什么问题。<br>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/04/17/记一次阿里云环境搭建/#more" rel="contents">
+              阅读全文 &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/11/数据结构-哈希表/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -374,11 +500,10 @@
 
       
         
-          
-          哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。
-在Java中HashMap就是使用的哈希表。
-在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过(key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)获取hash，在数据存入table时，通过(n - 1) &amp; hash获取数据应该存入数组下角位置。如果该位置存在数据，在JDK1.8之前是通过一个链表存入，如果重复就会吧数据放入该链表后，在JDK1.8里面是先通过链表存储，如果链表长度超过TREEIFY_THRESHOLD8通过红黑树来存储的数据。在取值时通过比较值来判断获取的key是否是传入当然key。在转换树时，通过判断MIN_TREEIFY_CAPACITY64，超过才会转换为树，为了避免在哈希表建立初期，多个键值对恰好被放入了同一个链表中而导致不必要的转
-          ...
+          <p>哈希表（Hash Table，也叫散列表），是根据关键码值 (Key-Value) 而直接进行访问的数据结构。也就是说，它通过把关键码值映射到表中一个位置来访问记录，以加快查找的速度。</p>
+<p>在Java中HashMap就是使用的哈希表。</p>
+<p>在HashMap中实际存储数据时在一个数组中，在插入时如果放入key，通过<code>(key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16)</code>获取hash，在数据存入table时，通过<code>(n - 1) &amp; hash</code>获取数据应该存入数组下角位置。如果该位置存在数据，在JDK1.8之前是通过一个链表存入，如果重复就会吧数据放入该链表后，在JDK1.8里面是先通过链表存储，如果链表长度超过<code>TREEIFY_THRESHOLD</code>8通过红黑树来存储的数据。在取值时通过比较值来判断获取的key是否是传入当然key。<br>在转换树时，通过判断<code>MIN_TREEIFY_CAPACITY</code>64，超过才会转换为树，为了避免在哈希表建立初期，多个键值对恰好被放入了同一个链表中而导致不必要的转化。</p>
+<p>在插入数据时，如果数据满了，当然不可能每次都放入链表或树中，这样在数据量较多的时候，会严重影响效率。在HashMap中有个扩容因子<code>DEFAULT_LOAD_FACTOR</code>，当插入数据后，数据大于该扩容因子，那么会把数据进行2倍的扩容，在扩容时，如果红黑树的长度小于<code>UNTREEIFY_THRESHOLD</code>6则会退化采用链表，同时把原有的数据重新插入。</p>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/11/数据结构-哈希表/#more" rel="contents">
@@ -1626,157 +1751,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/27/Java基础-测试/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="WHH">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.bmp">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="WHH">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2018/03/27/Java基础-测试/" itemprop="url">Java基础-测试</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-27T13:52:21+08:00">
-                2018-03-27
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">分类于</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java基础/" itemprop="url" rel="index">
-                    <span itemprop="name">Java基础</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>在工作完成后，都需要对代码进行测试用例编写，如果采用TDD，那就更加离不开测试。<br>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2018/03/27/Java基础-测试/#more" rel="contents">
-              阅读全文 &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -1822,7 +1801,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">80</span>
+                <span class="site-state-item-count">81</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1844,7 +1823,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">156</span>
+                <span class="site-state-item-count">159</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
