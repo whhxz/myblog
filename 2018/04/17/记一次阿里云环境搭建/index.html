@@ -94,20 +94,20 @@
 
 
 
-<meta name="description" content="test在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
+<meta name="description" content="在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
 在其中一台服务器上部署测试环境，同时搭建jenkins用来自动化打包和发布。
 先安装JDK、Tomcat、Nginx，不会有什么问题。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次阿里云环境搭建">
 <meta property="og:url" content="http://blog.whhxz.com/2018/04/17/记一次阿里云环境搭建/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="test在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
+<meta property="og:description" content="在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
 在其中一台服务器上部署测试环境，同时搭建jenkins用来自动化打包和发布。
 先安装JDK、Tomcat、Nginx，不会有什么问题。">
-<meta property="og:updated_time" content="2018-04-18T09:47:14.252Z">
+<meta property="og:updated_time" content="2018-04-18T09:51:12.582Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次阿里云环境搭建">
-<meta name="twitter:description" content="test在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
+<meta name="twitter:description" content="在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。
 在其中一台服务器上部署测试环境，同时搭建jenkins用来自动化打包和发布。
 先安装JDK、Tomcat、Nginx，不会有什么问题。">
 
@@ -354,7 +354,7 @@
       
 
       
-        <p>test在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。</p>
+        <p>在阿里云上现在购买esc好像默认是专有网络，以前使用的是经典网络。如果现在有两台服务器分别不在同一个账号上，那么需要配置高速通道。不过还好的是对于同一个地区高速通道并不要钱。</p>
 <p>在其中一台服务器上部署测试环境，同时搭建jenkins用来自动化打包和发布。</p>
 <p>先安装JDK、Tomcat、Nginx，不会有什么问题。<br><a id="more"></a></p>
 <h3 id="Tomcat根目录启动"><a href="#Tomcat根目录启动" class="headerlink" title="Tomcat根目录启动"></a>Tomcat根目录启动</h3><p>下载Tomcat解压后删除<code>webapps</code>目录下所有文件。<br>修改<code>conf/server.xml</code>文件，在Host节点下添加<code>&lt;Context path=&quot;&quot; reloadable=&quot;true&quot; docBase=&quot;/home/xxxx/xxx.war&quot; /&gt;</code>，用于指定war路径，启动tomcat后，直接访问就是在根目录。</p>
