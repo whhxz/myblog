@@ -374,10 +374,8 @@
 
       
         
-          
-          在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。
-docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。123456789101112# 使用centos作为基础镜像FROM centos# 复制本地jkd、tomcat到镜像目录COPY ./jdk8 /usr/local/share/jdk8COPY ./tomcat9 /usr/local/share/tomcat9# 配置运行时环境变量ENV JAVA_HOME /usr/local/share/jdk8ENV PAHT $JAVA_HOME/bin:$PATH# 声明端口EXPOSE 8080# 启动tomcat，同时使用tail-f是因为了避免 docker自动执行完shell后直接停止ENTRYPOINT /usr/local/share/tomcat9/bin/startup.sh &amp;&amp; tail -F /usr/local/s
-          ...
+          <p>在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。</p>
+<h3 id="docker配置tomcat"><a href="#docker配置tomcat" class="headerlink" title="docker配置tomcat"></a>docker配置tomcat</h3><p>下载jdk、tomcat解压放到本地。<br>编写Dockerfile。<br>
           <!--noindex-->
           <div class="post-button text-center">
             <a class="btn" href="/2018/04/23/docker部署项目/#more" rel="contents">
