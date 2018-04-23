@@ -10,6 +10,7 @@ tags: ['部署', 'docker', 'tomcat']
 ### docker配置tomcat
 下载jdk、tomcat解压放到本地。
 编写Dockerfile。
+<!-- more -->
 ```Dockerfile
 # 使用centos作为基础镜像
 FROM centos
