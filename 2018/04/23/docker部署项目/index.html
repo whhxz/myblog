@@ -374,7 +374,7 @@ docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
 
       
         <p>在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。</p>
-<h3 id="docker配置tomcat"><a href="#docker配置tomcat" class="headerlink" title="docker配置tomcat"></a>docker配置tomcat</h3><p>下载jdk、tomcat解压放到本地。<br>编写Dockerfile。<br><a id="more"></a><br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用centos作为基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"><span class="comment"># 复制本地jkd、tomcat到镜像目录</span></span><br><span class="line"><span class="keyword">COPY</span> ./jdk8 /usr/local/share/jdk8</span><br><span class="line"><span class="keyword">COPY</span> ./tomcat9 /usr/local/share/tomcat9</span><br><span class="line"><span class="comment"># 配置运行时环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/local/share/jdk<span class="number">8</span><br><span class="line"></span><span class="keyword">ENV</span> PAHT $JAVA_HOME/bin:$PATH</span><br><span class="line"><span class="comment"># 声明端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="comment"># 启动tomcat，同时使用tail-f是因为了避免 docker自动执行完shell后直接停止</span></span><br><span class="line">ENTRYPOINT /usr/local/share/tomcat9/bin/startup.sh &amp;&amp; tail -F /usr/local/share/tomcat9/logs/catalina.out</span><br></pre></td></tr></table></figure></p>
+<h3 id="docker配置tomcat"><a href="#docker配置tomcat" class="headerlink" title="docker配置tomcat"></a>docker配置tomcat</h3><p>下载jdk、tomcat解压放到本地。<br>编写Dockerfile。<br><a id="more"></a><br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用centos作为基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"><span class="comment"># 复制本地jkd、tomcat到镜像目录</span></span><br><span class="line"><span class="keyword">COPY</span> <span class="bash">./jdk8 /usr/<span class="built_in">local</span>/share/jdk8</span><br><span class="line"></span><span class="keyword">COPY</span> <span class="bash">./tomcat9 /usr/<span class="built_in">local</span>/share/tomcat9</span><br><span class="line"></span><span class="comment"># 配置运行时环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/local/share/jdk<span class="number">8</span><br><span class="line"></span><span class="keyword">ENV</span> PAHT $JAVA_HOME/bin:$PATH</span><br><span class="line"><span class="comment"># 声明端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="comment"># 启动tomcat，同时使用tail-f是因为了避免 docker自动执行完shell后直接停止</span></span><br><span class="line">ENTRYPOINT /usr/local/share/tomcat9/bin/startup.sh &amp;&amp; tail -F /usr/local/share/tomcat9/logs/catalina.out</span><br></pre></td></tr></table></figure></p>
 <p>上述就简单的配置生成镜像<br>命令<code>docker build -t tomcatweb --rm=true .</code>生成镜像。</p>
 <blockquote>
 <p>-t：用于生成镜像名<br>–rm：指定在生成镜像过程中删除中间产生的临时容器<br>.：表示当前目录下的Dockerfile</p>
@@ -445,6 +445,10 @@ docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/04/24/Java基础-类加载/" rel="prev" title="Java基础-类加载">
+                Java基础-类加载 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -521,7 +525,7 @@ docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">83</span>
+                <span class="site-state-item-count">84</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -543,7 +547,7 @@ docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">164</span>
+                <span class="site-state-item-count">166</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
