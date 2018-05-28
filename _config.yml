@@ -73,3 +73,8 @@ deploy:
   type: git
   repository: git@github.com:whhxz/myblog.git
   branch: gh-pages
+search:
+  path: search.xml
+  field: post
+  format: html
+  limit: 10000
