@@ -5,7 +5,7 @@ categories: ['Java进阶']
 tags: ['Spring', 'Bean']
 ---
 
-Spring作为JavaWeb流行框架，其核心之一就是Bean的管理。其中有Bean的创建、管理、加载。
+Spring作为JavaWeb流行框架，其核心之一就是Bean的管理。其中有Bean的创建、管理、加载。
 添加SpringBean依赖，启动Spring。
 ```xml
 <dependency>
@@ -51,7 +51,7 @@ public class Main {
 ![](http://otxnth5wx.bkt.clouddn.com/20180329创建Bean.png)
 
 在之前创建的BeanFactory实际上创建的默认类为`DefaultListableBeanFactory`
-需要注意的是，在创建Bean的过程中，如果该Bean有其他依赖，先创建Bean后对其依赖的属性进行赋值，如果赋值的Bean不存在，会先创建该Bean，直到创建完成。
+需要注意的是，在创建Bean的过程中，如果该Bean有其他依赖，先创建Bean后对其依赖的属性进行赋值，如果赋值的Bean不存在，会先创建该Bean，直到创建完成。
 
 * 如果是通过构造方法注入，两个Bean互相依赖，而且都是通过构造方法创建，那么就会出现死循环导致Spring启动异常。
 
