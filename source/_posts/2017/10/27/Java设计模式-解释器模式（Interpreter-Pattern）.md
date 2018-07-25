@@ -303,16 +303,16 @@ class Context {
                     tmp = stack.pop();
                 }
             } else if ("(".equals(element)
-                    || priority.get(element) >= priority.get(stack.peek())) {//如果是正括号或者当前符号优先级大于等于栈顶的优先级，那么放入栈中
+                    || priority.get(element) > priority.get(stack.peek())) {//如果是正括号或者当前符号优先级大于等于栈顶的优先级，那么放入栈中
                 stack.push(element);
             } else {//当前优先级小于栈顶优先级，取出栈顶
                 String tmp = stack.peek();
-                while (priority.get(element) < priority.get(tmp)){
+                while (priority.get(element) <= priority.get(tmp)){
                     tmp = stack.pop();
                     suffix.append(tmp).append(" ");
                     tmp = stack.peek();
                 }
-                suffix.append(element).append(" ");
+                stack.push(element);
             }
         }
         while (stack.size() > 0 && !",".equals(stack.peek())){
