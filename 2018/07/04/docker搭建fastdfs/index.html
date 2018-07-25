@@ -102,7 +102,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="使用fastdfs搭建文件服务器，用于存储图片。通过docker虚拟服务完成分布式系统的搭建。
 构建基础镜像为了方便服务的启动以及后续的配置，需要先创建基本的fastdfs镜像。">
-<meta property="og:updated_time" content="2018-07-04T03:37:26.451Z">
+<meta property="og:updated_time" content="2018-07-04T03:44:01.208Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker搭建fastdfs">
 <meta name="twitter:description" content="使用fastdfs搭建文件服务器，用于存储图片。通过docker虚拟服务完成分布式系统的搭建。
@@ -431,6 +431,9 @@
 <p>通过命令<code>docker-compose up</code>启动服务，之后可以通过客户端上传文件。之后在浏览器中直接访问。</p>
 <p>在使用Java客户端上传文件时（其他客户端为尝试），需要<code>StorageServer</code>这个默认是连接<code>TrackerClient</code>之后获取storage的地址，但是因为使用的是docker，返回的ip是docker内部ip，这样就会导致上传失败，可以手动创建<code>StorageServer</code>对象，ip填写主机地址以及映射端口，暂时未想到其他解决方案。</p>
 <p>因为使用的是多个storage服务，在指定其中一个上传后，在另外的服务器地址也可以照样访问。</p>
+<ul>
+<li>在启动时，可能会出现<code>tail -f</code>命令的错误，因为可能文件未生成，可以先修改为其他文件，之后在改回来，使用<code>tail -f</code>目的是为了保持docker持续的运行</li>
+</ul>
 
       
     </div>
