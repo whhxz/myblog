@@ -139,3 +139,5 @@ services:
 在使用Java客户端上传文件时（其他客户端为尝试），需要`StorageServer`这个默认是连接`TrackerClient`之后获取storage的地址，但是因为使用的是docker，返回的ip是docker内部ip，这样就会导致上传失败，可以手动创建`StorageServer`对象，ip填写主机地址以及映射端口，暂时未想到其他解决方案。
 
 因为使用的是多个storage服务，在指定其中一个上传后，在另外的服务器地址也可以照样访问。
+
+* 在启动时，可能会出现`tail -f`命令的错误，因为可能文件未生成，可以先修改为其他文件，之后在改回来，使用`tail -f`目的是为了保持docker持续的运行
