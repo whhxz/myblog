@@ -13,8 +13,8 @@ tags: ['设计模式','解释器模式','Interpreter Pattern']
 由于表达式可分为终结符表达式和非终结符表达式，因此解释器模式的结构与组合模式的结构有些类似，但在解释器模式中包含更多的组成元素。
 <!-- more -->
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27下午2.07.29.png)
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27下午2.07.45.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27下午2.07.29.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27下午2.07.45.png)
 ```java
 /**
  * 抽象表达式
@@ -82,7 +82,7 @@ operation ::= expression '+' expression | expression '-'  expression | expressio
 value ::= an integer
 ```
 使用抽象语法树表示为如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27下午3.31.56.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27下午3.31.56.png)
 
 设计四则运算：
 1、中缀表达式转后缀表达式
@@ -95,7 +95,7 @@ value ::= an integer
 2.1、从左到右遍历后缀表达式，遇到数字就进栈，遇到符号，就将栈顶的两个数字出栈运算，运算结果进栈，直到获得最终结果。
 
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27下午6.09.30.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27下午6.09.30.png)
 ```java
 /**
  * 表达式抽象类

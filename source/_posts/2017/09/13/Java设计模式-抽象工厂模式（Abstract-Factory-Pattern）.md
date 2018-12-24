@@ -9,7 +9,7 @@ tags: ['设计模式', '抽象工厂', 'Abstract Factory Pattern']
 > 抽象工厂相对工厂方法，可以创建一个产品族，而不是单一的产品。也就是在工厂方法上添加了创建其他产品方法。
 
 如图：
-![](http://otxnth5wx.bkt.clouddn.com/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%882.17.10.png)
+![](http://image.whhxz.smallstool.cn/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%882.17.10.png)
 * SeasonFactory：季节工厂
 * SpringFactory：春天工厂
 * SummerFactory：夏天工厂

@@ -12,10 +12,10 @@ tags: ['设计模式', '桥接模式', 'Bridge Pattern']
 
 错误示范：
 要设计武器，要有基本武器，还有附魔武器。
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午7.49.52.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午7.49.52.png)
 <!-- more -->
 采用桥接模式：
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.06.56.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午8.06.56.png)
 ```Java
 **
  * 武器
@@ -179,22 +179,22 @@ public class Main {
 ```
 ### Java中使用的桥接
 java.util.logging.Handler中Formatter，采用的是桥接设计模式。
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.49.05.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午8.49.05.png)
 Handler子类有ConsoleHandler、FileHandler、SocketHandler等
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.52.39.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午8.52.39.png)
 Formatter子类有XMLFormatter、SimpleFormatter等
 
 
 在Handler子类中有实现publish中，有需要使用Formatter来格式化输出，如图
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午8.55.23.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午8.55.23.png)
 
 JDBC连接核心也是使用的桥接模式，如下：
 Class.forName("com.mysql.jdbc.Driver");
 DriverManager.getConnection("url");
 在com.mysql.jdbc.Driver类加载的时候有个静态方法，把当前对象加载到DriverManager.registeredDrivers中
 在使用getConnection的时候，获取到之前的驱动连接数据库。如图：
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午9.05.37.png)
-![](http://otxnth5wx.bkt.clouddn.com/20170920屏幕快照2017-09-20下午9.05.47.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午9.05.37.png)
+![](http://image.whhxz.smallstool.cn/20170920屏幕快照2017-09-20下午9.05.47.png)
 
 JDBC连接桥接模式，相对之前，只是属性设置不一样。
 

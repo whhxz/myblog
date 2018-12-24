@@ -120,7 +120,7 @@ protected final boolean tryAcquire(int acquires) {
 }
 ```
 流程图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171225屏幕快照2017-12-25下午6.34.52.png)
+![](http://image.whhxz.smallstool.cn/20171225屏幕快照2017-12-25下午6.34.52.png)
 对于写锁而言，相对简单，只要当前存在锁，且不是当前线程获取，都会获取失败。如果存在锁，需要依据是否公平模式来判断是否有资格获取锁。
 
 WriteLock.tryLock()：直接去获取锁，逻辑和tryAcquire类似，只是少了writerShouldBlock该步骤。
@@ -404,9 +404,9 @@ private void doReleaseShared() {
 }
 ```
 尝试获取锁流程图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171225屏幕快照2017-12-25下午5.28.41.png)
+![](http://image.whhxz.smallstool.cn/20171225屏幕快照2017-12-25下午5.28.41.png)
 获取锁失败后doAcquireShared如图：
-![](http://otxnth5wx.bkt.clouddn.com/20171225屏幕快照2017-12-25下午6.30.33.png)
+![](http://image.whhxz.smallstool.cn/20171225屏幕快照2017-12-25下午6.30.33.png)
 
 ReadLock.tryLock，调用的实际上是Sync.tryReadLock。比较简单，判断如果存在写锁切不是当前线程获取直接返回false，如果不存在写锁，直接修改锁状态，更新重入次数。
 ReadLock.tryLock(long timeout, TimeUnit unit)，和之前类似，先尝试获取锁（受公平模式影响），如果失败放入链表阻塞，设置阻塞时间，等待唤醒。

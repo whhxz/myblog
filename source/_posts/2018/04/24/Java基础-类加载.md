@@ -67,7 +67,7 @@ Bootstrap类加载器主要用于加载JVM自身需要的类，改类加载器�
 
 #### Extension类加载器
 `sun.misc.Launcher.ExtClassLoader`是Extension类加载器的实现类，负责加载`$JAVA_HOME/lib/ext`目录下或者由`-Djava.ext.dir`指定路径中的包。继承关系如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180424屏幕快照2018-04-24上午10.46.26.png)
+![](http://image.whhxz.smallstool.cn/20180424屏幕快照2018-04-24上午10.46.26.png)
 
 #### System类加载器
 `sun.misc.Launcher.AppClassLoader`是System类加载器的实现类，负责加载类`java-classpath`或`-D java.class.path`指定路径下的类。通过`ClassLoader.getSystemClassLoader()`可以获取该类加载器.
@@ -218,7 +218,7 @@ private S nextService() {
 在tomcat中一般可以部署多个应用，不同应用如果依赖了同一个jar不同版本，这样就需要使用不同的类加载器来隔离应用。同时如果不同应用依赖相同的版本，也可以把依赖的jar放入共有类加载器中。 
 
 Tomcat服务器类加载器如下：
-![](http://otxnth5wx.bkt.clouddn.com/2018042420160925001518808.png)
+![](http://image.whhxz.smallstool.cn/2018042420160925001518808.png)
 
 在Tomcat中需要在conf/catalina.properties中配置`server.loader`和`share.loader`后才会建立`CatalinaClassLoader`和`SharedClassLoader`，否则使用`CommonClassLoader`代替。因为默认配置中没有所以合并后变成了`lib`目录，如果需要可以建立、`common`、`server`、`shared`目录分别对应`CommonClassLoader`、`CatalinaClassLoader`、`SharedClassLoader`。
 

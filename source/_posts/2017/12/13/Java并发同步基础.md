@@ -186,13 +186,13 @@ synchronized内部依赖于monitor，而monitor依赖于操作系统Mutex Lock�
 
 HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：**对象头（Header）**、**实例数据（Instance Data）**和**对齐填充（Padding）**。HotSpot虚拟机的对象头(Object Header)包括两部分信息，第一部分用于存储对象自身的运行时数据， 如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等等，这部分数据的长度在32位和64位的虚拟机（暂 不考虑开启压缩指针的场景）中分别为32个和64个Bits，官方称它为**Mark Word**。
 在32位JDK中存储如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171213屏幕快照2017-12-13下午2.04.12.png)
+![](http://image.whhxz.smallstool.cn/20171213屏幕快照2017-12-13下午2.04.12.png)
 
 #### 偏向锁
 在很多情况下，锁并没有线程竞争，经常由同一个线程获取，HotSpot作者为了让线程获取锁的代价更低而引入了偏向锁。可以通过JVM参数关闭偏向锁：XX:-UseBiasedLocking=false，程序会默认进入轻量级锁。
 
 偏向锁获取流程图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171213屏幕快照2017-12-13下午5.56.54.png)
+![](http://image.whhxz.smallstool.cn/20171213屏幕快照2017-12-13下午5.56.54.png)
 判断是否为偏向锁，如果为偏向锁，判断对象头的Mark Word里线程是否指向当前线程。如果不是需要采用CAS竞争锁，获取失败表示有竞争，当竞争达到全局安全点（safepoint）时，升级锁为轻量级锁。
 
 偏向锁释放：
@@ -200,7 +200,7 @@ HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域�
 * 这里释放应该是，通过出现竞争时，有判断逻辑处理当前锁是否需要重新变为无锁、重偏向锁、升级为轻量级锁。
 
 锁转换：
-![](http://otxnth5wx.bkt.clouddn.com/20171213屏幕快照2017-12-13下午3.52.56.png)
+![](http://image.whhxz.smallstool.cn/20171213屏幕快照2017-12-13下午3.52.56.png)
 
 **偏向锁主要是为了优化同一线程频繁访问锁。**
 #### 轻量级锁
@@ -222,7 +222,7 @@ HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域�
 重量级锁依赖monitor，当一个线程进入同步代码块，其他线程会被阻塞在外，当线程执行完毕后释放锁，同时唤醒其他等待线程。
 
 锁之间图解：
-![](http://otxnth5wx.bkt.clouddn.com/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg)
+![](http://image.whhxz.smallstool.cn/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg)
 
 
 #### 锁比较
