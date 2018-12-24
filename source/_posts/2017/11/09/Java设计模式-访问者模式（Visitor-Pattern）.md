@@ -13,7 +13,7 @@ tags: ['访问者模式', '设计模式', 'Visitor Pattern']
 访问者模式的目的是封装一些施加于某种数据结构元素之上的操作。一旦这些操作需要修改的话，接受这个操作的数据结构则可以保持不变。
 
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171113屏幕快照2017-11-10上午9.55.04.png)
+![](http://image.whhxz.smallstool.cn/20171113屏幕快照2017-11-10上午9.55.04.png)
 <!-- more -->
 ```java
 import java.util.List;
@@ -109,7 +109,7 @@ class ConcreteElementB extends Element{
 ### 实际举例
 在一个公司中有正式员工和兼职员工，计算工资方式不一样。公司部门有财务部门和人力资源部门，财务部门查看统计员工工资，不同员工工资内容不同。人力资源部门查看统计员工工时。
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171113屏幕快照2017-11-13下午2.39.10.png)
+![](http://image.whhxz.smallstool.cn/20171113屏幕快照2017-11-13下午2.39.10.png)
 ```java
 /**
  * 部门

@@ -26,7 +26,7 @@ Exception：由程序本身可以处理的异常。
 非运行时异常：除RuntimeException及其子类以外的异常。
 
 常见的异常关系继承图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180328异常继承关系图.jpg)
+![](http://image.whhxz.smallstool.cn/20180328异常继承关系图.jpg)
 
 
 # 异常流程

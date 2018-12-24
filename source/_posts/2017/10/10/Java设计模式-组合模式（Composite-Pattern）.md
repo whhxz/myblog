@@ -11,7 +11,7 @@ tags: ['设计模式', '组合模式', 'Composite Pattern']
 组合模式中，使得客户端看来单个对象和对象的组合是同等的。换句话说，某个类型的方法同时也接受自身类型作为参数。
 
 组合模式UML如图所示：
-![](http://otxnth5wx.bkt.clouddn.com/20171010屏幕快照2017-10-10下午9.54.17.png)
+![](http://image.whhxz.smallstool.cn/20171010屏幕快照2017-10-10下午9.54.17.png)
 
 <!-- more -->
 在组合模式中，通常有：
@@ -102,16 +102,16 @@ class Composite extends AbstractComponent {
 * Checkbox、Label、Button等叶子构件
 
 Component如图：
-![](http://otxnth5wx.bkt.clouddn.com/20171010屏幕快照2017-10-10下午9.31.21.png)
+![](http://image.whhxz.smallstool.cn/20171010屏幕快照2017-10-10下午9.31.21.png)
 
 Container如图：
-![](http://otxnth5wx.bkt.clouddn.com/20171010屏幕快照2017-10-10下午9.32.06.png)
+![](http://image.whhxz.smallstool.cn/20171010屏幕快照2017-10-10下午9.32.06.png)
 
 该出使用的是安全组合模式。
 
 ### 组合模式总结
 组合模式还可以用在该处
-![](http://otxnth5wx.bkt.clouddn.com/20171010屏幕快照2017-10-10下午9.45.34.png)
+![](http://image.whhxz.smallstool.cn/20171010屏幕快照2017-10-10下午9.45.34.png)
 公司组织结构队员的树形菜单。行政人员在下发通知的时候，可以直接下发到部门，也可以下发到子公司。
 
 组合模式使用面向对象的思想来实现树形结构的构建与处理，描述了如何将容器对象和叶子对象进行递归组合，实现简单，灵活性好。由于在软件开发中存在大量的树形结构，因此组合模式是一种使用频率较高的结构型设计模式。

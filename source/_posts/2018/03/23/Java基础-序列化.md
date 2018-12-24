@@ -863,8 +863,8 @@ message Person{
 }
 ```
 使用的对象比较简单，暂时未测试复杂对象的序列化。对比图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180325屏幕快照2018-03-25下午5.09.54.png)
-![](http://otxnth5wx.bkt.clouddn.com/20180325屏幕快照2018-03-25下午5.09.37.png)
+![](http://image.whhxz.smallstool.cn/20180325屏幕快照2018-03-25下午5.09.54.png)
+![](http://image.whhxz.smallstool.cn/20180325屏幕快照2018-03-25下午5.09.37.png)
 
 Thrift未加入进行比较，和protobuf同样是先定义好文件，所以速度应该也会很快。
 

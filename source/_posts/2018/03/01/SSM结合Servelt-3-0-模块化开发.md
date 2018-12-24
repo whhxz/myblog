@@ -21,10 +21,10 @@ tags: ['SSM', 'Servelt 3.0', '模块化开发']
 
 现在对启动对业务进行拆分：
 1、创建一个common项目，用于写接口已经公共类，以及基本的依赖。如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180301屏幕快照2018-03-01下午3.30.13.png)
+![](http://image.whhxz.smallstool.cn/20180301屏幕快照2018-03-01下午3.30.13.png)
 
 2、抽取user业务，用于user相关逻辑，依赖common，同时实现common用user相关接口用于外部调用。如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180301屏幕快照2018-03-01下午3.32.52.png)
+![](http://image.whhxz.smallstool.cn/20180301屏幕快照2018-03-01下午3.32.52.png)
 
 重点部分是抽取出的user项目。使用了Servlet3.0中模块化开发。
 需要在user项目中，resource/META-INF新增web-fragment.xml。web-fragment.xml结构类似于web.xml，用于web的相关配置比如监听器、拦截器等

@@ -9,8 +9,8 @@ tags: ['设计模式', '命令模式', 'Command Pattern']
 >将一个请求封装为一个对象，从而让我们可用不同的请求对客户进行参数化；对请求排队或者记录请求日志，以及支持可撤销的操作。命令模式是一种对象行为型模式，其别名为动作(Action)模式或事务(Transaction)模式。
 
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.28.37.png)
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.44.24.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27上午9.28.37.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27上午9.44.24.png)
 <!-- more -->
 ```Java
 /**
@@ -140,7 +140,7 @@ class Invoker {
 #### 实际举例
 需要一个库存项目，对外提供库存新增、扣减等操作。因为库存的频繁查询，实际库存是放入缓存中，为了避免数据库频繁更新，影响接口效率，更新缓存后，记录更新日志，方便日后查询，已经数据恢复。设计如下代码，采用命令设计模式把数据库操作抽象为相应的命令，对于数据库的操作封装好数据后放入队列，由其他线程处理队列中数据库操作命令，在实际应用中，为了避免因数据库宕机导致队列丢失，可以把命令修改操作放入消息中间件。
 UML类图：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午11.08.46.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27上午11.08.46.png)
 ```java
 /**
  * 抽象命令
@@ -256,7 +256,7 @@ public class Main{
 在实际应用中，在用JAVA写GUI时，一个按钮有相应的功能，如果需要做到用户自定义按钮功能，也可以使用命令模式。
 ### JDK中命令模式使用
 在JDK中ThreadPoolExecutor可以视为命令模式，UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171027屏幕快照2017-10-27上午9.35.31.png)
+![](http://image.whhxz.smallstool.cn/20171027屏幕快照2017-10-27上午9.35.31.png)
 在ThreadPoolExecutor中：
 * ThreadPoolExecutor：调用者
 * Runnable：抽象命令
