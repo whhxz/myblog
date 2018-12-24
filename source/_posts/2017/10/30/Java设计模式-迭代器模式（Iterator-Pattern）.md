@@ -9,7 +9,7 @@ tags: ['设计模式', '迭代器模式', 'Iterator Pattern']
 > 提供一种方法来访问聚合对象，而不用暴露这个对象的内部表示，其别名为游标(Cursor)。迭代器模式是一种对象行为型模式。
 
 UML类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30上午8.55.56.png)<!-- more -->
+![](http://image.whhxz.smallstool.cn/20171030屏幕快照2017-10-30上午8.55.56.png)<!-- more -->
 * Iterator（抽象迭代器）：它定义了访问和遍历元素的接口，声明了用于遍历数据元素的方法；
 * ConcreteIterator（具体迭代器）：它实现了抽象迭代器接口，完成对聚合对象的遍历，同时在具体迭代器中通过游标来记录在聚合对象中所处的当前位置，在具体实现时，游标通常是一个表示位置的非负整数。
 * Aggregate（抽象聚合类）：它用于存储和管理元素对象，声明一个createIterator()方法用于创建一个迭代器对象，充当抽象迭代器工厂角色。
@@ -20,10 +20,10 @@ UML类图如下：
 ### JDK迭代器
 在常用的集合类都有其迭代器，以常用ArrayList作为例子：
 ArrayList的基础关系类图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30上午9.10.00.png)
+![](http://image.whhxz.smallstool.cn/20171030屏幕快照2017-10-30上午9.10.00.png)
 Collection接口有个父接口为Iterable，Iterable中方法iterator获取迭代器Iterator。
 在ArrayList实现了接口方法iterator，如图：
-![](http://otxnth5wx.bkt.clouddn.com/20171030屏幕快照2017-10-30上午9.13.49.png)
+![](http://image.whhxz.smallstool.cn/20171030屏幕快照2017-10-30上午9.13.49.png)
 
 在ArrayList同时还提供逆向迭代listIterable。
 ### 迭代器总结

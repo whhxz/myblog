@@ -11,12 +11,12 @@ tags: ['设计模式', '装饰模式', 'Decorator Pattern']
 装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有类的方法，还可以增加新的方法，以扩充原有类的功能。
 
 举例：
-![](http://otxnth5wx.bkt.clouddn.com/20171012屏幕快照2017-10-12下午5.06.49.png)<!-- more -->
+![](http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.06.49.png)<!-- more -->
 在这个里面孙悟空只是一种动物，在使用了七十二变之后，就可以变为其他事物。这里`七十二变`就是装饰器，装饰后就可以做别的事情了。这里只是举例，便于理解，实际设计需要依据情况来。
 * 参考：[装饰设计模式](http://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html)
 
 在装饰模式中，实际UML图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20171012屏幕快照2017-10-12下午5.17.56.png)
+![](http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.17.56.png)
 
 * 抽象构件（Component）：它是具体构件和抽象装饰类的共同父类，声明了在具体构件中实现的业务方法，它的引入可以使客户端以一致的方式处理未被装饰的对象以及装饰之后的对象，实现客户端的透明操作。
 * 具体构件（ConcreteComponent）：它是抽象构件类的子类，用于定义具体的构件对象，实现了在抽象构件中声明的方法，装饰器可以给它增加额外的职责（方法）。
@@ -26,7 +26,7 @@ tags: ['设计模式', '装饰模式', 'Decorator Pattern']
 这里省略具体示例，直接分析JDK中应用。
 ### 在JDK中使用
 在IO中InputStream相关类中是典型的装饰模式。如图：
-![](http://otxnth5wx.bkt.clouddn.com/20171012屏幕快照2017-10-12下午6.05.34.png)
+![](http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.05.34.png)
 * InputStream：抽象构件，为子类提供统一接口
 * FileInputStream、ByteArrayInputStream：抽象构件子类，实现父类相关接口
 * FilterInputStream：装饰器，用于增强InputStream
@@ -64,7 +64,7 @@ fileInputStream.close();
 * 如果装饰角色的接口与抽象构件角色接口不一致，也就是说装饰角色的接口比抽象构件角色的接口宽的话，装饰角色实际上已经成了一个适配器角色，这种装饰模式也是可以接受的，称为“半透明”的装饰模式
 
 透明装饰、半透明装饰、适配器可以理解为下图
-![](http://otxnth5wx.bkt.clouddn.com/20171012屏幕快照2017-10-12下午6.34.13.png)
+![](http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.34.13.png)
 * 注：http://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html
 
 在InputStream中，FilterInputStream方法和InputStream中一样，可以视为透明装饰，但是在子类中新增了方法，就属于半透明模式。

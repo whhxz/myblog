@@ -69,7 +69,7 @@ public class Main {
 }
 ```
 打开jvisualvm（JAVA_HOME/bin/jvisualvm）可以看到线程死锁了。
-![](http://otxnth5wx.bkt.clouddn.com/20171211屏幕快照2017-12-11下午6.32.25.png)
+![](http://image.whhxz.smallstool.cn/20171211屏幕快照2017-12-11下午6.32.25.png)
 饥饿举例：
 ```java
 import javax.swing.*;

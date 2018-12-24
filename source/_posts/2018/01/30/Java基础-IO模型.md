@@ -9,21 +9,21 @@ Unix网络编程中对I/O模型做了5种分类：阻塞I/O模型、非阻塞I/O
 <!-- more -->
 **阻塞I/O模型** ：在缺省模式下，所有文件存在都是阻塞的。在嵌套字中，在进程空间中调用recvfrom，其系统调用直到数据包到达被复制到应用进程的缓冲区中或者发生错误时才返回，在此期间会一直等待，进程从调用recvfrom开始到它返回的整段时间内都是被阻塞的。
 图：
-![](http://otxnth5wx.bkt.clouddn.com/2018013011043-6296a0fe7e80353d.jpeg)
+![](http://image.whhxz.smallstool.cn/2018013011043-6296a0fe7e80353d.jpeg)
 * recvfrom：本函数用于从（已连接）套接口上接收数据，并捕获数据发送源的地址，成功则返回接收到的字符数，失败则返回-1，错误原因存于errno中。
 
 **非阻塞I/O模型** ：recvfrom从应用层到内核的时候，如果该缓冲区没有数据的话，就直接返回一个EWOULDBLOCK错误，一般都是对非阻塞I/O模型进行轮询检查这个状态，看内核是不是有数据到来。
 图：
-![](http://otxnth5wx.bkt.clouddn.com/2018013011043-393ab84aab39a91c.png)
+![](http://image.whhxz.smallstool.cn/2018013011043-393ab84aab39a91c.png)
 
 **I/O复用模型** ：Liunx提供select/poll，进程通过将一个或多个fd传输给select或者poll系统调用，阻塞在select操作上，这样select/poll可以侦测多个fd是否处于就绪状态。select/pool是顺序扫描fd是否就绪，而且支持的fd数量有限，所以受到一些制约。Linux还提供epoll系统调用，epoll使用基于事件驱动方式代替顺序扫描，性能更高，当有fd就绪的时候，立即回调rollback。
-![](http://otxnth5wx.bkt.clouddn.com/2018013011043-30acb370892f468d.png)
+![](http://image.whhxz.smallstool.cn/2018013011043-30acb370892f468d.png)
 
 **信号驱动I/O模型** ：先开启嵌套口信号驱动I/O功能，并通过系统调用sigaction执行一个信号处理函数（此系统立即返回，进程继续工作，非阻塞）。当数据准备就绪的时候，非该进程生成一个SIGIO信号，通过信号回调通知应用程序调用recvfrom来读取数据，并通知主循环函数处理数据。
-![](http://otxnth5wx.bkt.clouddn.com/20180130dc9df87303a2aee6e741b48b78b4b8d9.jpeg)
+![](http://image.whhxz.smallstool.cn/20180130dc9df87303a2aee6e741b48b78b4b8d9.jpeg)
 
 **异步I/O** ：告知内核启动某个操作，让内核在整个操作完成后（包括将数据从内核复制到用户自己的缓冲区）通知我们。
-![](http://otxnth5wx.bkt.clouddn.com/2018013011043-751d8b96d391cd43.png)
+![](http://image.whhxz.smallstool.cn/2018013011043-751d8b96d391cd43.png)
 * 异步I/O模型和信号驱动I/O模型区别在于，信号驱动模型由内核通知何时可以开始I/O操作；异步I/O模型由内核通知I/O何时已经完成。
 
 ### JavaI/O
@@ -421,7 +421,7 @@ public class TimeClient {
 除了使用缓冲区还要使用到Channel，网络中数据通过Channel读取和写入，Channel可以用于读写以及同时存在。Channel在使用过程中，可以分为两大类：SelectableChannel（网络读写）、FileChannel（文件操作）。
 
 Channel子类关系图如下：
-![](http://otxnth5wx.bkt.clouddn.com/20180131屏幕快照2018-01-31下午5.02.38.png)
+![](http://image.whhxz.smallstool.cn/20180131屏幕快照2018-01-31下午5.02.38.png)
 
 **Selector：**
 Selector在NIO中属于核心部分，在使用过程中通过轮询注册在Selector上的Channel，因为JDK中使用了`epoll`所以没有最大连接句柄的现在。所以只需要一个线程负责Selector轮询就能接入大量的客户端。
