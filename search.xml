@@ -8,8 +8,8 @@
         <category>snake</category>
       </categories>
       <tags>
-        <tag>classLoader</tag>
         <tag>snake</tag>
+        <tag>classLoader</tag>
       </tags>
   </entry>
   <entry>
@@ -20,8 +20,8 @@
         <category>snake</category>
       </categories>
       <tags>
-        <tag>agent</tag>
         <tag>classLoader</tag>
+        <tag>agent</tag>
       </tags>
   </entry>
   <entry>
@@ -170,8 +170,8 @@
         <category>mysql</category>
       </categories>
       <tags>
-        <tag>事务</tag>
         <tag>mysql</tag>
+        <tag>事务</tag>
       </tags>
   </entry>
   <entry>
@@ -183,8 +183,8 @@
         <category>事务</category>
       </categories>
       <tags>
-        <tag>工作</tag>
         <tag>事务</tag>
+        <tag>工作</tag>
         <tag>并发</tag>
       </tags>
   </entry>
