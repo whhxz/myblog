@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "hexo": {
-    "version": "3.2.0"
+    "version": "3.8.0"
   },
   "dependencies": {
     "hexo": "^3.1.1",
@@ -18,5 +18,9 @@
     "hexo-renderer-marked": "^0.2.9",
     "hexo-renderer-stylus": "^0.3.0",
     "hexo-server": "^0.1.3"
+  },
+  "devDependencies": {
+    "hexo-fs": "^1.0.2",
+    "hexo-util": "^0.6.3"
   }
 }
