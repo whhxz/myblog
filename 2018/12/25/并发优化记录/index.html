@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -108,30 +108,20 @@
 
 
 
-  <meta name="description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下
-
-1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回
-
-业务逻辑流程比较清晰">
+  <meta name="description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下  1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回  业务逻辑流程比较清晰">
+<meta name="keywords" content="优化">
 <meta property="og:type" content="article">
 <meta property="og:title" content="并发优化记录">
 <meta property="og:url" content="http://blog.whhxz.com/2018/12/25/并发优化记录/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下
-
-1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回
-
-业务逻辑流程比较清晰">
+<meta property="og:description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下  1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回  业务逻辑流程比较清晰">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.04.59.png">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.16.03.png">
 <meta property="og:updated_time" content="2018-12-25T12:58:00.081Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="并发优化记录">
-<meta name="twitter:description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下
-
-1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回
-
-业务逻辑流程比较清晰">
+<meta name="twitter:description" content="业务逻辑主要是通过商品查询商品相关的活动信息，流程如下  1、查询商品相关信息（DB）2、查询商品对应活动相关信息（DB）3、查询商品在指定门店是否被排除（DB）4、赠品库存校验（HTTP）5、限购校验（HTTP+Redis）6、数据封装返回  业务逻辑流程比较清晰">
 <meta name="twitter:image" content="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.04.59.png">
 
 
@@ -139,7 +129,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2018/12/25/并发优化记录/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2018/12/25/并发优化记录/">
 
 
 
@@ -249,7 +239,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -266,7 +256,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -283,7 +273,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -300,7 +290,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -317,7 +307,7 @@
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -328,7 +318,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -348,9 +338,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -453,7 +441,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -503,8 +491,8 @@
 <p>1、查询商品相关信息（DB）<br>2、查询商品对应活动相关信息（DB）<br>3、查询商品在指定门店是否被排除（DB）<br>4、赠品库存校验（HTTP）<br>5、限购校验（HTTP+Redis）<br>6、数据封装返回</p>
 </blockquote>
 <p>业务逻辑流程比较清晰<br><a id="more"></a></p>
-<h3 id="初次优化"><a href="#初次优化" class="headerlink" title="初次优化"></a>初次优化</h3><p>对数据操纵做异步处理，使用线程池，对数据异步处理后，统一汇总，返回数据<br><img src="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.04.59.png" alt=""><br>对数据做异步优化如上所示。<br>把其中3个流程通过线程池做异步处理，当前线程处理相关数据，之后对数据进行汇总对数据进行封装返回。</p>
-<h3 id="加入缓存二次优化"><a href="#加入缓存二次优化" class="headerlink" title="加入缓存二次优化"></a>加入缓存二次优化</h3><p>缓存设计为一、二级缓存。一级缓存为本地缓存速度快、缓存时间短、数量少，项目部署都是多机部署，所以一级缓存对于不同服务器数据有冗余。二级缓存未Redis远程缓存速度比本地缓存慢、存储时间相对长、数量大。如果一、二级缓存穿透流程会流转到DB逻辑，如初次优化逻辑处理。<br>数据流程如下：<br><img src="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.16.03.png" alt=""><br>批量数据处理，如果一级缓存命中，走正常逻辑，未命中数据流转到下一级。二级缓存如果未命中，数据流转到下一级。一二级缓存未命中逻辑处理逻辑一致，都是对数据进行过滤以及重新缓存。如果某级全部未命中，那么流转到下一级走同步方法，不需要走线程池异步处理。</p>
+<h3 id="初次优化"><a href="#初次优化" class="headerlink" title="初次优化"></a>初次优化</h3><p>对数据操纵做异步处理，使用线程池，对数据异步处理后，统一汇总，返回数据<br><img src="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.04.59.png" alt><br>对数据做异步优化如上所示。<br>把其中3个流程通过线程池做异步处理，当前线程处理相关数据，之后对数据进行汇总对数据进行封装返回。</p>
+<h3 id="加入缓存二次优化"><a href="#加入缓存二次优化" class="headerlink" title="加入缓存二次优化"></a>加入缓存二次优化</h3><p>缓存设计为一、二级缓存。一级缓存为本地缓存速度快、缓存时间短、数量少，项目部署都是多机部署，所以一级缓存对于不同服务器数据有冗余。二级缓存未Redis远程缓存速度比本地缓存慢、存储时间相对长、数量大。如果一、二级缓存穿透流程会流转到DB逻辑，如初次优化逻辑处理。<br>数据流程如下：<br><img src="http://image.whhxz.smallstool.cn/20181225屏幕快照2018-12-25下午8.16.03.png" alt><br>批量数据处理，如果一级缓存命中，走正常逻辑，未命中数据流转到下一级。二级缓存如果未命中，数据流转到下一级。一二级缓存未命中逻辑处理逻辑一致，都是对数据进行过滤以及重新缓存。如果某级全部未命中，那么流转到下一级走同步方法，不需要走线程池异步处理。</p>
 <h3 id="缓存问题"><a href="#缓存问题" class="headerlink" title="缓存问题"></a>缓存问题</h3><p>缓存可能会存在几个问题</p>
 <h4 id="缓存雪崩"><a href="#缓存雪崩" class="headerlink" title="缓存雪崩"></a>缓存雪崩</h4><p>如果缓存出现大批量过期，那么会导致大批量数据流转到DB，数据库压力大增，可能会导致数据库崩溃。<br>在设置缓存的时候，加入了随机值，避免同一时间大量缓存失效。</p>
 <h4 id="缓存穿透"><a href="#缓存穿透" class="headerlink" title="缓存穿透"></a>缓存穿透</h4><p>在查询数据的时候，如果有很多key查询不到数据，不做处理，这样会导致大量没数据的key走到DB层，这样接口的TPS会比较低，那么需要对不存在的数据一样进行缓存，缓存内容为空数据，避免缓存穿透</p>
@@ -617,9 +605,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1188,7 +1174,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 

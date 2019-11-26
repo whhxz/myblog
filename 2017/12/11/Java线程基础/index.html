@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -108,32 +108,19 @@
 
 
 
-  <meta name="description" content="环境
-jdk1.8
-
-并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。
-并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。
-同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
+  <meta name="description" content="环境 jdk1.8  并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。 并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。 同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
+<meta name="keywords" content="多线程,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java线程基础">
 <meta property="og:url" content="http://blog.whhxz.com/2017/12/11/Java线程基础/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="环境
-jdk1.8
-
-并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。
-并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。
-同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
+<meta property="og:description" content="环境 jdk1.8  并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。 并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。 同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171211屏幕快照2017-12-11下午6.32.25.png">
 <meta property="og:updated_time" content="2018-12-24T15:00:48.263Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java线程基础">
-<meta name="twitter:description" content="环境
-jdk1.8
-
-并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。
-并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。
-同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
+<meta name="twitter:description" content="环境 jdk1.8  并发编程基本概念为了利用多核处理器，采用多线程编程能节省大量运行时间，带来的缺点是会导致程序复杂度的提升。 并行、并发并行：两个任务同时运行，如启动多个线程，每个线程运行各自的任务，在多核处理器中，不同的任务同时运行，可视为并行。（单核系统不存在并行）并发：多个线程同时访问一个任务。 同步、异步同步：调用一个方法，必须等待该方法返回后，才能继续下一步。异步：调用方法后，必须等">
 <meta name="twitter:image" content="http://image.whhxz.smallstool.cn/20171211屏幕快照2017-12-11下午6.32.25.png">
 
 
@@ -141,7 +128,7 @@ jdk1.8
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2017/12/11/Java线程基础/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2017/12/11/Java线程基础/">
 
 
 
@@ -251,7 +238,7 @@ jdk1.8
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -268,7 +255,7 @@ jdk1.8
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -285,7 +272,7 @@ jdk1.8
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -302,7 +289,7 @@ jdk1.8
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -319,7 +306,7 @@ jdk1.8
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -330,7 +317,7 @@ jdk1.8
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -350,9 +337,7 @@ jdk1.8
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -467,7 +452,7 @@ jdk1.8
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -520,7 +505,7 @@ jdk1.8
 <p><strong>同步、异步</strong><br>同步：调用一个方法，必须等待该方法返回后，才能继续下一步。<br>异步：调用方法后，必须等待方法的返回，继续执行下一步。在Java中被调用的方法，一般会在另一个线程里面继续执行。</p>
 <p><strong>临界区</strong><br>用于多线程的互斥访问。如果有多个线程试图同时访问临界区，那么在有一个线程进入临界区后，其他试图访问的线程将被挂起，直到进入临界区的线程离开。临界区在被释放后，其他线程可以继续抢占，并以此达到对临界区的互斥访问。</p>
 <p><strong>阻塞、非阻塞</strong><br>阻塞：在一个线程占用了临界区的资源，其他线程想要进入临界区需等进入临界区的线程释放资源，这时是其他等待的线程被阻塞挂起。<br>非阻塞：没有线程妨碍其他线程执行。<br><a id="more"></a><br><strong>死锁、饥饿、活锁</strong><br>死锁：单两个线程持有自己当前的锁，同时等待获取对方的锁，导致死锁。<br>饥饿：在非公平模式下，如果存在一个低优先级任务，同时存在大量高优先级任务，会导致任务低优先级任务长期获取不到资源，称之为饥饿。不过当高优先级任务完成后，低优先级任务还是有机会执行。<br>活锁：活锁、死锁本质上是一样的，原因是在获取临界区资源时，并发多个进程/线程声明资源占用(加锁)的顺序不一致，死锁是加不上就死等，活锁是加不上就放开已获得的资源重试（tryLock）。<br>死锁举例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaskA</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(TaskB b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">        b.method();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"任务A"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TaskB</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"任务B"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(TaskA a)</span></span>&#123;</span><br><span class="line">        a.method();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        TaskA taskA = <span class="keyword">new</span> TaskA();</span><br><span class="line">        TaskB taskB = <span class="keyword">new</span> TaskB();</span><br><span class="line"></span><br><span class="line">        <span class="keyword">new</span> Thread(() -&gt; taskA.method(taskB)).start();</span><br><span class="line">        <span class="keyword">new</span> Thread(()-&gt; taskB.method(taskA)).start();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>打开jvisualvm（JAVA_HOME/bin/jvisualvm）可以看到线程死锁了。<br><img src="http://image.whhxz.smallstool.cn/20171211屏幕快照2017-12-11下午6.32.25.png" alt=""><br>饥饿举例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.swing.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProcessThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    JProgressBar progressBar;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> JProgressBar <span class="title">getProgressBar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> progressBar;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProcessThread</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        progressBar = <span class="keyword">new</span> JProgressBar();</span><br><span class="line">        progressBar.setString(name);</span><br><span class="line">        progressBar.setStringPainted(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Main.shareObj)&#123;</span><br><span class="line">                <span class="keyword">if</span> (c == <span class="number">100</span>)&#123;</span><br><span class="line">                    c = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                c = c+ <span class="number">10</span>;</span><br><span class="line">                progressBar.setValue(c);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//此处线程暂停，不释放锁，每次结束后由系统重新竞争锁，很大可能还是当前线程获取到锁。（偏向锁）</span></span><br><span class="line">                    <span class="comment">//在设计的时候，如果设计任务优先级执行，可能会重新高优先级任务一直运行</span></span><br><span class="line">                    TimeUnit.MILLISECONDS.sleep(<span class="number">100</span>);</span><br><span class="line">                    <span class="comment">//修改为下面的后，线程会暂停，释放锁，其他线程可以重新竞争锁，且当前线程不参与竞争。</span></span><br><span class="line"><span class="comment">//                    Main.shareObj.wait(100);</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Object shareObj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        JFrame starvation = <span class="keyword">new</span> JFrame(<span class="string">"Starvation"</span>);</span><br><span class="line">        starvation.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</span><br><span class="line">        starvation.setSize(<span class="number">300</span>, <span class="number">200</span>);</span><br><span class="line">        starvation.setLayout(<span class="keyword">new</span> FlowLayout(FlowLayout.LEFT));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">            ProcessThread processThread = <span class="keyword">new</span> ProcessThread(<span class="string">"Thread-"</span> + i);</span><br><span class="line">            starvation.add(processThread.getProgressBar());</span><br><span class="line">            Thread thread = <span class="keyword">new</span> Thread(processThread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        starvation.setLocationRelativeTo(<span class="keyword">null</span>);</span><br><span class="line">        starvation.setVisible(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>打开jvisualvm（JAVA_HOME/bin/jvisualvm）可以看到线程死锁了。<br><img src="http://image.whhxz.smallstool.cn/20171211屏幕快照2017-12-11下午6.32.25.png" alt><br>饥饿举例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> javax.swing.*;</span><br><span class="line"><span class="keyword">import</span> java.awt.*;</span><br><span class="line"><span class="keyword">import</span> java.util.concurrent.TimeUnit;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProcessThread</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    JProgressBar progressBar;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> JProgressBar <span class="title">getProgressBar</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> progressBar;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ProcessThread</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        progressBar = <span class="keyword">new</span> JProgressBar();</span><br><span class="line">        progressBar.setString(name);</span><br><span class="line">        progressBar.setStringPainted(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> c = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (<span class="keyword">true</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Main.shareObj)&#123;</span><br><span class="line">                <span class="keyword">if</span> (c == <span class="number">100</span>)&#123;</span><br><span class="line">                    c = <span class="number">0</span>;</span><br><span class="line">                &#125;</span><br><span class="line">                c = c+ <span class="number">10</span>;</span><br><span class="line">                progressBar.setValue(c);</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="comment">//此处线程暂停，不释放锁，每次结束后由系统重新竞争锁，很大可能还是当前线程获取到锁。（偏向锁）</span></span><br><span class="line">                    <span class="comment">//在设计的时候，如果设计任务优先级执行，可能会重新高优先级任务一直运行</span></span><br><span class="line">                    TimeUnit.MILLISECONDS.sleep(<span class="number">100</span>);</span><br><span class="line">                    <span class="comment">//修改为下面的后，线程会暂停，释放锁，其他线程可以重新竞争锁，且当前线程不参与竞争。</span></span><br><span class="line"><span class="comment">//                    Main.shareObj.wait(100);</span></span><br><span class="line">                &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Object shareObj = <span class="keyword">new</span> Object();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception</span>&#123;</span><br><span class="line">        JFrame starvation = <span class="keyword">new</span> JFrame(<span class="string">"Starvation"</span>);</span><br><span class="line">        starvation.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);</span><br><span class="line">        starvation.setSize(<span class="number">300</span>, <span class="number">200</span>);</span><br><span class="line">        starvation.setLayout(<span class="keyword">new</span> FlowLayout(FlowLayout.LEFT));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++) &#123;</span><br><span class="line">            ProcessThread processThread = <span class="keyword">new</span> ProcessThread(<span class="string">"Thread-"</span> + i);</span><br><span class="line">            starvation.add(processThread.getProgressBar());</span><br><span class="line">            Thread thread = <span class="keyword">new</span> Thread(processThread);</span><br><span class="line">            thread.start();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        starvation.setLocationRelativeTo(<span class="keyword">null</span>);</span><br><span class="line">        starvation.setVisible(<span class="keyword">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>该例子可能并不恰当，不过饥饿很好理解。</li>
 <li>通过图形化展示比较有趣，参考：<a href="http://www.logicbig.com/tutorials/core-java-tutorial/java-multi-threading/thread-starvation/" target="_blank" rel="external">http://www.logicbig.com/tutorials/core-java-tutorial/java-multi-threading/thread-starvation/</a></li>
@@ -701,9 +686,7 @@ jdk1.8
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1272,7 +1255,7 @@ jdk1.8
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 

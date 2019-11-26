@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -109,11 +109,13 @@
 
 
   <meta name="description" content="Spring请求拦截在使用Spring框架时，可以知道所有Spring入口都是从org.springframework.web.servlet.FrameworkServlet.processRequest中进入，可以通过对该方法进行字节码增强，达到拦截的目的。使用javassist对processRequest方法的前后分别插入操作代码。通过javassist提供获取当前对象出入参数等，做一些相">
+<meta name="keywords" content="classLoader,snake">
 <meta property="og:type" content="article">
 <meta property="og:title" content="snake-agent拦截及日志输出">
 <meta property="og:url" content="http://blog.whhxz.com/2019/01/04/snake-agent拦截及日志输出/index.html">
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="Spring请求拦截在使用Spring框架时，可以知道所有Spring入口都是从org.springframework.web.servlet.FrameworkServlet.processRequest中进入，可以通过对该方法进行字节码增强，达到拦截的目的。使用javassist对processRequest方法的前后分别插入操作代码。通过javassist提供获取当前对象出入参数等，做一些相">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20190104屏幕快照2019-01-04上午11.01.44.png">
 <meta property="og:updated_time" content="2019-01-04T03:10:09.771Z">
 <meta name="twitter:card" content="summary">
@@ -126,7 +128,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2019/01/04/snake-agent拦截及日志输出/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2019/01/04/snake-agent拦截及日志输出/">
 
 
 
@@ -236,7 +238,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -253,7 +255,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -270,7 +272,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -287,7 +289,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -304,7 +306,7 @@
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -315,7 +317,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -335,9 +337,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -440,7 +440,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -488,7 +488,7 @@
         <h3 id="Spring请求拦截"><a href="#Spring请求拦截" class="headerlink" title="Spring请求拦截"></a>Spring请求拦截</h3><p>在使用Spring框架时，可以知道所有Spring入口都是从<code>org.springframework.web.servlet.FrameworkServlet.processRequest</code>中进入，可以通过对该方法进行字节码增强，达到拦截的目的。<br>使用<code>javassist</code>对<code>processRequest</code>方法的前后分别插入操作代码。通过<code>javassist</code>提供获取当前对象出入参数等，做一些相关的操作。<br><a id="more"></a></p>
 <h4 id="修改注册"><a href="#修改注册" class="headerlink" title="修改注册"></a>修改注册</h4><p>在创建拦截操作对象时，为了保证在代码插入后生效，创建一个静态的注册类<code>InterceptorRegistry</code>，在创建代码时，生成一个唯一的id，通过<code>javassist</code>修改字节码时，带入该ID，就可以准确找到对应的修改类。</p>
 <h3 id="日志输出"><a href="#日志输出" class="headerlink" title="日志输出"></a>日志输出</h3><p>在agent中，日志依赖需要使用自定义的类加载器加载，使agent依赖的jar和项目的jar进行隔离。这样就会出现，父类加载器（项目类加载器）需要调用子类加载器（自定义类加载器）加载的对象。</p>
-<p>自定义日志类关系如下：<br><img src="http://image.whhxz.smallstool.cn/20190104屏幕快照2019-01-04上午11.01.44.png" alt=""><br>其中接口<code>Logger</code>、<code>LoggerBinder</code>类<code>LogManager</code>由父类加载器加载，其实现类<code>Log4j2Logger</code>、<code>Log4j2Binder</code>由子类加载器加载。<br>在使用的时候，如果初始化LogManner传入Log4j2Logger达到类加载分离。因为在自定义类加载器中，只加载部分类，其他的类由父类加载。<br>方法的调用，通过接口进行连接，具体实现由子类加载器处理。</p>
+<p>自定义日志类关系如下：<br><img src="http://image.whhxz.smallstool.cn/20190104屏幕快照2019-01-04上午11.01.44.png" alt><br>其中接口<code>Logger</code>、<code>LoggerBinder</code>类<code>LogManager</code>由父类加载器加载，其实现类<code>Log4j2Logger</code>、<code>Log4j2Binder</code>由子类加载器加载。<br>在使用的时候，如果初始化LogManner传入Log4j2Logger达到类加载分离。因为在自定义类加载器中，只加载部分类，其他的类由父类加载。<br>方法的调用，通过接口进行连接，具体实现由子类加载器处理。</p>
 <p>代码详情请看 v0.0.2</p>
 
       
@@ -513,9 +513,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/snake/" rel="tag"># snake</a>
-          
             <a href="/tags/classLoader/" rel="tag"># classLoader</a>
+          
+            <a href="/tags/snake/" rel="tag"># snake</a>
           
         </div>
       
@@ -595,9 +595,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1166,7 +1164,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 

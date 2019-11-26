@@ -8,8 +8,8 @@
         <category>snake</category>
       </categories>
       <tags>
-        <tag>snake</tag>
         <tag>classLoader</tag>
+        <tag>snake</tag>
       </tags>
   </entry>
   <entry>
@@ -20,8 +20,8 @@
         <category>snake</category>
       </categories>
       <tags>
-        <tag>classLoader</tag>
         <tag>agent</tag>
+        <tag>classLoader</tag>
       </tags>
   </entry>
   <entry>
@@ -817,10 +817,10 @@
         <category>基础知识</category>
       </categories>
       <tags>
+        <tag>基础</tag>
         <tag>Spring</tag>
         <tag>SpringMVC</tag>
         <tag>Mybatis</tag>
-        <tag>基础</tag>
       </tags>
   </entry>
   <entry>
@@ -949,8 +949,8 @@
         <category>设计模式</category>
       </categories>
       <tags>
-        <tag>Java</tag>
         <tag>设计模式</tag>
+        <tag>Java</tag>
         <tag>面向对象设计原则</tag>
       </tags>
   </entry>

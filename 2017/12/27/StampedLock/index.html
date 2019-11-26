@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -108,26 +108,25 @@
 
 
 
-  <meta name="description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。
-所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
+  <meta name="description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。 所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
+<meta name="keywords" content="多线程,同步,StampedLock">
 <meta property="og:type" content="article">
 <meta property="og:title" content="StampedLock">
 <meta property="og:url" content="http://blog.whhxz.com/2017/12/27/StampedLock/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。
-所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
+<meta property="og:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。 所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2017-12-27T08:12:59.111Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="StampedLock">
-<meta name="twitter:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。
-所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
+<meta name="twitter:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。 所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
 
 
 
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2017/12/27/StampedLock/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2017/12/27/StampedLock/">
 
 
 
@@ -237,7 +236,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -254,7 +253,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -271,7 +270,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -288,7 +287,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -305,7 +304,7 @@
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -316,7 +315,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -336,9 +335,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -441,7 +438,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -597,9 +594,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1152,7 +1147,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 

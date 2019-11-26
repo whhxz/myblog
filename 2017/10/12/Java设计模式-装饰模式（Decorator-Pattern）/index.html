@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -108,18 +108,14 @@
 
 
 
-  <meta name="description" content="扩展系统功能–装饰模式
-定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。
-
-装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
+  <meta name="description" content="扩展系统功能–装饰模式 定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。  装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
+<meta name="keywords" content="设计模式,装饰模式,Decorator Pattern">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java设计模式-装饰模式（Decorator Pattern）">
 <meta property="og:url" content="http://blog.whhxz.com/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="扩展系统功能–装饰模式
-定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。
-
-装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
+<meta property="og:description" content="扩展系统功能–装饰模式 定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。  装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.06.49.png">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.17.56.png">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.05.34.png">
@@ -127,10 +123,7 @@
 <meta property="og:updated_time" content="2018-12-24T15:00:48.252Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java设计模式-装饰模式（Decorator Pattern）">
-<meta name="twitter:description" content="扩展系统功能–装饰模式
-定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。
-
-装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
+<meta name="twitter:description" content="扩展系统功能–装饰模式 定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。  装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有">
 <meta name="twitter:image" content="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.06.49.png">
 
 
@@ -138,7 +131,7 @@
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2017/10/12/Java设计模式-装饰模式（Decorator-Pattern）/">
 
 
 
@@ -248,7 +241,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -265,7 +258,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -282,7 +275,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -299,7 +292,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -316,7 +309,7 @@
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -327,7 +320,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -347,9 +340,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -464,7 +455,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -513,11 +504,11 @@
 <p>定义：动态地给一个对象增加一些额外的职责，就增加对象功能来说，装饰模式比生成子类实现更为灵活。装饰模式是一种对象结构型模式。</p>
 </blockquote>
 <p>装饰模式可以在不改变一个对象本身功能的基础上给对象增加额外的功能。装饰模式是一种替代继承的技术，它通过一种无须定义子类的方式来给对象动态增加职责，使用对象之间的关联关系取代类之间的继承关系。在装饰模式中引入了装饰类，在装饰类中既可以调用待装饰的原有类的方法，还可以增加新的方法，以扩充原有类的功能。</p>
-<p>举例：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.06.49.png" alt=""><a id="more"></a><br>在这个里面孙悟空只是一种动物，在使用了七十二变之后，就可以变为其他事物。这里<code>七十二变</code>就是装饰器，装饰后就可以做别的事情了。这里只是举例，便于理解，实际设计需要依据情况来。</p>
+<p>举例：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.06.49.png" alt><a id="more"></a><br>在这个里面孙悟空只是一种动物，在使用了七十二变之后，就可以变为其他事物。这里<code>七十二变</code>就是装饰器，装饰后就可以做别的事情了。这里只是举例，便于理解，实际设计需要依据情况来。</p>
 <ul>
 <li>参考：<a href="http://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html" target="_blank" rel="external">装饰设计模式</a></li>
 </ul>
-<p>在装饰模式中，实际UML图如下：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.17.56.png" alt=""></p>
+<p>在装饰模式中，实际UML图如下：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午5.17.56.png" alt></p>
 <ul>
 <li>抽象构件（Component）：它是具体构件和抽象装饰类的共同父类，声明了在具体构件中实现的业务方法，它的引入可以使客户端以一致的方式处理未被装饰的对象以及装饰之后的对象，实现客户端的透明操作。</li>
 <li>具体构件（ConcreteComponent）：它是抽象构件类的子类，用于定义具体的构件对象，实现了在抽象构件中声明的方法，装饰器可以给它增加额外的职责（方法）。</li>
@@ -525,7 +516,7 @@
 <li>具体装饰器（ConcreteDecorator）：它是抽象装饰类的子类，负责向构件添加新的职责。每一个具体装饰类都定义了一些新的行为，它可以调用在抽象装饰类中定义的方法，并可以增加新的方法用以扩充对象的行为。</li>
 </ul>
 <p>这里省略具体示例，直接分析JDK中应用。</p>
-<h3 id="在JDK中使用"><a href="#在JDK中使用" class="headerlink" title="在JDK中使用"></a>在JDK中使用</h3><p>在IO中InputStream相关类中是典型的装饰模式。如图：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.05.34.png" alt=""></p>
+<h3 id="在JDK中使用"><a href="#在JDK中使用" class="headerlink" title="在JDK中使用"></a>在JDK中使用</h3><p>在IO中InputStream相关类中是典型的装饰模式。如图：<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.05.34.png" alt></p>
 <ul>
 <li>InputStream：抽象构件，为子类提供统一接口</li>
 <li>FileInputStream、ByteArrayInputStream：抽象构件子类，实现父类相关接口</li>
@@ -541,7 +532,7 @@
 <li>透明的装饰模式也就是理想的装饰模式，要求具体构件角色、装饰角色的接口与抽象构件角色的接口完全一致</li>
 <li>如果装饰角色的接口与抽象构件角色接口不一致，也就是说装饰角色的接口比抽象构件角色的接口宽的话，装饰角色实际上已经成了一个适配器角色，这种装饰模式也是可以接受的，称为“半透明”的装饰模式</li>
 </ul>
-<p>透明装饰、半透明装饰、适配器可以理解为下图<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.34.13.png" alt=""></p>
+<p>透明装饰、半透明装饰、适配器可以理解为下图<br><img src="http://image.whhxz.smallstool.cn/20171012屏幕快照2017-10-12下午6.34.13.png" alt></p>
 <ul>
 <li>注：<a href="http://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html" target="_blank" rel="external">http://www.cnblogs.com/java-my-life/archive/2012/04/20/2455726.html</a></li>
 </ul>
@@ -674,9 +665,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1245,7 +1234,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 

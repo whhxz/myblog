@@ -15,10 +15,10 @@
 
 
 <html class="theme-next gemini use-motion" lang="zh-CN">
-<head>
-  <meta charset="UTF-8"/>
-<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
 <meta name="theme-color" content="#222">
 
 
@@ -32,8 +32,8 @@
 
 
 
-<meta http-equiv="Cache-Control" content="no-transform" />
-<meta http-equiv="Cache-Control" content="no-siteapp" />
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
 
 
 
@@ -56,9 +56,9 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
 
-<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=6.6.0" rel="stylesheet" type="text/css">
 
 
   <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.6.0">
@@ -108,32 +108,25 @@
 
 
 
-  <meta name="description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。
-技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。
-考虑问题
-因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
+  <meta name="description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。 技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。 考虑问题 因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
+<meta name="keywords" content="有序链表">
 <meta property="og:type" content="article">
 <meta property="og:title" content="定时消息推送">
 <meta property="og:url" content="http://blog.whhxz.com/2017/01/06/定时消息推送/index.html">
 <meta property="og:site_name" content="WHH">
-<meta property="og:description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。
-技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。
-考虑问题
-因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
+<meta property="og:description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。 技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。 考虑问题 因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
+<meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2017-12-13T09:16:43.225Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="定时消息推送">
-<meta name="twitter:description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。
-技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。
-考虑问题
-因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
+<meta name="twitter:description" content="需求有一部分数据设置了超时时间，当到达该超时时间改数据还未处理时，推送数据给监控人员。由监控处理相关事情。 技术方案1、维护一个有序链表，在生成改数据后，把该数据加入该有序链表中，保证链表头为最小的超时时间。2、通过线程自旋，获取头部数据是否超时，超时取出数据，查询DB该数据是否已经被处理，未处理超时推送给监控，已经处理丢掉改数据。 考虑问题 因为是部署集群，没有调度器，在迭代更新时，重启服务器会">
 
 
 
 
 
 
-  <link rel="canonical" href="http://blog.whhxz.com/2017/01/06/定时消息推送/"/>
+  <link rel="canonical" href="http://blog.whhxz.com/2017/01/06/定时消息推送/">
 
 
 
@@ -243,7 +236,7 @@
 
     
 
-    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+    <a href="/" rel="section"><i class="menu-item-icon fa fa-fw fa-home"></i> <br>首页</a>
 
   </li>
         
@@ -260,7 +253,7 @@
 
     
 
-    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+    <a href="/tags/" rel="section"><i class="menu-item-icon fa fa-fw fa-tags"></i> <br>标签</a>
 
   </li>
         
@@ -277,7 +270,7 @@
 
     
 
-    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+    <a href="/categories/" rel="section"><i class="menu-item-icon fa fa-fw fa-th"></i> <br>分类</a>
 
   </li>
         
@@ -294,7 +287,7 @@
 
     
 
-    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+    <a href="/archives/" rel="section"><i class="menu-item-icon fa fa-fw fa-archive"></i> <br>归档</a>
 
   </li>
         
@@ -311,7 +304,7 @@
 
     
 
-    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益 404</a>
+    <a href="/404/" rel="section"><i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>公益 404</a>
 
   </li>
 
@@ -322,7 +315,7 @@
             <a href="javascript:;" class="popup-trigger">
           
             
-              <i class="menu-item-icon fa fa-search fa-fw"></i> <br />搜索</a>
+              <i class="menu-item-icon fa fa-search fa-fw"></i> <br>搜索</a>
         </li>
       
     </ul>
@@ -342,9 +335,7 @@
       <i class="fa fa-times-circle"></i>
     </span>
     <div class="local-search-input-wrapper">
-      <input autocomplete="off"
-             placeholder="搜索..." spellcheck="false"
-             type="text" id="local-search-input">
+      <input autocomplete="off" placeholder="搜索..." spellcheck="false" type="text" id="local-search-input">
     </div>
   </div>
   <div id="local-search-result"></div>
@@ -459,7 +450,7 @@
           </span>
 
           
-            <span class="post-category" >
+            <span class="post-category">
             
               <span class="post-meta-divider">|</span>
             
@@ -628,9 +619,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <img class="site-author-image" itemprop="image"
-                src="/images/avatar.bmp"
-                alt="WHH" />
+              <img class="site-author-image" itemprop="image" src="/images/avatar.bmp" alt="WHH">
             
               <p class="site-author-name" itemprop="name">WHH</p>
               <p class="site-description motion-element" itemprop="description">I BELIEVE I CAN DO</p>
@@ -1199,7 +1188,7 @@
 </div>
 
 
-  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.2.0</div>
+  <div class="powered-by">由 <a href="https://hexo.io" class="theme-link" rel="noopener" target="_blank">Hexo</a> 强力驱动 v3.8.0</div>
 
 
 
