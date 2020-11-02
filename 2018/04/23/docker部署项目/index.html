@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。 docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-23T09:32:28.892Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker部署项目">
 <meta name="twitter:description" content="在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。 docker配置tomcat下载jdk、tomcat解压放到本地。编写Dockerfile。">
@@ -427,12 +427,24 @@
                 
               
 
-              <time title="创建时间：2018-04-23 10:01:25 / 修改时间：17:32:28" itemprop="dateCreated datePublished" datetime="2018-04-23T10:01:25+08:00">2018-04-23</time>
+              <time title="创建时间：2018-04-23 10:01:25" itemprop="dateCreated datePublished" datetime="2018-04-23T10:01:25+08:00">2018-04-23</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -484,7 +496,7 @@
 
       
         <p>在部署项目时，每次需要配置不同的环境，如tomcat，jdk等等，过于麻烦，如果直接使用docker做好镜像后，启动docker容器即可方便启动项目。</p>
-<h3 id="docker配置tomcat"><a href="#docker配置tomcat" class="headerlink" title="docker配置tomcat"></a>docker配置tomcat</h3><p>下载jdk、tomcat解压放到本地。<br>编写Dockerfile。<br><a id="more"></a><br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用centos作为基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"><span class="comment"># 复制本地jkd、tomcat到镜像目录</span></span><br><span class="line"><span class="keyword">COPY</span> <span class="bash">./jdk8 /usr/<span class="built_in">local</span>/share/jdk8</span><br><span class="line"></span><span class="keyword">COPY</span> <span class="bash">./tomcat9 /usr/<span class="built_in">local</span>/share/tomcat9</span><br><span class="line"></span><span class="comment"># 配置运行时环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/local/share/jdk<span class="number">8</span><br><span class="line"></span><span class="keyword">ENV</span> PAHT $JAVA_HOME/bin:$PATH</span><br><span class="line"><span class="comment"># 声明端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="comment"># 启动tomcat，同时使用tail-f是因为了避免 docker自动执行完shell后直接停止</span></span><br><span class="line">ENTRYPOINT /usr/local/share/tomcat9/bin/startup.sh &amp;&amp; tail -F /usr/local/share/tomcat9/logs/catalina.out</span><br></pre></td></tr></table></figure></p>
+<h3 id="docker配置tomcat"><a href="#docker配置tomcat" class="headerlink" title="docker配置tomcat"></a>docker配置tomcat</h3><p>下载jdk、tomcat解压放到本地。<br>编写Dockerfile。<br><a id="more"></a><br><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用centos作为基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"><span class="comment"># 复制本地jkd、tomcat到镜像目录</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./jdk8 /usr/<span class="built_in">local</span>/share/jdk8</span></span><br><span class="line"><span class="keyword">COPY</span><span class="bash"> ./tomcat9 /usr/<span class="built_in">local</span>/share/tomcat9</span></span><br><span class="line"><span class="comment"># 配置运行时环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> JAVA_HOME /usr/local/share/jdk8</span><br><span class="line"><span class="keyword">ENV</span> PAHT $JAVA_HOME/bin:$PATH</span><br><span class="line"><span class="comment"># 声明端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="comment"># 启动tomcat，同时使用tail-f是因为了避免 docker自动执行完shell后直接停止</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="bash"> /usr/<span class="built_in">local</span>/share/tomcat9/bin/startup.sh &amp;&amp; tail -F /usr/<span class="built_in">local</span>/share/tomcat9/logs/catalina.out</span></span><br></pre></td></tr></table></figure></p>
 <p>上述就简单的配置生成镜像<br>命令<code>docker build -t tomcatweb --rm=true .</code>生成镜像。</p>
 <blockquote>
 <p>-t：用于生成镜像名<br>–rm：指定在生成镜像过程中删除中间产生的临时容器<br>.：表示当前目录下的Dockerfile</p>
@@ -499,18 +511,18 @@
 <p>docker ps -a：查看所有容器，包括停止的容器<br>docker stop [CONTAINER ID]：表示停止容器<br>docker start [CONTAINER ID]：启动容器<br>docker kill [CONTAINER ID]：直接杀死容器<br>docker rm [CONTAINER ID]：删除容器<br>docker rm $(docker ps -a -q)：删除本机所有容器</p>
 </blockquote>
 <p>启动后，通过<code>curl localhost:8080</code>可查看到tomcat已经启动完成，也可以直接浏览器访问</p>
-<h3 id="docker-compose集成启动项目"><a href="#docker-compose集成启动项目" class="headerlink" title="docker-compose集成启动项目"></a>docker-compose集成启动项目</h3><p>现在公司的项目一般是直接运行在tomcat根目录下，一个项目一个tomcat。<br>所以需要删除tomcat解压后webapps下所有文件。<br>重新运行之前命令生成新的镜像。<br>编写docker-compost.yml文件<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这里不能为1，会出错</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="comment"># 启动的服务</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span></span><br><span class="line">    <span class="comment"># 使用镜像</span></span><br><span class="line"><span class="attr">    image:</span> tomcatweb</span><br><span class="line">    <span class="comment">#使用的端口</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8080:8080"</span></span><br><span class="line">    <span class="comment"># 挂载目录，在使用本地目录挂载到容器中时，本地目录需要使用绝对路径，相对路径可能会报错</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line">      <span class="comment"># 用于存放配置文件，因为在项目启动时，配置文件是外放，并不放在war包中，</span></span><br><span class="line"><span class="bullet">      -</span> /home/xxx/Documents/dockerstd/webroot/:/home/xxx/webroot</span><br><span class="line">      <span class="comment"># 日志文件，用于容器销毁后，日志文件还是保留在本地，因为容器中的数据会随着容器的销毁而销毁</span></span><br><span class="line"><span class="bullet">      -</span> /home/xxx/Documents/dockerstd/logs/:/usr/local/share/tomcat9/logs</span><br><span class="line">      <span class="comment"># 用于项目在tomcat根目录启动</span></span><br><span class="line"><span class="bullet">      -</span> /home/xxx/Documents/dockerstd/ROOT.xml:/usr/local/share/tomcat9/conf/Catalina/localhost/ROOT.xml</span><br></pre></td></tr></table></figure></p>
+<h3 id="docker-compose集成启动项目"><a href="#docker-compose集成启动项目" class="headerlink" title="docker-compose集成启动项目"></a>docker-compose集成启动项目</h3><p>现在公司的项目一般是直接运行在tomcat根目录下，一个项目一个tomcat。<br>所以需要删除tomcat解压后webapps下所有文件。<br>重新运行之前命令生成新的镜像。<br>编写docker-compost.yml文件<br><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 这里不能为1，会出错</span></span><br><span class="line"><span class="attr">version:</span> <span class="string">'2'</span></span><br><span class="line"><span class="comment"># 启动的服务</span></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line"><span class="attr">  web:</span></span><br><span class="line">    <span class="comment"># 使用镜像</span></span><br><span class="line"><span class="attr">    image:</span> <span class="string">tomcatweb</span></span><br><span class="line">    <span class="comment">#使用的端口</span></span><br><span class="line"><span class="attr">    ports:</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">"8080:8080"</span></span><br><span class="line">    <span class="comment"># 挂载目录，在使用本地目录挂载到容器中时，本地目录需要使用绝对路径，相对路径可能会报错</span></span><br><span class="line"><span class="attr">    volumes:</span></span><br><span class="line">      <span class="comment"># 用于存放配置文件，因为在项目启动时，配置文件是外放，并不放在war包中，</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/xxx/Documents/dockerstd/webroot/:/home/xxx/webroot</span></span><br><span class="line">      <span class="comment"># 日志文件，用于容器销毁后，日志文件还是保留在本地，因为容器中的数据会随着容器的销毁而销毁</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/xxx/Documents/dockerstd/logs/:/usr/local/share/tomcat9/logs</span></span><br><span class="line">      <span class="comment"># 用于项目在tomcat根目录启动</span></span><br><span class="line"><span class="bullet">      -</span> <span class="string">/home/xxx/Documents/dockerstd/ROOT.xml:/usr/local/share/tomcat9/conf/Catalina/localhost/ROOT.xml</span></span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>如果需要设置启动时JVM的参数，可以添加：environment: - JVM_OPTS=-Xmx12g -Xms12g -XX:MaxPermSize=1024m 用于配置jvm的参数。</li>
 </ul>
-<p>ROOT.xml如下，tomcat启动后，部署的项目处于tomcat根目录<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span><br><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">""</span> <span class="attr">docBase</span>=<span class="string">"/home/xxxx/webroot/manage.war"</span> <span class="attr">reloadable</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>ROOT.xml如下，tomcat启动后，部署的项目处于tomcat根目录<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Context</span> <span class="attr">path</span>=<span class="string">""</span> <span class="attr">docBase</span>=<span class="string">"/home/xxxx/webroot/manage.war"</span> <span class="attr">reloadable</span>=<span class="string">"true"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Context</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>启动容器<code>docker-compose up -d</code>，通过在本地logs目录下可以查看容器启动的日志。<br>也可以通过<code>docker logs -f [CONTAINER ID]</code>查看容器的日志。</p>
 <p>在启动容器后，如果需要进入容器，可以使用<code>docker exec -it [CONTAINER ID] bash</code>进入容器，这样可以用于排除项目启动以及生成的容器是否有问题。</p>
 <p>参考：</p>
 <ul>
-<li><a href="http://docs.docker-cn.com/get-started/" target="_blank" rel="external">docker官方文档</a></li>
-<li><a href="https://blog.csdn.net/qq_24557827/article/details/73729913" target="_blank" rel="external">docker之使用dockerfile配置tomcat、jdk环境</a></li>
-<li><a href="https://segmentfault.com/a/1190000007271728" target="_blank" rel="external">指定jvm参数</a></li>
+<li><a href="http://docs.docker-cn.com/get-started/" target="_blank" rel="noopener">docker官方文档</a></li>
+<li><a href="https://blog.csdn.net/qq_24557827/article/details/73729913" target="_blank" rel="noopener">docker之使用dockerfile配置tomcat、jdk环境</a></li>
+<li><a href="https://segmentfault.com/a/1190000007271728" target="_blank" rel="noopener">指定jvm参数</a></li>
 </ul>
 
       
@@ -636,7 +648,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -743,7 +755,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1110,7 +1130,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1180,7 +1218,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

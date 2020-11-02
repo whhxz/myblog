@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="因为在家有个笔记本装的ubuntu，需要在公司访问家里笔记本，家中的宽带没有内网IP，所以需要通过反向代理访问家中电脑，需要一台外网服务器作为中转，使用的是阿里云做为中转服务器。    机器 描述     家ubuntu 内网   阿里云 独立IP   公司 内网    1、先通过家里机器反向代理到阿里云2、阿里云提供正向代理，通过公司访问">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-19T04:04:14.418Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ssh反向代理连接内网">
 <meta name="twitter:description" content="因为在家有个笔记本装的ubuntu，需要在公司访问家里笔记本，家中的宽带没有内网IP，所以需要通过反向代理访问家中电脑，需要一台外网服务器作为中转，使用的是阿里云做为中转服务器。    机器 描述     家ubuntu 内网   阿里云 独立IP   公司 内网    1、先通过家里机器反向代理到阿里云2、阿里云提供正向代理，通过公司访问">
@@ -427,12 +427,24 @@
                 
               
 
-              <time title="创建时间：2018-04-19 11:29:55 / 修改时间：12:04:14" itemprop="dateCreated datePublished" datetime="2018-04-19T11:29:55+08:00">2018-04-19</time>
+              <time title="创建时间：2018-04-19 11:29:55" itemprop="dateCreated datePublished" datetime="2018-04-19T11:29:55+08:00">2018-04-19</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -523,15 +535,15 @@
 <p>上述6666表示之前分析代理监听的端口，7777表示正向代理的端口</p>
 </blockquote>
 <p>在公司使用<code>ssh -p7777 homeuser@xxx.xx.xx.xx</code>即可登陆家中电脑。</p>
-<p>因为ssh可能会出现超时端口，所以在家中启动的反向代理使用autossh，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">autossh -M 6667 \</span><br><span class="line"><span class="_">-f</span>N -o <span class="string">"PubkeyAuthentication=yes"</span> \</span><br><span class="line">-o <span class="string">"StrictHostKeyChecking=false"</span> -o <span class="string">"ServerAliveInterval 60"</span> -o <span class="string">"ServerAliveCountMax 3"</span> \</span><br><span class="line">-R 6666:localhost:22 aliyun@xxx.xx.xx.xx</span><br></pre></td></tr></table></figure></p>
+<p>因为ssh可能会出现超时端口，所以在家中启动的反向代理使用autossh，如下：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">autossh -M 6667 \</span><br><span class="line">-fN -o <span class="string">"PubkeyAuthentication=yes"</span> \</span><br><span class="line">-o <span class="string">"StrictHostKeyChecking=false"</span> -o <span class="string">"ServerAliveInterval 60"</span> -o <span class="string">"ServerAliveCountMax 3"</span> \</span><br><span class="line">-R 6666:localhost:22 aliyun@xxx.xx.xx.xx</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>6667 用于重连</p>
 </blockquote>
 <p>端口监听命令：<br>netstat -tunlp</p>
 <p>参考：</p>
 <ul>
-<li><a href="https://www.cnblogs.com/kwongtai/p/6903420.html" target="_blank" rel="external">利用ssh反向代理以及autossh实现从外网连接内网服务器</a></li>
-<li><a href="https://lvii.github.io/system/2013/10/08/ssh-remote-port-forwarding/" target="_blank" rel="external">SSH 远程端口转发</a></li>
+<li><a href="https://www.cnblogs.com/kwongtai/p/6903420.html" target="_blank" rel="noopener">利用ssh反向代理以及autossh实现从外网连接内网服务器</a></li>
+<li><a href="https://lvii.github.io/system/2013/10/08/ssh-remote-port-forwarding/" target="_blank" rel="noopener">SSH 远程端口转发</a></li>
 </ul>
 
       
@@ -648,7 +660,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -755,7 +767,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1122,7 +1142,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1176,7 +1214,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

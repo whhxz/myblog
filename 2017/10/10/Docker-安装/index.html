@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="安装虚拟机本机使用vmware fusion安装CentOS7，配置好网络后打开虚拟机。 因为docker无法被墙，需要使用代理。当前用户代理修改~/.bash_profile添加12345#代理http_proxy=http://proxy.com:8080https_proxy=http://proxy.com:8080export http_proxyexport https_proxy 执">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T09:14:14.355Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Docker 安装">
 <meta name="twitter:description" content="安装虚拟机本机使用vmware fusion安装CentOS7，配置好网络后打开虚拟机。 因为docker无法被墙，需要使用代理。当前用户代理修改~/.bash_profile添加12345#代理http_proxy=http://proxy.com:8080https_proxy=http://proxy.com:8080export http_proxyexport https_proxy 执">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-12-13 17:14:14" itemprop="dateModified" datetime="2017-12-13T17:14:14+08:00">2017-12-13</time>
+                <time title="修改时间：2019-10-25 14:38:58" itemprop="dateModified" datetime="2019-10-25T14:38:58+08:00">2019-10-25</time>
               
             
           </span>
@@ -499,13 +499,13 @@
 <p>因为docker无法被墙，需要使用代理。<br>当前用户代理修改~/.bash_profile添加<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#代理</span></span><br><span class="line">http_proxy=http://proxy.com:8080</span><br><span class="line">https_proxy=http://proxy.com:8080</span><br><span class="line"><span class="built_in">export</span> http_proxy</span><br><span class="line"><span class="built_in">export</span> https_proxy</span><br></pre></td></tr></table></figure></p>
 <p>执行命令：<a id="more"></a><br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bash_profile</span><br></pre></td></tr></table></figure></p>
 <p>如果需要所有用户代理生效需要修改/etc/profile</p>
-<h3 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h3><p><a href="https://docs.docker.com/engine/installation/linux/docker-ce/centos/" target="_blank" rel="external">CentOS Docker官方安装文档</a></p>
+<h3 id="安装Docker"><a href="#安装Docker" class="headerlink" title="安装Docker"></a>安装Docker</h3><p><a href="https://docs.docker.com/engine/installation/linux/docker-ce/centos/" target="_blank" rel="noopener">CentOS Docker官方安装文档</a></p>
 <p>每次操作docker都需要sudo过于麻烦，把当前用户添加到docker组</p>
 <blockquote>
 <p>1.创建docker组（可能提示已经存在docker组）：sudo groupadd docker<br>2.当前用户加入docker组：sudo gpasswd -a ${USER} docker<br>3.重启docker服务：sudo systemctl restart docker<br>4.刷新docker成员：newgrp - docker</p>
 </blockquote>
 <p>之后操作docker就不要添加sudo了。</p>
-<h3 id="配置Docker国内加速"><a href="#配置Docker国内加速" class="headerlink" title="配置Docker国内加速"></a>配置Docker国内加速</h3><p>使用阿里云加速Docker<br>打开<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="external">Docker Hub镜像站点</a>获取个人加速地址。<br>通过修改daemon配置文件/etc/docker/daemon.json来使用加速器：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://w5g1eln1.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure></p>
+<h3 id="配置Docker国内加速"><a href="#配置Docker国内加速" class="headerlink" title="配置Docker国内加速"></a>配置Docker国内加速</h3><p>使用阿里云加速Docker<br>打开<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">Docker Hub镜像站点</a>获取个人加速地址。<br>通过修改daemon配置文件/etc/docker/daemon.json来使用加速器：<br><figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">sudo mkdir -p /etc/docker</span><br><span class="line">sudo tee /etc/docker/daemon.json &lt;&lt;-<span class="string">'EOF'</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">"registry-mirrors"</span>: [<span class="string">"https://w5g1eln1.mirror.aliyuncs.com"</span>]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -626,7 +626,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -733,7 +733,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1100,7 +1108,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1170,7 +1196,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

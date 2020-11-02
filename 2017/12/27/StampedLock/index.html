@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。 所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-27T08:12:59.111Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="StampedLock">
 <meta name="twitter:description" content="在使用ReentrantReadWriteLock时，获取写锁时，不能存在任何其他锁。如果存在读超大与写，可能会出现获取写锁线程一直处在等待状态导致饥饿。在JDK1.8中引入StampedLock，StampedLock控制锁有3种状态：写，读，乐观读。 所谓的乐观读模式，也就是若读的操作很多，写的操作很少的情况下，你可以乐观地认为，写入与读取同时发生几率很少，因此不悲观地使用完全的读取锁定，程序">
@@ -427,12 +427,24 @@
                 
               
 
-              <time title="创建时间：2017-12-27 14:58:47 / 修改时间：16:12:59" itemprop="dateCreated datePublished" datetime="2017-12-27T14:58:47+08:00">2017-12-27</time>
+              <time title="创建时间：2017-12-27 14:58:47" itemprop="dateCreated datePublished" datetime="2017-12-27T14:58:47+08:00">2017-12-27</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -488,9 +500,9 @@
 <p>暂时对StampedLock理解不够，后续理解后补充StampedLock使用。</p>
 <p>可参考：</p>
 <ul>
-<li><a href="http://blog.csdn.net/sunfeizhi/article/details/52135136" target="_blank" rel="external">http://blog.csdn.net/sunfeizhi/article/details/52135136</a></li>
-<li><a href="http://www.importnew.com/14941.html" target="_blank" rel="external">http://www.importnew.com/14941.html</a></li>
-<li><a href="https://blog.takipi.com/java-8-stampedlocks-vs-readwritelocks-and-synchronized/" target="_blank" rel="external">https://blog.takipi.com/java-8-stampedlocks-vs-readwritelocks-and-synchronized/</a></li>
+<li><a href="http://blog.csdn.net/sunfeizhi/article/details/52135136" target="_blank" rel="noopener">http://blog.csdn.net/sunfeizhi/article/details/52135136</a></li>
+<li><a href="http://www.importnew.com/14941.html" target="_blank" rel="noopener">http://www.importnew.com/14941.html</a></li>
+<li><a href="https://blog.takipi.com/java-8-stampedlocks-vs-readwritelocks-and-synchronized/" target="_blank" rel="noopener">https://blog.takipi.com/java-8-stampedlocks-vs-readwritelocks-and-synchronized/</a></li>
 </ul>
 
       
@@ -607,7 +619,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -714,7 +726,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1081,7 +1101,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1135,7 +1173,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

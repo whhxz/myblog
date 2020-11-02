@@ -120,7 +120,7 @@
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171213屏幕快照2017-12-13下午5.56.54.png">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171213屏幕快照2017-12-13下午3.52.56.png">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg">
-<meta property="og:updated_time" content="2018-12-24T15:00:48.265Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发同步基础">
 <meta name="twitter:description" content="volatile定义与实现原理Java编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致的更新，线程应该确保通过排他锁单独获得这个变量。Java语言提供了volatile，在某些情况下比锁更加方便。如果一个字段被声明成volatile，Java线程内存模型确保所有线程看到这个变量的值是一致的。(Java语言规范第三版volatile定义) volatile主要作用为：  禁止指令重排序优">
@@ -449,7 +449,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 23:00:48" itemprop="dateModified" datetime="2018-12-24T23:00:48+08:00">2018-12-24</time>
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -509,9 +509,9 @@
 <p>因为在写操作volatile修饰的变量时，会多出一行lock汇编代码。<br>在cpu操作时，会把部分数据缓存到CPU缓存里（L1、L2等）并未实时写回内存，如果对声明了volatile的变量进行写操作，会将当前变量所在的缓存行数据写回到系统内存，在多处理器下，为了保证其他处理核心缓存一致，会实现缓存一致协议，保证其他处理器检查当前缓存是否过期，后续操作时，会重新从系统内存中读取最新数据到缓存。简单来说，修改了volatile修饰的变量时，把CPU缓存中修改后的值及时写入内存，同时其他处理器设置自己缓存过期，使用时重新从系统内存中读取。<br><a id="more"></a><br>编译器和处理器为了提高并行度，可能会对部分操作进行重排序，在单线程执行下，重排序并不会改变执行结果。编译器和处理器不会对存在数据依赖关系的操作做重排序，因为这种重排序会改变执行结果。但是，如果操作之间不存在数据依赖关系，这些操作可能被编译器和处理器重排序。（as-if-serial）</p>
 <p>参考：</p>
 <ul>
-<li><a href="http://www.infoq.com/cn/articles/ftf-java-volatile" target="_blank" rel="external">聊聊并发（一）——深入分析Volatile的实现原理</a></li>
-<li><a href="http://www.infoq.com/cn/articles/zzm-java-hsdis-jvm" target="_blank" rel="external">JVM执行篇：使用HSDIS插件分析JVM代码执行细节</a></li>
-<li><a href="http://www.infoq.com/cn/articles/java-memory-model-2/" target="_blank" rel="external">深入理解Java内存模型（二）——重排序</a></li>
+<li><a href="http://www.infoq.com/cn/articles/ftf-java-volatile" target="_blank" rel="noopener">聊聊并发（一）——深入分析Volatile的实现原理</a></li>
+<li><a href="http://www.infoq.com/cn/articles/zzm-java-hsdis-jvm" target="_blank" rel="noopener">JVM执行篇：使用HSDIS插件分析JVM代码执行细节</a></li>
+<li><a href="http://www.infoq.com/cn/articles/java-memory-model-2/" target="_blank" rel="noopener">深入理解Java内存模型（二）——重排序</a></li>
 </ul>
 <p>常规单例：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton singleton;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="keyword">null</span>)&#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> Singleton();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">out</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"xxx"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>在单例设计模式中，采用双重检查锁来创建单例对象。因为可能出现指令重排序而导致该代码中有个安全隐患。<br>在代码 <strong>singleton = new Singleton();</strong> 创建对象，其操作可拆解为：</p>
@@ -567,7 +567,7 @@
 <li>替换成功，同步完成结束</li>
 <li>替换失败，说明有其他线程尝试获取锁，锁已经变为重量级锁，需要释放锁的同时唤醒其他被挂起的线程。</li>
 </ol>
-<p>轻量级锁升级为重量级锁，是为了避免资源消耗。轻量级锁没有太多空间存储额外的状态，太多线程自旋太消耗CPU资源。可参考<a href="https://www.zhihu.com/question/41930877/answer/136699311" target="_blank" rel="external">https://www.zhihu.com/question/41930877/answer/136699311</a></p>
+<p>轻量级锁升级为重量级锁，是为了避免资源消耗。轻量级锁没有太多空间存储额外的状态，太多线程自旋太消耗CPU资源。可参考<a href="https://www.zhihu.com/question/41930877/answer/136699311" target="_blank" rel="noopener">https://www.zhihu.com/question/41930877/answer/136699311</a></p>
 <h4 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h4><p>重量级锁依赖monitor，当一个线程进入同步代码块，其他线程会被阻塞在外，当线程执行完毕后释放锁，同时唤醒其他等待线程。</p>
 <p>锁之间图解：<br><img src="http://image.whhxz.smallstool.cn/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg" alt></p>
 <h4 id="锁比较"><a href="#锁比较" class="headerlink" title="锁比较"></a>锁比较</h4><table>
@@ -605,9 +605,9 @@
 <p>锁消除（Lock Elimination）：锁消除即删除不必要的加锁操作。根据代码逃逸技术，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。看下面这段程序：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//禁用了偏向锁</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">SynchronizedTest02</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        SynchronizedTest02 test02 = <span class="keyword">new</span> SynchronizedTest02();</span><br><span class="line">        <span class="comment">//启动预热</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">long</span> start = System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100000000</span>; i++) &#123;</span><br><span class="line">            test02.append(<span class="string">"abc"</span>, <span class="string">"def"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">"Time="</span> + (System.currentTimeMillis() - start));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">append</span><span class="params">(String str1, String str2)</span> </span>&#123;</span><br><span class="line">        StringBuffer sb = <span class="keyword">new</span> StringBuffer();</span><br><span class="line">        sb.append(str1).append(str2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>参考：</p>
 <ul>
-<li><a href="http://www.cnblogs.com/paddix/p/5405678.html" target="_blank" rel="external">http://www.cnblogs.com/paddix/p/5405678.html</a></li>
-<li><a href="https://www.zhihu.com/question/57774162/answer/154298044" target="_blank" rel="external">https://www.zhihu.com/question/57774162/answer/154298044</a></li>
-<li><a href="https://www.zhihu.com/question/53826114/answer/236363126" target="_blank" rel="external">https://www.zhihu.com/question/53826114/answer/236363126</a></li>
+<li><a href="http://www.cnblogs.com/paddix/p/5405678.html" target="_blank" rel="noopener">http://www.cnblogs.com/paddix/p/5405678.html</a></li>
+<li><a href="https://www.zhihu.com/question/57774162/answer/154298044" target="_blank" rel="noopener">https://www.zhihu.com/question/57774162/answer/154298044</a></li>
+<li><a href="https://www.zhihu.com/question/53826114/answer/236363126" target="_blank" rel="noopener">https://www.zhihu.com/question/53826114/answer/236363126</a></li>
 </ul>
 
       
@@ -735,7 +735,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -842,7 +842,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1209,7 +1217,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1279,7 +1305,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="在业务需求中，有时候需要使用js跨域请求。解决办法有使用jsonp和CORS。  jsonp利用的是在页面访问资源文件时，访问非当前域名下其他域名资源。如&amp;lt;img&amp;gt;、&amp;lt;script&amp;gt;、&amp;lt;form&amp;gt;等标签。可以利用这一特性跨域。  前端请求：12345678var scriptJsonP = document.createElement(&amp;quot;script&amp;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T09:16:20.291Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ajax跨域">
 <meta name="twitter:description" content="在业务需求中，有时候需要使用js跨域请求。解决办法有使用jsonp和CORS。  jsonp利用的是在页面访问资源文件时，访问非当前域名下其他域名资源。如&amp;lt;img&amp;gt;、&amp;lt;script&amp;gt;、&amp;lt;form&amp;gt;等标签。可以利用这一特性跨域。  前端请求：12345678var scriptJsonP = document.createElement(&amp;quot;script&amp;">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-12-13 17:16:20" itemprop="dateModified" datetime="2017-12-13T17:16:20+08:00">2017-12-13</time>
+                <time title="修改时间：2019-10-25 14:38:58" itemprop="dateModified" datetime="2019-10-25T14:38:58+08:00">2019-10-25</time>
               
             
           </span>
@@ -504,7 +504,7 @@
 <p>后台服务器：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">@Controller</span><br><span class="line">@RequestMapping(&quot;corssOrigin&quot;)</span><br><span class="line">public class CrossOriginController &#123;</span><br><span class="line">    @RequestMapping(&quot;jsonp&quot;)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String jsonp(HttpServletRequest request)&#123;</span><br><span class="line">        return &quot;jsonp(&#123;test:&apos;test&apos;&#125;)&quot;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>调用成功后会调用jsonp方法。完成一次跨域请求。</p>
 <p>使用jquery：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$.ajax(&#123;</span><br><span class="line">           type: &quot;get&quot;,</span><br><span class="line">           async: false,</span><br><span class="line">           url: &quot;http://a.com/corssOrigin/jsonp&quot;,</span><br><span class="line">           dataType: &quot;jsonp&quot;,</span><br><span class="line">           jsonp: &quot;callback&quot;,//传递给请求处理程序或页面的，用以获得jsonp回调函数名的参数名(一般默认为:callback)</span><br><span class="line">           jsonpCallback:&quot;jsonp&quot;,//自定义的jsonp回调函数名称，默认为jQuery自动生成的随机函数名，也可以写&quot;?&quot;，jQuery会自动为你处理数据</span><br><span class="line">           success: function(json)&#123;</span><br><span class="line">             alert(json);</span><br><span class="line">           &#125;,</span><br><span class="line">           error: function()&#123;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
-<p>使用除了使用jsonp跨域，还有一种CORS，可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="external">HTTP访问控制（CORS）</a></p>
+<p>使用除了使用jsonp跨域，还有一种CORS，可以参考<a href="https://developer.mozilla.org/zh-CN/docs/Web/HTTP/Access_control_CORS" target="_blank" rel="noopener">HTTP访问控制（CORS）</a></p>
 
       
     </div>
@@ -618,7 +618,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -725,7 +725,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1092,7 +1100,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1146,7 +1172,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

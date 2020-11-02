@@ -1,6 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[Java基础-Queue(1)]]></title>
+    <url>%2F2020%2F11%2F02%2FJava%E5%9F%BA%E7%A1%80-Queue-1%2F</url>
+    <content type="text"><![CDATA[定义一般情况下，队列为一种先进先出的线性表。队列只允许在尾端插入数据，前端删除数据。也存在双端队列，可以在头部和尾部进行插入删除数据。 队列实现链表实现1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677/** * 自定义队列 */class Queue&lt;T&gt; &#123; //队列头部 private Node&lt;T&gt; head; //队列尾部 private Node&lt;T&gt; tail; /** * 添加数据到队列 * * @param val 数据 * @return 是否添加成功 */ public boolean offer(T val) &#123; /* * 判断尾节点是否为空 * 空：表示队列无数据，设置首尾节点为当前节点 * 非空：放入链表尾部 */ Node&lt;T&gt; node = new Node&lt;&gt;(val); if (tail == null) &#123; head = node; tail = node; &#125; else &#123; tail.next = node; tail = node; &#125; return true; &#125; /** * 去除队列数据 * * @return 队列数据，如果不存在返回null */ public T poll() &#123; Node&lt;T&gt; node; if (head == tail) &#123; node = head; head = null; tail = null; &#125; else &#123; node = head; head = head.next; &#125; return node == null ? null : node.val; &#125;&#125;/** * 队列的节点，一个链表 */class Node&lt;T&gt; &#123; //下一个节点 Node&lt;T&gt; next; //节点值 T val; Node(T val) &#123; this.val = val; &#125;&#125;public class Demo &#123; public static void main(String[] args) &#123; Queue&lt;Integer&gt; queue = new Queue&lt;&gt;(); queue.offer(1); queue.offer(2); queue.offer(3); Integer num; while ((num = queue.poll()) != null)&#123; System.out.println(num);//输出顺序为1、2、3 &#125; &#125;&#125; 数组实现12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879/** * 自定义队列 数组实现 */class Queue&lt;T&gt; &#123; //固定队列大小 private Object[] data; //头 private int head; //尾 private int tail; public Queue(int size) &#123; if (size &lt;= 1) &#123; throw new IllegalArgumentException("队列长度不能小于等于1"); &#125; data = new Object[size]; head = 0; tail = 0; &#125; /** * 添加 * * @param t 数据 * @return 是否添加成功 */ public boolean offer(T t) &#123; // 队列中无数据 if (head == tail &amp;&amp; data[head] == null)&#123; data[head] = t; return true; &#125; int next = (tail + 1) % data.length; if (data[next] != null)&#123; return false; &#125; data[next] = t; tail = next; return true; &#125; /** * 获取队列数据 * * @return 数据 */ public T poll() &#123; Object res = data[head]; data[head] = null; //队列中并非只有一个数据时 if (head != tail)&#123; head = (head + 1) % data.length; &#125; return res == null? null: (T)res; &#125;&#125;public class Demo &#123; public static void main(String[] args) &#123; Queue&lt;Integer&gt; queue = new Queue&lt;&gt;(5); queue.offer(1); queue.offer(2); queue.offer(3); Integer num; while ((num = queue.poll()) != null) &#123; System.out.println(num); &#125; queue.offer(4); queue.offer(5); queue.offer(6); queue.offer(7); queue.offer(8); queue.offer(9); while ((num = queue.poll()) != null) &#123; System.out.println(num); &#125; &#125;&#125; 上述两种实现，都是作为参考实现。具体可能有边界值判断的问题存在 链表的实现队列长度是无限长，这和链表的特性有关。数组为指定大小的容器存储队列数据，也可以对数组进行扩容。]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>Queue</tag>
+        <tag>数据结构</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[IDEA关于SpringBoot配置文件提示失效]]></title>
+    <url>%2F2020%2F06%2F11%2FIDEA%E5%85%B3%E4%BA%8ESpringBoot%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%8F%90%E7%A4%BA%E5%A4%B1%E6%95%88%2F</url>
+    <content type="text"><![CDATA[使用IDEA开发SpringBoot项目，有时候在导入项目后，写配置文件无提示。可以正常提示的application.properties为一个绿叶图标，不能正常提示的图标为普通properties图标。如下： 正常 普通 正常修复应该是对项目按F4打开moudle设置，如果没有Spring，添加Spring支持如下： 之后点击Spring，截图如下： 是没有spring的配置的，表示当前项目SpringBoot配置文件无法正确识别，可以正常的识别应该为如下： 查询资料后，正常应该点击下方绿叶按钮然后添加配置文件 windows系统好像在上面 不知道为什么一直提示有误，无法点击确认如下： 在网上查询一圈资料未解决后，通过找正常项目下的iml文件和无法正常提示的iml文件得到，如果直接在iml里面添加配置即可解决，在iml文件里面填写如下：123&lt;facet type="Spring" name="Spring"&gt; &lt;configuration spring_boot_spring_config_custom_files="file://$MODULE_DIR$/src/main/resources/application.properties;file://$MODULE_DIR$/src/main/resources/config/local/application.properties"/&gt;&lt;/facet&gt; 重点是spring_boot_spring_config_custom_files，后面添加配置文件路径，如果有多个文件需要提示可以通过分号分隔]]></content>
+      <categories>
+        <category>IDEA</category>
+      </categories>
+      <tags>
+        <tag>配置文件提示</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Servlet 3.0基本信息]]></title>
+    <url>%2F2020%2F06%2F01%2FServlet-3-0%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%2F</url>
+    <content type="text"><![CDATA[Servelt 3.0在2009年已经随着JavaEE 6推出。主要增加了异步处理、注解支持、模块化处理 异步支持在之前Servelt在接收到请求后需要处理完毕后再做返回，线程一直在阻塞状态，现在可以接收数据后交由其他线程处理，线程接收线程本身返回容器。如果聊天中等待消息。在WebServlet设置asyncSupported为true即可(默认为false) 模块化支持支持在容器启动后可以动态在ServletContext中添加Servelt，在SpringBoot中内嵌Tomcat，在启动Tomcat后，通过动态添加DispatcherServlet到容器中。 参考： Servlet 3.0 新特性详解 JavaEE 6 Servlet 3.0 中的新特性]]></content>
+      <categories>
+        <category>Servelt</category>
+      </categories>
+      <tags>
+        <tag>Servelt 3.0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring中BeanFactoryPostProcessor、BeanPostProcessor]]></title>
+    <url>%2F2020%2F06%2F01%2FSpring%E4%B8%ADBeanFactoryPostProcessor%E3%80%81BeanPostProcessor%2F</url>
+    <content type="text"><![CDATA[BeanFactoryPostProcessor实现改接口，可以在Bean创建前，修改Bean定义的对象（元数据），也就是定义Bean的相关信息。但是需要注意的是，不可以在该实现里面触发Bean的实例化操作。可能会导致其他意想不到的问题。文档中有注释，如果需要与构建的Bean有交互的话使用BeanPostProcessor BeanPostProcessor该接口有两个方法。一个为执行Bean的init方法之前，一个是之后，在该过程中可以对该Bean进行修改操作。如果现在某个Bean的处理有上面两个实现，整个流程如下： 1、Spring读取配置文件，构建BeanFactoryPostProcessor，构建Bean的定义（元数据）2、执行BeanFactoryPostProcessor中实现方法3、创建Bean4、执行BeanPostProcessor中postProcessBeforeInitialization5、执行Bean中init方法6、执行BeanPostProcessor中postProcessAfterInitialization]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>BeanFactoryPostProcessor</tag>
+        <tag>BeanPostProcessor</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Spring中BeanFactory、FactoryBean、ObjectFactory]]></title>
+    <url>%2F2020%2F06%2F01%2FSpring%E4%B8%ADBeanFactory%E3%80%81FactoryBean%E3%80%81ObjectFactory%2F</url>
+    <content type="text"><![CDATA[BeanFactory是Spring IOC容器定义的跟接口，用于获取Bean。 FactoryBean是一个Bean，只不过是一个工厂Bean，在BeanFactory需要获取Bean的时候，通过FactoryBean来生成对象返回，如果是单例，缓存生成的对象。如果需要获取的是FactoryBean而不是FactoryBean生成Bean时，需要在Bean的名称上面加一个&amp; ObjectFactory也是用于生成Bean，只不过生成Bean的时间由自己把握在BeanFactory.getBean的时候，是通过FactoryBean生成Bean返回如果需要生成的Bean又ObjectFactory构建，那么需要先获取ObjectFactory之后再调用ObjectFactory.getObject ObjectFactory和FactoryBean区部在生成Bean的时机不同]]></content>
+      <categories>
+        <category>Spring</category>
+      </categories>
+      <tags>
+        <tag>BeanFactory</tag>
+        <tag>FactoryBean</tag>
+        <tag>ObjectFactory</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[redis使用lua脚本批量操作]]></title>
+    <url>%2F2020%2F04%2F21%2Fredis%E4%BD%BF%E7%94%A8lua%E8%84%9A%E6%9C%AC%E6%89%B9%E9%87%8F%E6%93%8D%E4%BD%9C%2F</url>
+    <content type="text"><![CDATA[前言：本来项目中使用的redis采用的是集群模式，之后改为了哨兵模式。今天在缓存平台上查看缓存，发现命中率非常低，缓存中key非常少，之前集群模式应该有即使上百万的key，现在就几百。几番排查后发现在集群模式下使用了mset可以正常批量写入数据，之后通过mexpire批量设置失效时间。改为哨兵模式后，mset无法使用。业务中如果缓存没命中会直接查询数据库，所有在测试时并未发现什么问题。 确实哨兵模式下，也有对应的mset，但是该模式下没有批量设置失效时间，只能使用lua脚本对数据进行操作。 添加脚本到redis服务器使用方法scriptLoad传入脚本和key，key不变方便后续直接使用。在启动项目时即可传入脚本，获取返回的sha(用于唯一标识脚本，如果传入的key一样，返回的值不会变，方便后续使用，脚本如果上传成功后会永久保存在服务器)，保存改sha用于后续调用该脚本。批量写入数据同时设置失效时间脚本如下：12345for index, value in ipairs(KEYS) do redis.call('SETEX', KEYS[index], ARGV[index*2-1], ARGV[index*2]) endreturn 1 脚本中KEYS用于获取传入的key，脚本中ARGV用于获取传入的参数 循环遍历传入的KEYS，调用命令SETEX设置该key的值以及key的失效时间。 调用脚本方法evalsha(final String sha1, final List&lt;String&gt; keys, final List&lt;String&gt; args)调用脚本。第一个参数为之前上传lua脚本返回的sha，第二个为需要操作的key，第三个为传入的参数(失效时间和值交替放入list) 缓存平台使用的开源sohutv/cachecloud 集群模式下mset为String mset(final Map&lt;String, String&gt; keyValueMap)，哨兵模式下为String mset(String... keysvalues)key和val交替。]]></content>
+      <categories>
+        <category>线上BUG</category>
+      </categories>
+      <tags>
+        <tag>redis</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[Java基础-String中replace]]></title>
+    <url>%2F2020%2F04%2F20%2FJava%E5%9F%BA%E7%A1%80-String%E4%B8%ADreplace%2F</url>
+    <content type="text"><![CDATA[String中replace是我们常用的一个方法，用于替换字符中的字母。 方法java.lang.String#replace(char, char)入参为char，源码如下：123456789101112131415161718192021222324252627282930313233public String replace(char oldChar, char newChar) &#123; //判断传入的oldChar和newChar是否一致，如果不一样开始做替换 if (oldChar != newChar) &#123; int len = value.length; int i = -1; char[] val = value; /* 避免使用 getfield 操作码 */ //获取第一个匹配需要替换的字符 while (++i &lt; len) &#123; if (val[i] == oldChar) &#123; break; &#125; &#125; //判断是否匹配上，如果匹配上开始做替换，如果未匹配上，直接返回this if (i &lt; len) &#123; //构造一个新字符数组，长度数据和原有一致 char buf[] = new char[len]; //把第一个匹配上的前面数据赋值到新数组中 for (int j = 0; j &lt; i; j++) &#123; buf[j] = val[j]; &#125; //遍历数组后续，如果匹配上替换为新字符 while (i &lt; len) &#123; char c = val[i]; buf[i] = (c == oldChar) ? newChar : c; i++; &#125; //通过字符数组构建一个新字符串 return new String(buf, true); &#125; &#125; //如果传入参数一样，直接返回当前字符串对象 return this;&#125; 总结：1、如果传入的参数被替换字符、替换一致，直接返回当前字符串对象，如果被替换字符不在当前字符串内，也直接返回当前字符串对象。2、遍历旧字符数组，通过一个新字符数组存储替换后的字符，返回一个新构建的字符串对象。 方法java.lang.String#replace(java.lang.CharSequence, java.lang.CharSequence)入参为两个java.lang.CharSequence。源码如下：123456public String replace(CharSequence target, CharSequence replacement) &#123; //通过正则表达式替换，被替换字符串使用Pattern.LITERAL模式，表示输入的字符串都视为字面值，对于元字符或转义序列无任何意义 //替换的字符串，使用Matcher.quoteReplacement处理，也就是对\和$处理，如果存在这两个字符，那么对其进行转译 return Pattern.compile(target.toString(), Pattern.LITERAL).matcher( this).replaceAll(Matcher.quoteReplacement(replacement.toString()));&#125; 总结：1、替换字符串是从前往后开始替换，如果先匹配先替换2、通过Pattern纯粹的字符串替换，对于targe，使用了Pattern.LITERAL（纯粹视为字符），对于replacement使用了Matcher.quoteReplacement（对与\和$做转译处理）。 方法java.lang.String#replaceAll入参为两个String。源码如下：123public String replaceAll(String regex, String replacement) &#123; return Pattern.compile(regex).matcher(this).replaceAll(replacement);&#125; 直接通过传入的正则表达式进行全部的替换。 方法java.lang.String#replaceFirst入参为两个String。源码如下：123public String replaceFirst(String regex, String replacement) &#123; return Pattern.compile(regex).matcher(this).replaceFirst(replacement);&#125; 一样通过正则表达式进行替换，只不过只替换第一个匹配上的。]]></content>
+      <categories>
+        <category>Java基础</category>
+      </categories>
+      <tags>
+        <tag>String</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[snake-agent拦截及日志输出]]></title>
     <url>%2F2019%2F01%2F04%2Fsnake-agent%E6%8B%A6%E6%88%AA%E5%8F%8A%E6%97%A5%E5%BF%97%E8%BE%93%E5%87%BA%2F</url>
     <content type="text"><![CDATA[Spring请求拦截在使用Spring框架时，可以知道所有Spring入口都是从org.springframework.web.servlet.FrameworkServlet.processRequest中进入，可以通过对该方法进行字节码增强，达到拦截的目的。使用javassist对processRequest方法的前后分别插入操作代码。通过javassist提供获取当前对象出入参数等，做一些相关的操作。 修改注册在创建拦截操作对象时，为了保证在代码插入后生效，创建一个静态的注册类InterceptorRegistry，在创建代码时，生成一个唯一的id，通过javassist修改字节码时，带入该ID，就可以准确找到对应的修改类。 日志输出在agent中，日志依赖需要使用自定义的类加载器加载，使agent依赖的jar和项目的jar进行隔离。这样就会出现，父类加载器（项目类加载器）需要调用子类加载器（自定义类加载器）加载的对象。 自定义日志类关系如下：其中接口Logger、LoggerBinder类LogManager由父类加载器加载，其实现类Log4j2Logger、Log4j2Binder由子类加载器加载。在使用的时候，如果初始化LogManner传入Log4j2Logger达到类加载分离。因为在自定义类加载器中，只加载部分类，其他的类由父类加载。方法的调用，通过接口进行连接，具体实现由子类加载器处理。 代码详情请看 v0.0.2]]></content>
@@ -170,8 +251,8 @@
         <category>mysql</category>
       </categories>
       <tags>
-        <tag>mysql</tag>
         <tag>事务</tag>
+        <tag>mysql</tag>
       </tags>
   </entry>
   <entry>
@@ -183,8 +264,8 @@
         <category>事务</category>
       </categories>
       <tags>
-        <tag>事务</tag>
         <tag>工作</tag>
+        <tag>事务</tag>
         <tag>并发</tag>
       </tags>
   </entry>
@@ -425,7 +506,7 @@
   <entry>
     <title><![CDATA[ELK搭建简单日志查询]]></title>
     <url>%2F2018%2F01%2F11%2FELK%E6%90%AD%E5%BB%BA%E7%AE%80%E5%8D%95%E6%97%A5%E5%BF%97%E6%9F%A5%E8%AF%A2%2F</url>
-    <content type="text"><![CDATA[通常在项目日志查看过程中都是直接登录服务器，找到服务器通过一些命令查看日志。有时候在定位问题的时候比较麻烦，不能快速找到问题日志。 这次尝试在本地搭建简单的ELK查询日志相关信息。 Elasticsearch：用于日志搜索查询Logstash：用于日志收集Kibana：用于页面展示1、下载Elasticsearch、因为是简单实用，下载解压后直接使用。2、下载Kibana，修改config下kibana.yml，添加 elasticsearch.url: “http://127.0.0.1:9200“3、下载Logstash，配置相关配置信息。4、下载filebeat用于采集日志传送到Logstash、配置采集信息 filebeat配置：备份原有filebeta.yml文件，新增filebeta.yml文件12345678910111213141516171819filebeat: prospectors: - paths: #采集路径 - /home/webdata/tomcat/logs/catalina.out input_type: log #用于日志合并、比如有的日志是异常多行信息，通过下面判断日志是否以时间格式开头，合并到上一行 multiline.pattern: '^[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125;' multiline.negate: true multiline.match: after # 增加字段、用来标示日志来源，在采集多个项目日志时有用 fields: server_name: storemanager-api fields_under_root: trueoutput: logstash: #本机Logstash地址 hosts: ["10.211.240.162:4560"] filebeat其他配置可以参考：Filebeat安装部署及配置详解 Logstash配置：新增文件tomcat_log4j.conf1234567891011121314151617181920212223242526272829303132333435# 开放输入端口input&#123; beats &#123; host =&gt; "0.0.0.0" port =&gt; 4560 &#125;&#125;filter &#123; #判断日志来源、通过来源分开处理 if [server_name] == "manager-api"&#123; #处理日志 grok &#123; #lo4j日志配置为：log4j.appender.logstash.layout.ConversionPattern=%d [%t] %-5p [%c] - %m%n # 需要对日志进行拆分 match =&gt; &#123; "message" =&gt; "(?&lt;timestamp&gt;[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125; [0-9]&#123;2&#125;:[0-9]&#123;2&#125;:[0-9]&#123;2&#125;,[0-9]&#123;3&#125;) \[(?&lt;thread_name&gt;.*)\] (?&lt;log_level&gt;.*) \[(?&lt;class_name&gt;.*)\] - (?&lt;message&gt;.*)" &#125; overwrite =&gt; [ "message" ] &#125; date &#123; match =&gt; ['logtime', "yyyy-MM-dd HH:mm:ss,SSS"] locale =&gt; "cn" &#125; &#125;&#125;#日志输出output &#123; stdout&#123; codec =&gt; rubydebug &#125; #实际情况是需要依据日志来源建立不同的索引，不能全部混在一起 elasticsearch&#123; hosts =&gt;["127.0.0.1:9200"] &#125;&#125; 分别启动4个服务、启动Logstash需要使用：./bin/logstash -f tomcat_log4j.conf 指定配置文件。之后打开浏览器localhost:5601查看日志信息。 后续如果需要使用，可以控制权限之类，还有很多玩法。在使用grok写表达式时，可以通过http://grokdebug.herokuapp.com/ 测试表达式 参考： Logstash 最佳实践 ELKstack 中文指南 ELK技术实战-安装Elk 5.x平台]]></content>
+    <content type="text"><![CDATA[通常在项目日志查看过程中都是直接登录服务器，找到服务器通过一些命令查看日志。有时候在定位问题的时候比较麻烦，不能快速找到问题日志。 这次尝试在本地搭建简单的ELK查询日志相关信息。 Elasticsearch：用于日志搜索查询Logstash：用于日志收集Kibana：用于页面展示1、下载Elasticsearch、因为是简单实用，下载解压后直接使用。2、下载Kibana，修改config下kibana.yml，添加 elasticsearch.url: “http://127.0.0.1:9200&quot;3、下载Logstash，配置相关配置信息。4、下载filebeat用于采集日志传送到Logstash、配置采集信息 filebeat配置：备份原有filebeta.yml文件，新增filebeta.yml文件12345678910111213141516171819filebeat: prospectors: - paths: #采集路径 - /home/webdata/tomcat/logs/catalina.out input_type: log #用于日志合并、比如有的日志是异常多行信息，通过下面判断日志是否以时间格式开头，合并到上一行 multiline.pattern: '^[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125;' multiline.negate: true multiline.match: after # 增加字段、用来标示日志来源，在采集多个项目日志时有用 fields: server_name: storemanager-api fields_under_root: trueoutput: logstash: #本机Logstash地址 hosts: ["10.211.240.162:4560"] filebeat其他配置可以参考：Filebeat安装部署及配置详解 Logstash配置：新增文件tomcat_log4j.conf1234567891011121314151617181920212223242526272829303132333435# 开放输入端口input&#123; beats &#123; host =&gt; "0.0.0.0" port =&gt; 4560 &#125;&#125;filter &#123; #判断日志来源、通过来源分开处理 if [server_name] == "manager-api"&#123; #处理日志 grok &#123; #lo4j日志配置为：log4j.appender.logstash.layout.ConversionPattern=%d [%t] %-5p [%c] - %m%n # 需要对日志进行拆分 match =&gt; &#123; "message" =&gt; "(?&lt;timestamp&gt;[0-9]&#123;4&#125;-[0-9]&#123;2&#125;-[0-9]&#123;2&#125; [0-9]&#123;2&#125;:[0-9]&#123;2&#125;:[0-9]&#123;2&#125;,[0-9]&#123;3&#125;) \[(?&lt;thread_name&gt;.*)\] (?&lt;log_level&gt;.*) \[(?&lt;class_name&gt;.*)\] - (?&lt;message&gt;.*)" &#125; overwrite =&gt; [ "message" ] &#125; date &#123; match =&gt; ['logtime', "yyyy-MM-dd HH:mm:ss,SSS"] locale =&gt; "cn" &#125; &#125;&#125;#日志输出output &#123; stdout&#123; codec =&gt; rubydebug &#125; #实际情况是需要依据日志来源建立不同的索引，不能全部混在一起 elasticsearch&#123; hosts =&gt;["127.0.0.1:9200"] &#125;&#125; 分别启动4个服务、启动Logstash需要使用：./bin/logstash -f tomcat_log4j.conf 指定配置文件。之后打开浏览器localhost:5601查看日志信息。 后续如果需要使用，可以控制权限之类，还有很多玩法。在使用grok写表达式时，可以通过http://grokdebug.herokuapp.com/ 测试表达式 参考： Logstash 最佳实践 ELKstack 中文指南 ELK技术实战-安装Elk 5.x平台]]></content>
       <categories>
         <category>ELK</category>
       </categories>
@@ -536,8 +617,8 @@
         <category>多线程学习</category>
       </categories>
       <tags>
-        <tag>多线程</tag>
         <tag>java</tag>
+        <tag>多线程</tag>
       </tags>
   </entry>
   <entry>
@@ -660,7 +741,7 @@
   <entry>
     <title><![CDATA[Java设计模式-中介者模式（Mediator Pattern）]]></title>
     <url>%2F2017%2F10%2F30%2FJava%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%B8%AD%E4%BB%8B%E8%80%85%E6%A8%A1%E5%BC%8F%EF%BC%88Mediator-Pattern%EF%BC%89%2F</url>
-    <content type="text"><![CDATA[中介者模式 用一个中介对象（中介者）来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。 如果在一个系统中对象之间的联系呈现为网状结构，对象之间存在大量的多对多联系，将导致系统非常复杂，这些对象既会影响别的对象，也会被别的对象所影响，这些对象称为同事对象，它们之间通过彼此的相互作用实现系统的行为。在网状结构中，几乎每个对象都需要与其他对象发生相互作用，而这种相互作用表现为一个对象与另外一个对象的直接耦合，这将导致一个过度耦合的系统。中介者模式可以使对象之间的关系数量急剧减少，通过引入中介者对象，可以将系统的网状结构变成以中介者为中心的星形结构，“在这个星形结构中，同事对象不再直接与另一个对象联系，它通过中介者对象与另一个对象发生相互作用。中介者对象的存在保证了对象结构上的稳定，也就是说，系统的结构不会因为新对象的引入带来大量的修改工作。如果在一个系统中对象之间存在多对多的相互关系，我们可以将对象之间的一些交互行为从各个对象中分离出来，并集中封装在一个中介者对象中，并由该中介者进行统一协调，这样对象之间多对多的复杂关系就转化为相对简单的一对多关系。通过引入中介者来简化对象之间的复杂交互，中介者模式是“迪米特法则”的一个典型应用。网状图：星状图： UML类图：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889/** * 抽象中介者 */abstract class AbstractMediator&#123; protected List&lt;AbstractColleague&gt; colleagues = new ArrayList&lt;&gt;(); /** * 注册 * @param colleague */ public void register(AbstractColleague colleague)&#123; colleagues.add(colleague); &#125; /** * 相关操作 */ public abstract void operation();&#125;/** * 中介者实现类 */class ConcreteMediator extends AbstractMediator&#123; @Override public void operation() &#123; System.out.println("中介者开始通知"); colleagues.forEach(AbstractColleague::callback); &#125;&#125;/** * 抽象同事类 */abstract class AbstractColleague&#123; protected AbstractMediator mediator; public AbstractColleague(AbstractMediator mediator) &#123; this.mediator = mediator; &#125; /** * 消息回调 */ public abstract void callback(); /** * 发送消息 */ public void contact()&#123; mediator.operation(); &#125;&#125;class ConcreteColleagueA extends AbstractColleague&#123; public ConcreteColleagueA(AbstractMediator mediator) &#123; super(mediator); &#125; @Override public void callback() &#123; System.out.println("A收到消息"); &#125;&#125;class ConcreteColleagueB extends AbstractColleague&#123; public ConcreteColleagueB(AbstractMediator mediator) &#123; super(mediator); &#125; @Override public void callback() &#123; System.out.println("B收到消息"); &#125;&#125;public class Main &#123; public static void main(String[] args) throws InterruptedException, ScriptException &#123; AbstractMediator mediator = new ConcreteMediator(); ConcreteColleagueA colleagueA = new ConcreteColleagueA(mediator); mediator.register(colleagueA); ConcreteColleagueB colleagueB = new ConcreteColleagueB(mediator); mediator.register(colleagueB); colleagueA.contact(); &#125;&#125; Mediator（抽象中介者）：它定义一个接口，该接口用于与各同事对象之间进行通信。 ConcreteMediator（具体中介者）：它是抽象中介者的子类，通过协调各个同事对象来实现协作行为，它维持了对各个同事对象的引用。 Colleague（抽象同事类）：它定义各个同事类公有的方法，并声明了一些抽象方法来供子类实现，同时它维持了一个对抽象中介者类的引用，其子类可以通过该引用来与中介者通信。 ConcreteColleague（具体同事类）：它是抽象同事类的子类；每一个同事对象在需要和其他同事对象通信时，先与中介者通信，通过中介者来间接完成与其他同事类的通信；在具体同事类中实现了在抽象同事类中声明的抽象方法。 同事类指互相之间有关联的类。 外观模式、代理模式、中介者模式外观模式： 为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。在外观模式中，外观模式所有的请求处理都委托给子系统完成，而中介者模式则由中心协调同事类和中心本身共同完成业务。外观模式属于单向操作，调用者和子系统可以理解为1-&gt;N。 代理模式： 给某一个对象提供一个代理或占位符，并由代理对象来控制对原对象的访问。在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到传递的作用。在代理模式中，代理类用于隐藏真实对象、扩展额外功能。可以理解为代理模式为1-&gt;1。 中介者模式： 可以理解为N&lt;–&gt;N解耦。 中介者模式总结在中介者模式中，中介者承担两方面的职责： 中转作用（结构性）：通过中介者提供的中转作用，各个同事对象就不再需要显式引用其他同事，当需要和其他同事进行通信时，通过中介者即可。该中转作用属于中介者在结构上的支持。 协调作用（行为性）：中介者可以更进一步的对同事之间的关系进行封装，同事可以一致地和中介者进行交互，而不需要指明中介者需要具体怎么做，中介者根据封装在自身内部的协调逻辑，对同事的请求进行进一步处理，将同事成员之间的关系行为进行分离和封装。该协调作用属于中介者在行为上的支持。 在群组聊天中，可以采用中介者模式。一般在需要抽取一个可以管理其他业务的对象作为中介者，各个相关对象互相之间不打交道，与中介者打交道，之后由中介者通过相关规则通知到其他关联对象。如果在系统中存在大量多对多关系时，不需要第一时间采用中介者模式，可以考虑下是否系统设计不够合理。 在JDK中应用中介者模式有： All scheduleXXX() methods of java.util.Timer java.util.concurrent.Executor#execute() submit() and invokeXXX() methods of java.util.concurrent.ExecutorService scheduleXXX() methods of java.util.concurrent.ScheduledExecutorService java.lang.reflect.Method#invoke()由于能力有限，并未找到上述类中使用了中介者模式，也未找到相关文档。 适用场景： 系统中对象之间存在复杂的引用关系，产生的相互依赖关系结构混乱且难以理解。 一个对象由于引用了其他很多对象并且直接和这些对象通信，导致难以复用该对象。 想通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。可以通过引入中介者类来实现，在中介者中定义对象。 交互的公共行为，如果需要改变行为则可以增加新的中介者类。 优点： 中介者模式简化了对象之间的交互，它用中介者和同事的一对多交互代替了原来同事之间的多对多交互，一对多关系更容易理解、维护和扩展，将原本难以理解的网状结构转换成相对简单的星型结构。 中介者模式可将各同事对象解耦。中介者有利于各同事之间的松耦合，我们可以独立的改变和复用每一个同事和中介者，增加新的中介者和新的同事类都比较方便，更好地符合“开闭原则”。 可以减少子类生成，中介者将原本分布于多个对象间的行为集中在一起，改变这些行为只需生成新的中介者子类即可，这使各个同事类可被重用，无须对同事类进行扩展。 缺点： 在具体中介者类中包含了大量同事之间的交互细节，可能会导致具体中介者类非常复杂，使得系统难以维护。]]></content>
+    <content type="text"><![CDATA[中介者模式 用一个中介对象（中介者）来封装一系列的对象交互，中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立地改变它们之间的交互。中介者模式又称为调停者模式，它是一种对象行为型模式。 如果在一个系统中对象之间的联系呈现为网状结构，对象之间存在大量的多对多联系，将导致系统非常复杂，这些对象既会影响别的对象，也会被别的对象所影响，这些对象称为同事对象，它们之间通过彼此的相互作用实现系统的行为。在网状结构中，几乎每个对象都需要与其他对象发生相互作用，而这种相互作用表现为一个对象与另外一个对象的直接耦合，这将导致一个过度耦合的系统。中介者模式可以使对象之间的关系数量急剧减少，通过引入中介者对象，可以将系统的网状结构变成以中介者为中心的星形结构，“在这个星形结构中，同事对象不再直接与另一个对象联系，它通过中介者对象与另一个对象发生相互作用。中介者对象的存在保证了对象结构上的稳定，也就是说，系统的结构不会因为新对象的引入带来大量的修改工作。如果在一个系统中对象之间存在多对多的相互关系，我们可以将对象之间的一些交互行为从各个对象中分离出来，并集中封装在一个中介者对象中，并由该中介者进行统一协调，这样对象之间多对多的复杂关系就转化为相对简单的一对多关系。通过引入中介者来简化对象之间的复杂交互，中介者模式是“迪米特法则”的一个典型应用。网状图：星状图： UML类图：1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253545556575859606162636465666768697071727374757677787980818283848586878889/** * 抽象中介者 */abstract class AbstractMediator&#123; protected List&lt;AbstractColleague&gt; colleagues = new ArrayList&lt;&gt;(); /** * 注册 * @param colleague */ public void register(AbstractColleague colleague)&#123; colleagues.add(colleague); &#125; /** * 相关操作 */ public abstract void operation();&#125;/** * 中介者实现类 */class ConcreteMediator extends AbstractMediator&#123; @Override public void operation() &#123; System.out.println("中介者开始通知"); colleagues.forEach(AbstractColleague::callback); &#125;&#125;/** * 抽象同事类 */abstract class AbstractColleague&#123; protected AbstractMediator mediator; public AbstractColleague(AbstractMediator mediator) &#123; this.mediator = mediator; &#125; /** * 消息回调 */ public abstract void callback(); /** * 发送消息 */ public void contact()&#123; mediator.operation(); &#125;&#125;class ConcreteColleagueA extends AbstractColleague&#123; public ConcreteColleagueA(AbstractMediator mediator) &#123; super(mediator); &#125; @Override public void callback() &#123; System.out.println("A收到消息"); &#125;&#125;class ConcreteColleagueB extends AbstractColleague&#123; public ConcreteColleagueB(AbstractMediator mediator) &#123; super(mediator); &#125; @Override public void callback() &#123; System.out.println("B收到消息"); &#125;&#125;public class Main &#123; public static void main(String[] args) throws InterruptedException, ScriptException &#123; AbstractMediator mediator = new ConcreteMediator(); ConcreteColleagueA colleagueA = new ConcreteColleagueA(mediator); mediator.register(colleagueA); ConcreteColleagueB colleagueB = new ConcreteColleagueB(mediator); mediator.register(colleagueB); colleagueA.contact(); &#125;&#125; Mediator（抽象中介者）：它定义一个接口，该接口用于与各同事对象之间进行通信。 ConcreteMediator（具体中介者）：它是抽象中介者的子类，通过协调各个同事对象来实现协作行为，它维持了对各个同事对象的引用。 Colleague（抽象同事类）：它定义各个同事类公有的方法，并声明了一些抽象方法来供子类实现，同时它维持了一个对抽象中介者类的引用，其子类可以通过该引用来与中介者通信。 ConcreteColleague（具体同事类）：它是抽象同事类的子类；每一个同事对象在需要和其他同事对象通信时，先与中介者通信，通过中介者来间接完成与其他同事类的通信；在具体同事类中实现了在抽象同事类中声明的抽象方法。 同事类指互相之间有关联的类。 外观模式、代理模式、中介者模式外观模式： 为子系统中的一组接口提供一个统一的入口。外观模式定义了一个高层接口，这个接口使得这一子系统更加容易使用。在外观模式中，外观模式所有的请求处理都委托给子系统完成，而中介者模式则由中心协调同事类和中心本身共同完成业务。外观模式属于单向操作，调用者和子系统可以理解为1-&gt;N。 代理模式： 给某一个对象提供一个代理或占位符，并由代理对象来控制对原对象的访问。在某些情况下，一个对象不适合或者不能直接引用另一个对象，而代理对象可以在客户端和目标对象之间起到传递的作用。在代理模式中，代理类用于隐藏真实对象、扩展额外功能。可以理解为代理模式为1-&gt;1。 中介者模式： 可以理解为NN解耦。 中介者模式总结在中介者模式中，中介者承担两方面的职责： 中转作用（结构性）：通过中介者提供的中转作用，各个同事对象就不再需要显式引用其他同事，当需要和其他同事进行通信时，通过中介者即可。该中转作用属于中介者在结构上的支持。 协调作用（行为性）：中介者可以更进一步的对同事之间的关系进行封装，同事可以一致地和中介者进行交互，而不需要指明中介者需要具体怎么做，中介者根据封装在自身内部的协调逻辑，对同事的请求进行进一步处理，将同事成员之间的关系行为进行分离和封装。该协调作用属于中介者在行为上的支持。 在群组聊天中，可以采用中介者模式。一般在需要抽取一个可以管理其他业务的对象作为中介者，各个相关对象互相之间不打交道，与中介者打交道，之后由中介者通过相关规则通知到其他关联对象。如果在系统中存在大量多对多关系时，不需要第一时间采用中介者模式，可以考虑下是否系统设计不够合理。 在JDK中应用中介者模式有： All scheduleXXX() methods of java.util.Timer java.util.concurrent.Executor#execute() submit() and invokeXXX() methods of java.util.concurrent.ExecutorService scheduleXXX() methods of java.util.concurrent.ScheduledExecutorService java.lang.reflect.Method#invoke()由于能力有限，并未找到上述类中使用了中介者模式，也未找到相关文档。 适用场景： 系统中对象之间存在复杂的引用关系，产生的相互依赖关系结构混乱且难以理解。 一个对象由于引用了其他很多对象并且直接和这些对象通信，导致难以复用该对象。 想通过一个中间类来封装多个类中的行为，而又不想生成太多的子类。可以通过引入中介者类来实现，在中介者中定义对象。 交互的公共行为，如果需要改变行为则可以增加新的中介者类。 优点： 中介者模式简化了对象之间的交互，它用中介者和同事的一对多交互代替了原来同事之间的多对多交互，一对多关系更容易理解、维护和扩展，将原本难以理解的网状结构转换成相对简单的星型结构。 中介者模式可将各同事对象解耦。中介者有利于各同事之间的松耦合，我们可以独立的改变和复用每一个同事和中介者，增加新的中介者和新的同事类都比较方便，更好地符合“开闭原则”。 可以减少子类生成，中介者将原本分布于多个对象间的行为集中在一起，改变这些行为只需生成新的中介者子类即可，这使各个同事类可被重用，无须对同事类进行扩展。 缺点： 在具体中介者类中包含了大量同事之间的交互细节，可能会导致具体中介者类非常复杂，使得系统难以维护。]]></content>
       <categories>
         <category>设计模式</category>
       </categories>
@@ -817,10 +898,10 @@
         <category>基础知识</category>
       </categories>
       <tags>
-        <tag>基础</tag>
         <tag>Spring</tag>
         <tag>SpringMVC</tag>
         <tag>Mybatis</tag>
+        <tag>基础</tag>
       </tags>
   </entry>
   <entry>
@@ -949,8 +1030,8 @@
         <category>设计模式</category>
       </categories>
       <tags>
-        <tag>设计模式</tag>
         <tag>Java</tag>
+        <tag>设计模式</tag>
         <tag>面向对象设计原则</tag>
       </tags>
   </entry>

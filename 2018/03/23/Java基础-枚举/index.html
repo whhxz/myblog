@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="JDK1.5新增了枚举类型，定义一个枚举如下：123456789101112131415161718192021222324252627public enum Main &amp;#123;    MONDAY(1, &quot;星期一&quot;),    TUESDAY(2, &quot;星期二&quot;),    WEDNESDAY(3, &quot;星期三&quot;),    THURSDAY(4, &quot;星期四&quot;),    FRIDAY(5, &quot;星期五&quot;">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-05-28T08:43:00.888Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础-枚举">
 <meta name="twitter:description" content="JDK1.5新增了枚举类型，定义一个枚举如下：123456789101112131415161718192021222324252627public enum Main &amp;#123;    MONDAY(1, &quot;星期一&quot;),    TUESDAY(2, &quot;星期二&quot;),    WEDNESDAY(3, &quot;星期三&quot;),    THURSDAY(4, &quot;星期四&quot;),    FRIDAY(5, &quot;星期五&quot;">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-05-28 16:43:00" itemprop="dateModified" datetime="2018-05-28T16:43:00+08:00">2018-05-28</time>
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -505,15 +505,15 @@
 <p>通过定义一个抽象方法，然后在定义枚举是需要实现改方法（反编译后生成的类为抽象类，枚举值为其内部类），既然是类，那么如果定义的是普通方法，那么可以重写定义的方法。</p>
 <p>枚举因为编译器最终生成的是类，在Java中不支持多继承（已经继承java.lang.Enum），但是可以实现接口，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IDeme</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Main implements IDeme &#123;</span><br><span class="line">    SATURDAY() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"nothing"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SUNDAY() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"nothing"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>枚举除了在定义唯一的属性，同时在使用单例设计模式时，保证了唯一性。<br>普通的单例在通过序列化、反序列化时，可以生成一个新的对象（通过添加readResolve方法来解决该问题）；也可以通过反射来强行调用私有构造方法生成新的对象。</p>
-<p>在对枚举序列化和反序列化过程中，仅仅是把枚举对象的name序列化，反序列化的时候是通过Enum.valueOf()来通过name找到对应的对象。同时编译器不允许对这种序列化机制做定制，所有禁用了writeObject、readObject、readObjectNoData、writeReplace和readResolve等方法。<br>参考：<a href="https://docs.oracle.com/javase/7/docs/platform/serialization/spec/serial-arch.html" target="_blank" rel="external">1.12 Serialization of Enum Constants</a></p>
+<p>在对枚举序列化和反序列化过程中，仅仅是把枚举对象的name序列化，反序列化的时候是通过Enum.valueOf()来通过name找到对应的对象。同时编译器不允许对这种序列化机制做定制，所有禁用了writeObject、readObject、readObjectNoData、writeReplace和readResolve等方法。<br>参考：<a href="https://docs.oracle.com/javase/7/docs/platform/serialization/spec/serial-arch.html" target="_blank" rel="noopener">1.12 Serialization of Enum Constants</a></p>
 <p>举例如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">interface</span> <span class="title">IDeme</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Main implements IDeme &#123;</span><br><span class="line">    SATURDAY() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"nothing"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    SUNDAY() &#123;</span><br><span class="line">        <span class="meta">@Override</span></span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">doSomething</span><span class="params">()</span> </span>&#123;</span><br><span class="line">            System.out.println(<span class="string">"nothing"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        ObjectOutputStream objectOutputStream = <span class="keyword">new</span> ObjectOutputStream(System.out);</span><br><span class="line">        Main saturday = Main.SATURDAY;</span><br><span class="line">        objectOutputStream.writeObject(saturday);</span><br><span class="line">        <span class="comment">//输出类似 乱码com.whh.netty.Main乱码java.lang.Enum乱码xptSATURDAY</span></span><br><span class="line">        objectOutputStream.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>从上面可以依稀看出最后是SATURDAY字符串，可以通过验证反序列化比较是否一致。<br>Enum.valueOf如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Enum&lt;T&gt;&gt; <span class="function">T <span class="title">valueOf</span><span class="params">(Class&lt;T&gt; enumType,</span><br><span class="line">                                            String name)</span> </span>&#123;</span><br><span class="line">    T result = enumType.enumConstantDirectory().get(name);</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    <span class="keyword">if</span> (name == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Name is null"</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">        <span class="string">"No enum constant "</span> + enumType.getCanonicalName() + <span class="string">"."</span> + name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>从上面可以依稀看出最后是SATURDAY字符串，可以通过验证反序列化比较是否一致。<br>Enum.valueOf如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T extends Enum&lt;T&gt;&gt; <span class="function">T <span class="title">valueOf</span><span class="params">(Class&lt;T&gt; enumType,</span></span></span><br><span class="line"><span class="function"><span class="params">                                            String name)</span> </span>&#123;</span><br><span class="line">    T result = enumType.enumConstantDirectory().get(name);</span><br><span class="line">    <span class="keyword">if</span> (result != <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    <span class="keyword">if</span> (name == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException(<span class="string">"Name is null"</span>);</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(</span><br><span class="line">        <span class="string">"No enum constant "</span> + enumType.getCanonicalName() + <span class="string">"."</span> + name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>通过传入的类调用enumConstantDirectory，该方法返回枚举名字的常量（其实就是反射获取枚举类中values返回枚举中定义的数组），通过key或获取到对应的枚举值。这样就保证枚举返回的事唯一值。</p>
 <p>通过反射创建新枚举：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">enum</span> Main &#123;</span><br><span class="line">    SATURDAY,</span><br><span class="line">    SUNDAY;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        Constructor&lt;Main&gt; declaredConstructor = Main.class.getDeclaredConstructor(String.class, <span class="keyword">int</span>.class);</span><br><span class="line">        declaredConstructor.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">        Main test = declaredConstructor.newInstance(<span class="string">"test"</span>, <span class="number">11</span>);<span class="comment">//Cannot reflectively create enum objects</span></span><br><span class="line">        System.out.println(test);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>打开Constructor.newInstance源码看到<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((clazz.getModifiers() &amp; Modifier.ENUM) != <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Cannot reflectively create enum objects"</span>);</span><br></pre></td></tr></table></figure></p>
 <p>如果是枚举类型会直接抛出异常。</p>
 <p>在使用枚举过程中，还有EnumSet、EnumMap辅助类帮助快速使用，EnumSet使用了位向量，后续位运算时分析。</p>
-<p>参考：<a href="https://blog.csdn.net/javazejian/article/details/71333103" target="_blank" rel="external">深入理解Java枚举类型(enum)</a></p>
+<p>参考：<a href="https://blog.csdn.net/javazejian/article/details/71333103" target="_blank" rel="noopener">深入理解Java枚举类型(enum)</a></p>
 
       
     </div>
@@ -627,7 +627,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -734,7 +734,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1101,7 +1109,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1155,7 +1181,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

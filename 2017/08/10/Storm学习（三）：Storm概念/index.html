@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="对于Storm，其核心概念有包括：   Stream 数据流 Spout 数据流 Bolt 处理数据 Tuple 数据单元 Task 运行Spout或Bolt中的线程 Worker 是运行这些线程中的进程 Stream Grouping 规定了Bolt接受何种数据类型作为输入 Topology 是Stream Grouping连接起来的Spout和Bolt节点网络   Tuple元组 Tuple">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T09:15:48.237Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Storm学习（三）：Storm概念">
 <meta name="twitter:description" content="对于Storm，其核心概念有包括：   Stream 数据流 Spout 数据流 Bolt 处理数据 Tuple 数据单元 Task 运行Spout或Bolt中的线程 Worker 是运行这些线程中的进程 Stream Grouping 规定了Bolt接受何种数据类型作为输入 Topology 是Stream Grouping连接起来的Spout和Bolt节点网络   Tuple元组 Tuple">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-12-13 17:15:48" itemprop="dateModified" datetime="2017-12-13T17:15:48+08:00">2017-12-13</time>
+                <time title="修改时间：2019-10-25 14:38:58" itemprop="dateModified" datetime="2019-10-25T14:38:58+08:00">2019-10-25</time>
               
             
           </span>
@@ -528,6 +528,8 @@
 <li>Executor属于Worker进程内线程</li>
 <li>Task，实际处理数据。在Topology生命周期中Task数量不会发生变化。</li>
 </ul>
+</blockquote>
+<blockquote>
 <p>worker 在yaml中的topology.workers属性设置，或者config中setNumWorkers<br>Executor 在setBolt或者setSpout中设置<br>Task 默认和Executor一致，在TopologyBuilder.setNumTasks设置<br>停止Topology storm kill sopologyName</p>
 </blockquote>
 <h3 id="Stream消息流"><a href="#Stream消息流" class="headerlink" title="Stream消息流"></a>Stream消息流</h3><p>stream消息流是一个抽象概念，主要是消息中的Tuple。</p>
@@ -656,7 +658,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -763,7 +765,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1130,7 +1140,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1200,7 +1228,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

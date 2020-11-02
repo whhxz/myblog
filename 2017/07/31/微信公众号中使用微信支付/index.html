@@ -117,7 +117,7 @@
 <meta property="og:description" content="在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：  已经备案域名 微信公众号开发id（appid） 微信公众号开发密钥（secret） 微信商户号（mch_id） 微信商户支付密钥（apy.key）  1. 微信公众号平台配置1.1 在微信支付中配置授权目录该授权目录指，在该目录下才可以调用起微信支付。调用支付页面为 http://www.xx">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://image.whhxz.smallstool.cn/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png">
-<meta property="og:updated_time" content="2018-12-24T15:00:48.242Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:58.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="微信公众号中使用微信支付">
 <meta name="twitter:description" content="在项目中需要在微信公众号H5中嵌入微信支付，需要先申请开通微信支付，注册商户信息。关键性信息需要如下：  已经备案域名 微信公众号开发id（appid） 微信公众号开发密钥（secret） 微信商户号（mch_id） 微信商户支付密钥（apy.key）  1. 微信公众号平台配置1.1 在微信支付中配置授权目录该授权目录指，在该目录下才可以调用起微信支付。调用支付页面为 http://www.xx">
@@ -446,7 +446,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-12-24 23:00:48" itemprop="dateModified" datetime="2018-12-24T23:00:48+08:00">2018-12-24</time>
+                <time title="修改时间：2019-10-25 14:38:58" itemprop="dateModified" datetime="2019-10-25T14:38:58+08:00">2019-10-25</time>
               
             
           </span>
@@ -505,15 +505,15 @@
 <li>微信商户号（mch_id）</li>
 <li>微信商户支付密钥（apy.key）</li>
 </ul>
-<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="external">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="external">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="external">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="external">http://www.xxx.com/recharge/</a></strong></p>
+<h3 id="1-微信公众号平台配置"><a href="#1-微信公众号平台配置" class="headerlink" title="1. 微信公众号平台配置"></a>1. 微信公众号平台配置</h3><h4 id="1-1-在微信支付中配置授权目录"><a href="#1-1-在微信支付中配置授权目录" class="headerlink" title="1.1 在微信支付中配置授权目录"></a>1.1 在微信支付中配置授权目录</h4><p>该授权目录指，在该目录下才可以调用起微信支付。<br>调用支付页面为 <strong><a href="http://www.xxx.com/wxpay/js_api_call" target="_blank" rel="noopener">http://www.xxx.com/wxpay/js_api_call</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/wxpay/" target="_blank" rel="noopener">http://www.xxx.com/wxpay/</a></strong><br>调用支付页面为 <strong><a href="http://www.xxx.com/recharge/index?package=1" target="_blank" rel="noopener">http://www.xxx.com/recharge/index?package=1</a></strong> 那么配置为 <strong><a href="http://www.xxx.com/recharge/" target="_blank" rel="noopener">http://www.xxx.com/recharge/</a></strong></p>
 <h4 id="1-2-配置授权域名"><a href="#1-2-配置授权域名" class="headerlink" title="1.2 配置授权域名"></a>1.2 配置授权域名</h4><p>在设置 -&gt; 公众号设置 -&gt; 功能设置中，配置js接口安全域名，网页授权域名，配置这里域名时，需要下载一个txt文件到域名所在服务器根目录下。详细请参考页面详细提示。<br><a id="more"></a></p>
-<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="external">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
-<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://image.whhxz.smallstool.cn/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
+<h3 id="2-开发步骤"><a href="#2-开发步骤" class="headerlink" title="2. 开发步骤"></a>2. 开发步骤</h3><h4 id="2-1-在支付前提前获取用户标示openid"><a href="#2-1-在支付前提前获取用户标示openid" class="headerlink" title="2.1 在支付前提前获取用户标示openid"></a>2.1 在支付前提前获取用户标示openid</h4><p><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=4_4" target="_blank" rel="noopener">参考文档 获取openid</a> 每个用户对于每个公众号是唯一的。</p>
+<h4 id="2-2-用户支付"><a href="#2-2-用户支付" class="headerlink" title="2.2 用户支付"></a>2.2 用户支付</h4><p>在用户支付页面，用户点击支付后，请求后台服务器，由<strong>后台服务器</strong>访问微信统一下单接口<br><a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="noopener">参考文档 统一下单</a> ，需要注意签名生成算法，避免调用失败。返回appId、timeStamp、nonceStr、package、signType、paySign信息，用于下一步操作。<br><img src="http://image.whhxz.smallstool.cn/20170731TIM%E6%88%AA%E5%9B%BE20170731101946.png" alt="返回参数"></p>
 <blockquote>
 <p>注：有个商户订单号out_trade_no，在调用统一下单接口时，微信接口成功，但后续用户支付失败，或者用户取消未支付，单用户重新进入该订单支付时，使用同一订单号调用统一接口会失败。解决办法可以为在用户订单号后，加随机数，保存数据库，后调用统一下单接口，待支付成功后还原。或者在数据库添加一个新字段。</p>
 </blockquote>
 <h4 id="2-3-H5页面通过js调用微信支付"><a href="#2-3-H5页面通过js调用微信支付" class="headerlink" title="2.3 H5页面通过js调用微信支付"></a>2.3 H5页面通过js调用微信支付</h4><p>在调用微信统一下单接口成功后，通过微信浏览器中，内置WeixinJSBridge对象调用微信支付。<a href="WeixinJSBridge">参考H5调用支付</a>。这时调用支付需要参数使用之前调用统一下单接口返回的参数。</p>
-<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="external">API接口</a></p>
+<h4 id="2-4-后续操作"><a href="#2-4-后续操作" class="headerlink" title="2.4 后续操作"></a>2.4 后续操作</h4><p>用户退款，查询等操作，可以直接参考微信API接口。依据业务使用相关接口<a href="https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1" target="_blank" rel="noopener">API接口</a></p>
 <h3 id="3-本地调试"><a href="#3-本地调试" class="headerlink" title="3. 本地调试"></a>3. 本地调试</h3><p>因为微信支付需要指定域名，在本地调试十分不便。个人开发使用到的工具有：</p>
 <ul>
 <li>微信开发工具，用于调试微信公众号h5页面</li>
@@ -643,7 +643,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -750,7 +750,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1117,7 +1125,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1187,7 +1213,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

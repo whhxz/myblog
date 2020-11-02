@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="docker安装使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。安装最新版docker需要添加docker源，参考Docker Community Edition for Ubuntu。 docker配置阿里云参考阿里云加速器进行配置。 初步使用docker时出现问题在使用docker build时强行停止后，在使用docker im">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-12-13T09:23:47.239Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="docker环境部署">
 <meta name="twitter:description" content="docker安装使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。安装最新版docker需要添加docker源，参考Docker Community Edition for Ubuntu。 docker配置阿里云参考阿里云加速器进行配置。 初步使用docker时出现问题在使用docker build时强行停止后，在使用docker im">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2017-12-13 17:23:47" itemprop="dateModified" datetime="2017-12-13T17:23:47+08:00">2017-12-13</time>
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -495,8 +495,8 @@
       
 
       
-        <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><p>使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。<br>安装最新版docker需要添加docker源，参考<a href="https://store.docker.com/editions/community/docker-ce-server-ubuntu?tab=description" target="_blank" rel="external">Docker Community Edition for Ubuntu</a>。</p>
-<h2 id="docker配置阿里云"><a href="#docker配置阿里云" class="headerlink" title="docker配置阿里云"></a>docker配置阿里云</h2><p>参考<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="external">阿里云加速器</a>进行配置。</p>
+        <h2 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker安装</h2><p>使用系统Ubuntu 15.04 vivid，该版本无法安装最新版docker，需要升级ubuntu到最新版本。<br>安装最新版docker需要添加docker源，参考<a href="https://store.docker.com/editions/community/docker-ce-server-ubuntu?tab=description" target="_blank" rel="noopener">Docker Community Edition for Ubuntu</a>。</p>
+<h2 id="docker配置阿里云"><a href="#docker配置阿里云" class="headerlink" title="docker配置阿里云"></a>docker配置阿里云</h2><p>参考<a href="https://cr.console.aliyun.com/#/accelerator" target="_blank" rel="noopener">阿里云加速器</a>进行配置。</p>
 <h2 id="初步使用docker时出现问题"><a href="#初步使用docker时出现问题" class="headerlink" title="初步使用docker时出现问题"></a>初步使用docker时出现问题</h2><p>在使用docker build时强行停止后，在使用<code>docker image</code>出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;none&gt;              &lt;none&gt;              1c4475fbe64f        5 minutes ago       194 MB</span><br></pre></td></tr></table></figure></p>
 <p>使用<code>docker rmi 1c4475fbe64f</code>命令删除该无用image出现如下错误<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Error response from daemon: conflict: unable to delete 1c4475fbe64f (must be forced) - image is being used by stopped container a4f0c195cff5</span><br></pre></td></tr></table></figure></p>
 <p>但是使用<code>docker ps</code>未显示任何数据<br>解决办法先<code>docker rm a4f0c195cff5</code> 之后<code>docker rmi 1c4475fbe64f</code><br><a id="more"></a></p>
@@ -620,7 +620,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -727,7 +727,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1094,7 +1102,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1164,7 +1190,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>

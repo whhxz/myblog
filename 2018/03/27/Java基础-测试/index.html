@@ -116,7 +116,7 @@
 <meta property="og:site_name" content="WHH">
 <meta property="og:description" content="在工作完成后，都需要对代码进行测试用例编写，如果采用TDD，那就更加离不开测试。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-03-28T02:32:29.759Z">
+<meta property="og:updated_time" content="2019-10-25T06:38:59.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java基础-测试">
 <meta name="twitter:description" content="在工作完成后，都需要对代码进行测试用例编写，如果采用TDD，那就更加离不开测试。">
@@ -444,7 +444,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2018-03-28 10:32:29" itemprop="dateModified" datetime="2018-03-28T10:32:29+08:00">2018-03-28</time>
+                <time title="修改时间：2019-10-25 14:38:59" itemprop="dateModified" datetime="2019-10-25T14:38:59+08:00">2019-10-25</time>
               
             
           </span>
@@ -507,16 +507,16 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RunWith</span>(SpringJUnit4ClassRunner.class)</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath*:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeReplenishTaskServiceTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"timeReplenishTaskService"</span>)</span><br><span class="line">    <span class="keyword">private</span> AbstractReplenishTask replenishTask;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">      replenishTask.doSomethind();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如上使用SpringTest，通过<code>RunWith</code>配置<code>SpringJUnit4ClassRunner</code>，指定由<code>SpringJUnit4ClassRunner</code>启动，<code>ContextConfiguration</code>用来配置环境，其他的注入就如同普通的Spring注入。<br>Junit允许通过<code>RunWith</code>改变默认的执行类，不然默认就是<code>org.junit.runners.Suite</code>。</p>
 <h3 id="TestNG"><a href="#TestNG" class="headerlink" title="TestNG"></a>TestNG</h3><p>添加maven依赖<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.testng<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>testng<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">version</span>&gt;</span>6.8<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.<span class="function">Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"demo"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.<span class="function">Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">login</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span> / <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.Test(dependsOnMethods = &#123;<span class="string">"login"</span>&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userInfo</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"userInfo"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceTest</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"demo"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">login</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> i = <span class="number">1</span> / <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.Test(dependsOnMethods = &#123;<span class="string">"login"</span>&#125;)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">userInfo</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"userInfo"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>如上TestNG使用看起来和Junit一样，在TestNG中可以使用更多的功能，比如依赖。如上，userInfo就依赖于login测试，如果login失败，后续的userInfo就会直接跳过。<br>同时TestNG可以通过写xml文件来进行组合测试。<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" &gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">suite</span> <span class="attr">name</span>=<span class="string">"Suite"</span> <span class="attr">thread-count</span>=<span class="string">"5"</span> <span class="attr">verbose</span>=<span class="string">"1"</span> <span class="attr">parallel</span>=<span class="string">"false"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">test</span> <span class="attr">name</span>=<span class="string">"demoService"</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">classes</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">class</span> <span class="attr">name</span>=<span class="string">"com.whh.netty.DemoServiceTest"</span>/&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">classes</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">test</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">suite</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
 <p>在xml中可以配置多个测试类进行整个流程的测试。</p>
-<h4 id="TestNG结合spring"><a href="#TestNG结合spring" class="headerlink" title="TestNG结合spring"></a>TestNG结合spring</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@org</span>.testng.annotations.Test</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath*:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeReplenishTaskServiceTest</span> <span class="keyword">extends</span> <span class="title">AbstractTestNGSpringContextTests</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"timeReplenishTaskService"</span>)</span><br><span class="line">    <span class="keyword">private</span> AbstractReplenishTask replenishTask;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.<span class="function">Test</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">      replenishTask.doSomethind();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="TestNG结合spring"><a href="#TestNG结合spring" class="headerlink" title="TestNG结合spring"></a>TestNG结合spring</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@org</span>.testng.annotations.Test</span><br><span class="line"><span class="meta">@ContextConfiguration</span>(locations = <span class="string">"classpath*:applicationContext.xml"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TimeReplenishTaskServiceTest</span> <span class="keyword">extends</span> <span class="title">AbstractTestNGSpringContextTests</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(<span class="string">"timeReplenishTaskService"</span>)</span><br><span class="line">    <span class="keyword">private</span> AbstractReplenishTask replenishTask;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@org</span>.testng.annotations.Test</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">create</span><span class="params">()</span></span>&#123;</span><br><span class="line">      replenishTask.doSomethind();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>通过继承AbstractTestNGSpringContextTests来实现和Spring结合使用。</p>
-<p>参考：<a href="https://www.ibm.com/developerworks/cn/java/j-cq08296/" target="_blank" rel="external">JUnit 4 与 TestNG 的对比</a></p>
+<p>参考：<a href="https://www.ibm.com/developerworks/cn/java/j-cq08296/" target="_blank" rel="noopener">JUnit 4 与 TestNG 的对比</a></p>
 <h3 id="Mock框架"><a href="#Mock框架" class="headerlink" title="Mock框架"></a>Mock框架</h3><p>在开发过程中，可以依赖的某个功能未开发完成，就可以通过Mock框架来模拟对象替换部分功能来完成。</p>
 <h4 id="mockito"><a href="#mockito" class="headerlink" title="mockito"></a>mockito</h4><p>简单使用如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DemoServiceTest</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">demo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        List list = Mockito.mock(List.class);</span><br><span class="line">        <span class="comment">//设置当使用list.get(0)时返回whh</span></span><br><span class="line">        Mockito.when(list.get(<span class="number">0</span>)).thenReturn(<span class="string">"whh"</span>);</span><br><span class="line">        <span class="comment">//调用list.get(0)</span></span><br><span class="line">        String result = (String) list.get(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//验证是否调用</span></span><br><span class="line">        Mockito.verify(list).get(<span class="number">0</span>);</span><br><span class="line">        <span class="comment">//判断返回值</span></span><br><span class="line">        Assert.assertEquals(<span class="string">"whh"</span>, result);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>使用的Junit做的测试。创建mock对象不能对final，Anonymous，primitive类进行mock。<br>同时还可以设置方法返回异常等操作。<br>其他操作查看：<br><a href="https://github.com/mockito/mockito/wiki" target="_blank" rel="external">mockito github</a><br><a href="http://site.mockito.org/" target="_blank" rel="external">mockito官网</a></p>
-<p>同样的mock框架还有<a href="http://jmockit.github.io/" target="_blank" rel="external">jmockit</a>、<a href="http://easymock.org/" target="_blank" rel="external">easymock</a></p>
+<p>使用的Junit做的测试。创建mock对象不能对final，Anonymous，primitive类进行mock。<br>同时还可以设置方法返回异常等操作。<br>其他操作查看：<br><a href="https://github.com/mockito/mockito/wiki" target="_blank" rel="noopener">mockito github</a><br><a href="http://site.mockito.org/" target="_blank" rel="noopener">mockito官网</a></p>
+<p>同样的mock框架还有<a href="http://jmockit.github.io/" target="_blank" rel="noopener">jmockit</a>、<a href="http://easymock.org/" target="_blank" rel="noopener">easymock</a></p>
 <p>未完待续。。。</p>
 
       
@@ -640,7 +640,7 @@
                 
                   <a href="/archives/">
                 
-                    <span class="site-state-item-count">89</span>
+                    <span class="site-state-item-count">96</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -747,7 +747,15 @@
                     
                       
                     
-                    <span class="site-state-item-count">47</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -1114,7 +1122,25 @@
                     
                       
                     
-                    <span class="site-state-item-count">177</span>
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">186</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -1184,7 +1210,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
