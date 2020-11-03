@@ -1,5 +1,5 @@
 ---
-title: Java基础-Queue(1)
+title: Java基础-Queue（1）
 date: 2020-11-02 14:29:56
 categories: ['Java基础']
 tags: ['Queue', '数据结构']
@@ -175,3 +175,5 @@ public class Demo {
 * 上述两种实现，都是作为参考实现。具体可能有边界值判断的问题存在
 
 链表的实现队列长度是无限长，这和链表的特性有关。数组为指定大小的容器存储队列数据，也可以对数组进行扩容。
+
+Queue主要有两个子接口Deque（双端队列）、BlockingQueue（阻塞队列）、AbstractQueue（抽象类）
