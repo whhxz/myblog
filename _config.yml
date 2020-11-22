@@ -75,7 +75,7 @@ deploy:
   repository: git@github.com:whhxz/myblog.git
   branch: gh-pages
 search:
-  path: search.xml
+  path: search.json
   field: post
   format: html
   limit: 10000
