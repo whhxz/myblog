@@ -11,7 +11,7 @@ tags: ['策略模式', '设计模式', 'Strategy Pattern']
 在策略模式中，我们可以定义一些独立的类来封装不同的算法，每一个类封装一种具体的算法，在这里，每一个封装算法的类我们都可以称之为一种策略(Strategy)，为了保证这些策略在使用时具有一致性，一般会提供一个抽象的策略类来做规则的定义，而每种算法则对应于一个具体策略类。
 
 UML类图如下：
-![](http://image.whhxz.smallstool.cn/20171109屏幕快照2017-11-09下午4.14.50.png)
+![](/images/old/20171109屏幕快照2017-11-09下午4.14.50.png)
 <!-- more -->
 ```java
 
@@ -140,7 +140,7 @@ public class Main {
 例子比较简单，如果设置不同的活动，对购物车的商品进行扣减。
 
 ### JDK中应用
-![](http://image.whhxz.smallstool.cn/20171109屏幕快照2017-11-09下午4.59.53.png)
+![](/images/old/20171109屏幕快照2017-11-09下午4.59.53.png)
 图中少了一根Container指向LayoutManager的线，Container中有个LayoutManager属性，在使用Container的时候，通过设置不同Layout展示不同布局。
 
 ### 策略模式总结
