@@ -91,16 +91,16 @@ mvn -Pdist -f modules/master/pom.xml clean install
 Spark下载地址：https://igniterealtime.org/projects/spark/
 因为使用的mac，需要启动多个spark，可以通过命令 **open -na spark** 启动。
 点击高级配置Spark，如图：
-![](http://image.whhxz.smallstool.cn/20171104屏幕快照2017-11-04下午3.04.00.png)
+![](/images/old/20171104屏幕快照2017-11-04下午3.04.00.png)
 通过Spark注册账号，如图：
-![](http://image.whhxz.smallstool.cn/20171104屏幕快照2017-11-04下午3.04.49.png)
+![](/images/old/20171104屏幕快照2017-11-04下午3.04.49.png)
 登陆Spark，多开后可以通过不同账号聊天，也可以通过会议群聊。
 
 
 ### Idea启动Tigase
 在项目中XMPPServer是启动的入口，需要配置XMPPServer启动。
 配置如图：
-![](http://image.whhxz.smallstool.cn/20171104QQ20171104-152648@2x.png)
+![](/images/old/20171104QQ20171104-152648@2x.png)
 配置参数如下：
 ```
 VM option：

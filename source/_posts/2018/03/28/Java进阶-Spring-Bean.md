@@ -40,7 +40,7 @@ public class Main {
 ### SpringBean创建
 进入ClassPathXmlApplicationContext分析Spring加载Bean的过程。
 默认加载流程图如下（简化版）：
-![](http://image.whhxz.smallstool.cn/20180329Spring基本加载过程.png)
+![](/images/old/20180329Spring基本加载过程.png)
 
 基本就是先创建BeanFacotry（用于后续构建Bean）---> 读取配置 ---> 封装需要创建的Bean
 在这过程中有不少前置后置等相关处理。
@@ -48,7 +48,7 @@ public class Main {
 
 上述构造好需要组装的Bean后（Bean还未创建），之后通过BeanFactory创建需要的Bean。
 默认加载流程图如下（单例简化版）：
-![](http://image.whhxz.smallstool.cn/20180329创建Bean.png)
+![](/images/old/20180329创建Bean.png)
 
 在之前创建的BeanFactory实际上创建的默认类为`DefaultListableBeanFactory`
 需要注意的是，在创建Bean的过程中，如果该Bean有其他依赖，先创建Bean后对其依赖的属性进行赋值，如果赋值的Bean不存在，会先创建该Bean，直到创建完成。

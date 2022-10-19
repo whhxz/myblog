@@ -36,7 +36,7 @@ tags: ['maven', '脚手架', '快速搭建项目', 'archetypes']
 <!-- more -->
 #### 配置相关文件
 目录结构如下
-![](http://image.whhxz.smallstool.cn/20170908%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-08%E4%B8%8A%E5%8D%8810.13.35.png)
+![](/images/old/20170908%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-08%E4%B8%8A%E5%8D%8810.13.35.png)
 目录**archetype-resources**下配置需要生成的项目，在使用maven生成项目时，目录结构和archetype-resources下目录一致。
 目录**META-INF/maven**下*archetype-metadata.xml*设置生成规则
 如下：
@@ -91,7 +91,7 @@ tags: ['maven', '脚手架', '快速搭建项目', 'archetypes']
 
 #### 使用方式
 1. 使用命令 *mvn install* 把当前项目打包到本地maven仓库中，如果都要上传到服务器，可以配置好服务器路径，账号密码，使用 *mvn deploy* 上传文件。
-2. 创建maven项目,如图![](http://image.whhxz.smallstool.cn/20170908QQ20170908-102803.png)，配置archetype相关参数。后续步骤和普通创建maven项目一致。
+2. 创建maven项目,如图![](/images/old/20170908QQ20170908-102803.png)，配置archetype相关参数。后续步骤和普通创建maven项目一致。
 3. 导入创建的maven项目，配置数据库，启动项目即可。
 
 该项目地址 ** [quick-ssm-webapp](https://github.com/whhxz/quick-ssm-webapp) **

@@ -6,7 +6,7 @@ tags: ['Java', '设计模式', '面向对象设计原则']
 ---
 
 ## Java设计模式
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%888.33.33.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%888.33.33.png)
 ### 面向对象设计原则：
 > * 单一职责原则：一个类只负责一个功能领域中的相应职责
 > * 开闭原则：软件实体应对扩展开放，而对修改关闭
@@ -40,7 +40,7 @@ public class ActivityService {
 }
 ```
 UML类图如下：
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8810.52.32.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8810.52.32.png)
 这里改类承担太多功能，需要从新改进，如下：
 ```Java
 public class ActivityService {
@@ -67,7 +67,7 @@ public class DBUtils{
 }
 ```
 UML类图如下：
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.40.30.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.40.30.png)
 **注意**：在使用单一职责原则时，在拆分功能时，不要拆分太细，以免出现太多类。
 
 #### 开闭原则（Open-Closed Principle, OCP）：
@@ -102,7 +102,7 @@ public class PieChart {
 }
 ```
 UML类图如下：
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.46.40.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.46.40.png)
 这里不符合开闭原则，需要代码重构，如下：
 ```Java
 //新增一个画画抽象类
@@ -147,7 +147,7 @@ public class ChartDisplay {
 }
 ```
 UML类图如下：
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%8812.00.36.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%8812.00.36.png)
 在改进方法后，在添加新的画图，只要添加一个新子类就可以实现。
 
 **注**：在修改xml和properties等配置文件时，因为无需重新编译源代码，即可认为是符合开闭原则。
@@ -190,7 +190,7 @@ public class Excemple{
 > 使用多个专门的接口，而不使用单一的总接口，即客户端不应该依赖那些它不需要的接口。根据接口隔离原则，当一个接口太大时，我们需要将它分割成一些更细小的接口，使用该接口的客户端仅需知道与之相关的方法即可。每一个接口应该承担一种相对独立的角色，不干不该干的事，该干的事都要干。
 
 Spring中XmlWebApplication的继承关系图：
-![](http://image.whhxz.smallstool.cn/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%883.24.01.png)
+![](/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%883.24.01.png)
 
 很多接口拆分的比较细
 

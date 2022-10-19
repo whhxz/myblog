@@ -38,7 +38,7 @@ class EagerSingleton {
 缺点：该类就是在系统中不使用也会初始化，对象会一直存在，不会被回收。占用系统资源。
 
 在jdk中有啥用饿汉式单例设计模式，如Runtime：
-![](http://image.whhxz.smallstool.cn/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%883.02.15.png)
+![](/images/old/20170913%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-09-13%E4%B8%8B%E5%8D%883.02.15.png)
 
 #### 懒汉式单例
 ```java
