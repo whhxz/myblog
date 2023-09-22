@@ -1,8 +1,8 @@
 ---
 title: 初次使用rust
 date: 2023-09-19 16:45:38
-categories: ["Rust"]
-tags: ["Rust"]
+categories: ["rust"]
+tags: ["rust"]
 ---
 
 ### 安装
