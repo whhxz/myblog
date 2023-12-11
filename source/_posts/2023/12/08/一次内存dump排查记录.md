@@ -14,6 +14,7 @@ tags: ['异常', '内存dump']
 ```sql
 select t from org.apache.tomcat.jdbc.pool.PooledConnection t
 ```
+<!-- more -->
 得到返回的20池连接对象。点开池连接后可以看到对象详细信息。
 对象**org.apache.tomcat.jdbc.pool.PooledConnection**是由**org.apache.tomcat.jdbc.pool.ProxyConnection**所持有。
 一直往上查，查到**org.apache.tomcat.jdbc.pool.StatementFacade$StatementProxy**。
