@@ -92,3 +92,5 @@ where t.id = v.id
 
 对于超多字段更新情况下并未做参数，可能性能比对相差不是很大，不过也可能因为最后生成sql较大导致性能有差距。
 本次参数过程中还缺少记录数据库cup、内存、磁盘占用情况。
+
+测试代码地址：https://github.com/whhxz/blog-example/tree/main/mybatis-batch-handler-test
