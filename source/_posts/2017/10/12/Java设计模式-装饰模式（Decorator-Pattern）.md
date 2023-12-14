@@ -33,7 +33,7 @@ tags: ['设计模式', '装饰模式', 'Decorator Pattern']
 * BufferedInputStream、PushbackInputStream：装饰器子类，增强InputStream。`BufferedInputStream `的作用是为另一个输入流添加一些功能，例如，提供“缓冲功能”以及支持“mark()标记”和“reset()重置方法”。带缓冲的流一次读取多个字节，相比InputStream一次读取一个字节，带缓存的磁盘操作减少了磁盘的操作次数，加快了读取速度。
 
 ```java
-String fileName = "/Users/xuzhuo/Downloads/CentOS-7.0-1406-x86_64-DVD.iso";
+String fileName = "/Users/demo/Downloads/CentOS-7.0-1406-x86_64-DVD.iso";
 byte[] bytes = new byte[1024];
 //使用buffered读取
 BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(new File(fileName)));
