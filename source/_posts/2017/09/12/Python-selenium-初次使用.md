@@ -21,7 +21,7 @@ def use_phantom():
     # 设置代理
     service_args = ['--proxy=proxy3.fn.com:8080', '--proxy-type=http']
     # 设置路径
-    driver = webdriver.PhantomJS(executable_path="/Users/xuzhuo/SOFT/phantomjs/phantomjs-2.1.1-macosx/bin/phantomjs",
+    driver = webdriver.PhantomJS(executable_path="/Users/demo/SOFT/phantomjs/phantomjs-2.1.1-macosx/bin/phantomjs",
                                  service_args=service_args)
     driver.get("https://www.google.com")
     # 截图

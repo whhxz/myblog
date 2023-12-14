@@ -618,8 +618,8 @@ spring:
       server:
         svn:
           uri: http://xxxxx.com/svnuri/
-          username: xuzhuo
-          password: 123123.com
+          username: demo
+          password: 123456
           default-label: ""
   profiles:
     active: subversion
