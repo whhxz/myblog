@@ -50,6 +50,6 @@ jobs:
       uses: s0/git-publish-subdir-action@v2.6.0
       env:
         REPO: self
-        BRANCH: gh-pages
+        BRANCH: public # gh-pages该分支属于特殊分支
         FOLDER: public
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

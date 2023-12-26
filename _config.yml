@@ -73,7 +73,7 @@ since: 2014
 deploy:
   type: git
   repository: git@github.com:whhxz/myblog.git
-  branch: gh-pages
+  branch: public
 search:
   path: search.json
   field: post
