@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="享元模式 定义：运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式。  享元模式以共享的方式高效地支持大量细粒度对象的重用，享元对象能做到共享的关键是区分了内部状态(Intrinsic State)和外部状态(Extrinsic S">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java设计模式-享元模式（Flyweight Pattern）">
+<meta property="og:url" content="http://blog.whhxz.com/2017/10/17/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight-Pattern%EF%BC%89/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="享元模式 定义：运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式。  享元模式以共享的方式高效地支持大量细粒度对象的重用，享元对象能做到共享的关键是区分了内部状态(Intrinsic State)和外部状态(Extrinsic S">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%883.41.00.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%883.33.44.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%884.06.40.png">
+<meta property="article:published_time" content="2017-10-17T06:02:58.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.208Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="享元模式">
+<meta property="article:tag" content="Flyweight Pattern">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%883.41.00.png">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2017/10/17/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight-Pattern%EF%BC%89/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2017/10/17/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight-Pattern%EF%BC%89/","path":"2017/10/17/Java设计模式-享元模式（Flyweight-Pattern）/","title":"Java设计模式-享元模式（Flyweight Pattern）"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java设计模式-享元模式（Flyweight Pattern） | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">享元模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8D%95%E7%BA%AF%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%E3%80%81%E5%A4%8D%E5%90%88%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">单纯享元模式、复合享元模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8JDK%E4%B8%AD%E4%BD%BF%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">在JDK中使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">享元模式总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/10/17/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F%EF%BC%88Flyweight-Pattern%EF%BC%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java设计模式-享元模式（Flyweight Pattern） | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java设计模式-享元模式（Flyweight Pattern）
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-10-17 14:02:58" itemprop="dateCreated datePublished" datetime="2017-10-17T14:02:58+08:00">2017-10-17</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h3><blockquote>
+<p>定义：运用共享技术有效地支持大量细粒度对象的复用。系统只使用少量的对象，而这些对象都很相似，状态变化很小，可以实现对象的多次复用。由于享元模式要求能够共享的对象必须是细粒度对象，因此它又称为轻量级模式，它是一种对象结构型模式。</p>
+</blockquote>
+<p>享元模式以共享的方式高效地支持大量细粒度对象的重用，享元对象能做到共享的关键是区分了内部状态(Intrinsic State)和外部状态(Extrinsic State)。</p>
+<ul>
+<li>内部状态：内部状态是存储在享元对象内部并且不会随环境改变而改变的状态，内部状态可以共享。</li>
+<li>外部状态是随环境改变而改变的、不可以共享的状态。享元对象的外部状态通常由客户端保存，并在享元对象被创建之后，需要使用的时候再传入到享元对象内部。一个外部状态与另一个外部状态之间是相互独立的。</li>
+</ul>
+<p>正因为区分了内部状态和外部状态，我们可以将具有相同内部状态的对象存储在享元池中，享元池中的对象是可以实现共享的，需要的时候就将对象从享元池中取出，实现对象的复用。通过向取出的对象注入不同的外部状态，可以得到一系列相似的对象，而这些对象在内存中实际上只存储一份。</p>
+<span id="more"></span>
+<p>享元模式UML如图：<br><img src="/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%883.41.00.png"></p>
+<ul>
+<li>抽象享元（AbstractFlyweight）:通常是一个接口或抽象类，在抽象享元类中声明了具体享元类公共的方法，这些方法可以向外界提供享元对象的内部数据（内部状态），同时也可以通过这些方法来设置外部数据（外部状态）。</li>
+<li>具体享元（ConcreteFlyweight）：它实现了抽象享元类，其实例称为享元对象；在具体享元类中为内部状态提供了存储空间。</li>
+<li>非共享具体享元类(UnsharedConcreteFlyweight)：并不是所有的抽象享元类的子类都需要被共享，不能被共享的子类可设计为非共享具体享元类；当需要一个非共享具体享元类的对象时可以直接通过实例化创建。</li>
+<li>享元工厂（FlyweightFactory）：享元工厂类用于创建并管理享元对象，它针对抽象享元类编程，将各种类型的具体享元对象存储在一个享元池中，享元池一般设计为一个存储“键值对”的集合（也可以是其他类型的集合）。</li>
+</ul>
+<p>举例，在游戏中，有恢复药剂，分为HP恢复药剂以及MP恢复药剂，在没捡到一份药剂后，如果每次都创建一个药剂对象，会比较浪费系统资源，这个时候可以采用享元模式来设计：<br><img src="/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%883.33.44.png"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.HashMap;</span><br><span class="line"><span class="keyword">import</span> java.util.Map;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 药水</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractPotion</span> &#123;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 药品名称</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">protected</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">AbstractPotion</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 使用药水</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> String <span class="title function_">getName</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 生命药剂</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">HealingPotion</span> <span class="keyword">extends</span> <span class="title class_">AbstractPotion</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">HealingPotion</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用&quot;</span> + name + <span class="string">&quot;：你的HP恢复了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 魔法药剂</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MagicPotion</span> <span class="keyword">extends</span> <span class="title class_">AbstractPotion</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">MagicPotion</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;使用&quot;</span> + name + <span class="string">&quot;：你的MP恢复了&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 药水工厂</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">PotionFactory</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">PotionFactory</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 工厂药品存放</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Map&lt;String, AbstractPotion&gt; potionMap = <span class="keyword">new</span> <span class="title class_">HashMap</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">static</span> <span class="type">Object</span> <span class="variable">potionBuild</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">Object</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 药水类型</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">enum</span> <span class="title class_">PotionTypeEnum</span> &#123;</span><br><span class="line">        <span class="comment">//HP药剂</span></span><br><span class="line">        HEALING_POTION,</span><br><span class="line">        <span class="comment">//HP药剂</span></span><br><span class="line">        MAGIC_POTION</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 创建药品</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> potionType</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> AbstractPotion <span class="title function_">buildPotion</span><span class="params">(PotionTypeEnum potionType, String name)</span> &#123;</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">potion</span> <span class="operator">=</span> potionMap.get(potionType.name() + <span class="string">&quot;_&quot;</span> + name);</span><br><span class="line">        <span class="keyword">if</span> (potion == <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (potionMap) &#123;</span><br><span class="line">                potion = potionMap.get(potionType.name() + <span class="string">&quot;_&quot;</span> + name);</span><br><span class="line">                <span class="keyword">if</span> (potion == <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">switch</span> (potionType) &#123;</span><br><span class="line">                        <span class="keyword">case</span> HEALING_POTION:</span><br><span class="line">                            potion = <span class="keyword">new</span> <span class="title class_">HealingPotion</span>(name);</span><br><span class="line">                            potionMap.put(potionType.name() + <span class="string">&quot;_&quot;</span> + name, potion);</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                        <span class="keyword">case</span> MAGIC_POTION:</span><br><span class="line">                            potion = <span class="keyword">new</span> <span class="title class_">MagicPotion</span>(name);</span><br><span class="line">                            potionMap.put(potionType.name() + <span class="string">&quot;_&quot;</span> + name, potion);</span><br><span class="line">                            <span class="keyword">break</span>;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> potion;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">hp1</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;小型HP恢复药剂&quot;</span>);</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">hp2</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;大型HP恢复药剂&quot;</span>);</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">hp3</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;小型HP恢复药剂&quot;</span>);</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">mp1</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;大型MP恢复药剂&quot;</span>);</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">mp2</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;小型MP恢复药剂&quot;</span>);</span><br><span class="line">        <span class="type">AbstractPotion</span> <span class="variable">mp3</span> <span class="operator">=</span> PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;大型MP恢复药剂&quot;</span>);</span><br><span class="line"></span><br><span class="line">        System.out.println(System.identityHashCode(hp1));</span><br><span class="line">        System.out.println(System.identityHashCode(hp2));</span><br><span class="line">        System.out.println(System.identityHashCode(hp3));</span><br><span class="line">        System.out.println(System.identityHashCode(mp1));</span><br><span class="line">        System.out.println(System.identityHashCode(mp2));</span><br><span class="line">        System.out.println(System.identityHashCode(mp3));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在该例子中，提供工厂车间对象后，如果是同种药剂，返回的是同一个对象。非共享具体享元类，这里不做展示，和平常创建对象是一样的。</p>
+<h3 id="单纯享元模式、复合享元模式"><a href="#单纯享元模式、复合享元模式" class="headerlink" title="单纯享元模式、复合享元模式"></a>单纯享元模式、复合享元模式</h3><ul>
+<li>在单纯享元模式中，所有的具体享元类都是可以共享的，不存在非共享具体享元类。（如上面例子）</li>
+<li>将一些单纯享元对象使用组合模式加以组合，还可以形成复合享元对象，这样的复合享元对象本身不能共享，但是它们可以分解成单纯享元对象，而后者则可以共享。</li>
+</ul>
+<p>复合享元模式例子：还是之前的系统，现在有个药剂师副业，可以生产出极度稀有的自定义药剂（这里只是举例理解复合享元模式，实际应用中应该不存在），系统能出产改药剂的人非常少。这时需要在系统中新增一个特殊药剂类：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 特殊药剂</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SpecialPotion</span> <span class="keyword">extends</span> <span class="title class_">AbstractPotion</span>&#123;</span><br><span class="line">    <span class="comment">//药剂效果</span></span><br><span class="line">    <span class="keyword">private</span> List&lt;AbstractPotion&gt; effect = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SpecialPotion</span><span class="params">(String name)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="title function_">SpecialPotion</span><span class="params">(String name, List&lt;AbstractPotion&gt; effect)</span> &#123;</span><br><span class="line">        <span class="built_in">super</span>(name);</span><br><span class="line">        <span class="built_in">this</span>.effect = effect;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">void</span> <span class="title function_">operation</span><span class="params">()</span> &#123;</span><br><span class="line">        effect.forEach(AbstractPotion::operation);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        ArrayList&lt;AbstractPotion&gt; potionArrayList = <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">        potionArrayList.add(PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;小型HP药剂&quot;</span>));</span><br><span class="line">        potionArrayList.add(PotionFactory.buildPotion(PotionFactory.PotionTypeEnum.HEALING_POTION, <span class="string">&quot;小型MP药剂&quot;</span>));</span><br><span class="line">        <span class="type">SpecialPotion</span> <span class="variable">specialPotion</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SpecialPotion</span>(<span class="string">&quot;特殊药剂&quot;</span>, potionArrayList);</span><br><span class="line">        specialPotion.operation();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UML类图如下：<br><img src="/images/old/20171017%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-10-17%E4%B8%8B%E5%8D%884.06.40.png"></p>
+<p>新增的特殊药剂，有着同时恢复HP和MP功效，其内部属性effect集合中数据时共享的，由Factory创建。</p>
+<h3 id="在JDK中使用"><a href="#在JDK中使用" class="headerlink" title="在JDK中使用"></a>在JDK中使用</h3><p>在String和Integer等类中有使用享元模式。<br>先说String：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">str1</span> <span class="operator">=</span> <span class="string">&quot;abcd&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">str2</span> <span class="operator">=</span> <span class="string">&quot;abcd&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">str3</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span> + <span class="string">&quot;cd&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">str4</span> <span class="operator">=</span> <span class="string">&quot;ab&quot;</span>;</span><br><span class="line">        str4 += <span class="string">&quot;cd&quot;</span>;</span><br><span class="line">        System.out.println(System.identityHashCode(str1));<span class="comment">//1160460865</span></span><br><span class="line">        System.out.println(System.identityHashCode(str2));<span class="comment">//1160460865</span></span><br><span class="line">        System.out.println(System.identityHashCode(str3));<span class="comment">//1160460865</span></span><br><span class="line">        System.out.println(System.identityHashCode(str4));<span class="comment">//1247233941</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在Java中字符串被大量使用，为了避免每次都创建相同的字符串对象及内存分配，JVM内部对字符串对象的创建做了一定的优化，在内存中专门有一块区域用来存储字符串常量池。在第一次创建字符串”abcd”，会把该字符串对象放入常量池，第二次创建时，直接从常量池中获取改字符串。第三个在编译期间就会把改字符串合并为”abcd”所以是一样的，第四个，在实际运行中是通过StringBuilder来拼接的字符串之后toString返回。</p>
+<ul>
+<li>注：在JDK1.7中, 已经把原本放在永久代的字符串常量池移出, 放在堆中。JDK 1.8 对 JVM 架构的改造将类元数据放到本地内存中。另外。将常量池和静态变量放到 Java 堆里。在这样的架构下。类元信息就突破了原来 -XX:MaxPermSize 的限制。如今能够使用很多其它的本地内存。这样就从一定程度上攻克了原来在执行时生成大量类的造成常常 Full GC 问题，如执行时使用反射、代理等。</li>
+<li>注：除了字面常量值以外，常量池还可以容纳其它几种符号引用：类和接口的全限定名、字段名称和描述符、方法名称和描述符。</li>
+</ul>
+<p>举例Integer：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">int1</span> <span class="operator">=</span> <span class="number">1</span>;<span class="comment">//自动装箱相当于Integer.valueOf(1)</span></span><br><span class="line">        <span class="type">Integer</span> <span class="variable">int2</span> <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">int3</span> <span class="operator">=</span> <span class="number">200</span>;</span><br><span class="line">        <span class="type">Integer</span> <span class="variable">int4</span> <span class="operator">=</span> <span class="number">200</span>;</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> <span class="variable">i1</span> <span class="operator">=</span> <span class="number">200</span>;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i2</span> <span class="operator">=</span> <span class="number">200</span>;</span><br><span class="line"></span><br><span class="line">        System.out.println(int1 == int2);<span class="comment">//true</span></span><br><span class="line">        System.out.println(int3 == int4);<span class="comment">//false</span></span><br><span class="line">        System.out.println(i1 == i2);<span class="comment">//true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在代码中int比较为true是因为int是基本类型，直接比较的值。两个Integer中比较一个为true，一个为false，查看源码得知，是因为Integer中使用了享元模式，在Integer中有个缓存池，保存了-128~127之间所有的Integer。</p>
+<p>同样在项目中线程池、连接池等，都使用享元模式。</p>
+<h3 id="享元模式总结"><a href="#享元模式总结" class="headerlink" title="享元模式总结"></a>享元模式总结</h3><p>享元模式是以节约内存、提高性能为出发点的设计模式。当系统中存在大量相同或者相似的对象时，享元模式是一种较好的解决方案，它通过共享技术实现相同或相似的细粒度对象的复用，从而节约了内存空间，提高了系统性能。相比其他结构型设计模式，享元模式的使用频率并不算太高。</p>
+<p>享元模式和工厂模式区别在于，享元模式是内部使用了工厂模式来创建对象，是包含关系。<br>享元模式和单例模式区别在于，享元模式创建的对象在系统中并不是唯一存在，只是相似对象是唯一存在。而单例是类基本唯一存在，有且只有一个。相同点在于都能节约内存。</p>
+<p><strong>使用场景：</strong></p>
+<ul>
+<li>一个系统有大量相同或者相似的对象，造成内存的大量耗费。</li>
+<li>对象的大部分状态都可以外部化，可以将这些外部状态传入对象中。（如药剂名字）</li>
+<li>在使用享元模式时需要维护一个存储享元对象的享元池，而这需要耗费一定的系统资源，因此，应当在需要多次重复使用享元对象时才值得使用享元模式。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>可以极大减少内存中对象的数量，使得相同或相似对象在内存中只保存一份，从而可以节约系统资源，提高系统性能。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>享元模式使得系统变得复杂，需要分离出内部状态和外部状态，这使得程序的逻辑复杂化。</li>
+<li>为了使对象可以共享，享元模式需要将享元对象的部分状态外部化，而读取外部状态将使得运行时间变长。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+              <a href="/tags/%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/" rel="tag"># 享元模式</a>
+              <a href="/tags/Flyweight-Pattern/" rel="tag"># Flyweight Pattern</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/10/14/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%A4%96%E8%A7%82%E6%A8%A1%E5%BC%8F%EF%BC%88Facade-Pattern%EF%BC%89/" rel="prev" title="Java设计模式-外观模式（Facade Pattern）">
+                  <i class="fa fa-angle-left"></i> Java设计模式-外观模式（Facade Pattern）
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/10/18/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F%EF%BC%88Proxy-Pattern%EF%BC%89/" rel="next" title="Java设计模式-代理模式（Proxy-Pattern）">
+                  Java设计模式-代理模式（Proxy-Pattern） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

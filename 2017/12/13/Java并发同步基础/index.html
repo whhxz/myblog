@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="volatile定义与实现原理Java编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致的更新，线程应该确保通过排他锁单独获得这个变量。Java语言提供了volatile，在某些情况下比锁更加方便。如果一个字段被声明成volatile，Java线程内存模型确保所有线程看到这个变量的值是一致的。(Java语言规范第三版volatile定义) volatile主要作用为：  禁止指令重排序优">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发同步基础">
+<meta property="og:url" content="http://blog.whhxz.com/2017/12/13/Java%E5%B9%B6%E5%8F%91%E5%90%8C%E6%AD%A5%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="volatile定义与实现原理Java编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致的更新，线程应该确保通过排他锁单独获得这个变量。Java语言提供了volatile，在某些情况下比锁更加方便。如果一个字段被声明成volatile，Java线程内存模型确保所有线程看到这个变量的值是一致的。(Java语言规范第三版volatile定义) volatile主要作用为：  禁止指令重排序优">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%882.04.12.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%885.56.54.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%883.52.56.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg">
+<meta property="article:published_time" content="2017-12-13T01:09:23.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.209Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="多线程">
+<meta property="article:tag" content="同步">
+<meta property="article:tag" content="synchronized">
+<meta property="article:tag" content="volatile">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%882.04.12.png">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2017/12/13/Java%E5%B9%B6%E5%8F%91%E5%90%8C%E6%AD%A5%E5%9F%BA%E7%A1%80/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2017/12/13/Java%E5%B9%B6%E5%8F%91%E5%90%8C%E6%AD%A5%E5%9F%BA%E7%A1%80/","path":"2017/12/13/Java并发同步基础/","title":"Java并发同步基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java并发同步基础 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#volatile%E5%AE%9A%E4%B9%89%E4%B8%8E%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">volatile定义与实现原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#synchronized%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">synchronized基本使用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%94%81%E7%9A%84%E5%8D%87%E7%BA%A7"><span class="nav-number">3.</span> <span class="nav-text">锁的升级</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%8F%E5%90%91%E9%94%81"><span class="nav-number">3.1.</span> <span class="nav-text">偏向锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BD%BB%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">3.2.</span> <span class="nav-text">轻量级锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E9%87%8F%E7%BA%A7%E9%94%81"><span class="nav-number">3.3.</span> <span class="nav-text">重量级锁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%81%E6%AF%94%E8%BE%83"><span class="nav-number">3.4.</span> <span class="nav-text">锁比较</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%85%B6%E4%BB%96%E4%BC%98%E5%8C%96"><span class="nav-number">4.</span> <span class="nav-text">虚拟机其他优化</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/12/13/Java%E5%B9%B6%E5%8F%91%E5%90%8C%E6%AD%A5%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java并发同步基础 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java并发同步基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-12-13 09:09:23" itemprop="dateCreated datePublished" datetime="2017-12-13T09:09:23+08:00">2017-12-13</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">多线程学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h3 id="volatile定义与实现原理"><a href="#volatile定义与实现原理" class="headerlink" title="volatile定义与实现原理"></a>volatile定义与实现原理</h3><p>Java编程语言允许线程访问共享变量，为了确保共享变量能被准确和一致的更新，线程应该确保通过排他锁单独获得这个变量。Java语言提供了volatile，在某些情况下比锁更加方便。如果一个字段被声明成volatile，Java线程内存模型确保所有线程看到这个变量的值是一致的。(Java语言规范第三版volatile定义)</p>
+<p>volatile主要作用为：</p>
+<ol>
+<li>禁止指令重排序优化</li>
+<li>保证内存一致性</li>
+</ol>
+<p>因为在写操作volatile修饰的变量时，会多出一行lock汇编代码。<br>在cpu操作时，会把部分数据缓存到CPU缓存里（L1、L2等）并未实时写回内存，如果对声明了volatile的变量进行写操作，会将当前变量所在的缓存行数据写回到系统内存，在多处理器下，为了保证其他处理核心缓存一致，会实现缓存一致协议，保证其他处理器检查当前缓存是否过期，后续操作时，会重新从系统内存中读取最新数据到缓存。简单来说，修改了volatile修饰的变量时，把CPU缓存中修改后的值及时写入内存，同时其他处理器设置自己缓存过期，使用时重新从系统内存中读取。</p>
+<span id="more"></span>
+<p>编译器和处理器为了提高并行度，可能会对部分操作进行重排序，在单线程执行下，重排序并不会改变执行结果。编译器和处理器不会对存在数据依赖关系的操作做重排序，因为这种重排序会改变执行结果。但是，如果操作之间不存在数据依赖关系，这些操作可能被编译器和处理器重排序。（as-if-serial）</p>
+<p>参考：</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cDovL3d3dy5pbmZvcS5jb20vY24vYXJ0aWNsZXMvZnRmLWphdmEtdm9sYXRpbGU=">聊聊并发（一）——深入分析Volatile的实现原理<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cDovL3d3dy5pbmZvcS5jb20vY24vYXJ0aWNsZXMvenptLWphdmEtaHNkaXMtanZt">JVM执行篇：使用HSDIS插件分析JVM代码执行细节<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cDovL3d3dy5pbmZvcS5jb20vY24vYXJ0aWNsZXMvamF2YS1tZW1vcnktbW9kZWwtMi8=">深入理解Java内存模型（二）——重排序<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+<p>常规单例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Singleton</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> Singleton singleton;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="title function_">Singleton</span><span class="params">()</span> &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title function_">getSingleton</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class)&#123;</span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="literal">null</span>)&#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> <span class="title class_">Singleton</span>();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">out</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;xxx&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在单例设计模式中，采用双重检查锁来创建单例对象。因为可能出现指令重排序而导致该代码中有个安全隐患。<br>在代码 <strong>singleton &#x3D; new Singleton();</strong> 创建对象，其操作可拆解为：</p>
+<ol>
+<li>堆内存开辟空间准备初始化对象</li>
+<li>初始化对象</li>
+<li>singleton引用指向这个堆内存空间地址</li>
+</ol>
+<p>实际转换为汇编，不会仅仅这几个步骤。如果现在进行了指令重排序变为1、3、2，这并不影响最终执行结果，如果现在属性singleton引用指向了改内存地址，但是对象还未初始化完成，另外一个线程进入该方法后判断singleton不为空，返回的singleton对象调用其方法时就会出错，因为对象实际上并未初始化完成。解决办法，在singleton属性上加上volatile标识，（jdk1.5之后有效）或者使用临时变量，创建完成后在赋值到singleton。</p>
+<p>内存不一致性举例：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TaskTest</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> stop;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">while</span> (!stop) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span> &#123;</span><br><span class="line">        stop = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line"></span><br><span class="line">        <span class="type">TaskTest</span> <span class="variable">taskTest</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">TaskTest</span>();</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">Thread</span>(taskTest).start();</span><br><span class="line">        TimeUnit.SECONDS.sleep(<span class="number">1</span>);</span><br><span class="line">        taskTest.stop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//TaskTest编译后代码</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TaskTest</span> <span class="keyword">implements</span> <span class="title class_">Runnable</span> &#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="type">boolean</span> stop;</span><br><span class="line"></span><br><span class="line">    TaskTest() &#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="type">int</span> i;</span><br><span class="line">        <span class="keyword">for</span>(i = <span class="number">0</span>; !<span class="built_in">this</span>.stop; ++i) &#123;</span><br><span class="line">            ;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">stop</span><span class="params">()</span> &#123;</span><br><span class="line">        <span class="built_in">this</span>.stop = <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述例子中，主线程启动了一个子线程，子线程有个循环，通过判断属性stop是否退出循环，之后主线程修改属性stop值，在实际运行中，子线程并不会退出循环，这就可能是因为stop被缓存到CPU缓存中，导致内存中数据修改，但是CPU缓存中的数据为过期数据，使循环无法退出。解决办法在stop属性中加入volatile修饰。</p>
+<h3 id="synchronized基本使用"><a href="#synchronized基本使用" class="headerlink" title="synchronized基本使用"></a>synchronized基本使用</h3><p>synchronized是实现同步的基础，Java中每个对象都可以作为一个锁，当一个线程试图访问同步代码块时，必须先获取锁。具体使用有3种方法：</p>
+<ol>
+<li>对普通方法同步，锁为当前实例对象。</li>
+<li>对静态方法同步，锁为当前类的Class对象</li>
+<li>对代码块进行同步，锁为括号内的对象</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SynchronizedDemo</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">synchronized</span> (<span class="built_in">this</span>)&#123;</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method2</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method3</span><span class="params">()</span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对改代码编译后，对该代码进行反编译。<br>第一个方法反编译部分如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span>;</span><br><span class="line">    descriptor: ()V</span><br><span class="line">    flags: ACC_PUBLIC</span><br><span class="line">    Code:</span><br><span class="line">      stack=<span class="number">2</span>, locals=<span class="number">3</span>, args_size=<span class="number">1</span></span><br><span class="line">         <span class="number">0</span>: aload_0</span><br><span class="line">         <span class="number">1</span>: dup</span><br><span class="line">         <span class="number">2</span>: astore_1</span><br><span class="line">         <span class="number">3</span>: monitorenter</span><br><span class="line">         <span class="number">4</span>: aload_1</span><br><span class="line">         <span class="number">5</span>: monitorexit</span><br><span class="line">         <span class="number">6</span>: <span class="keyword">goto</span>          <span class="number">14</span></span><br><span class="line">         <span class="number">9</span>: astore_2</span><br><span class="line">        <span class="number">10</span>: aload_1</span><br><span class="line">        <span class="number">11</span>: monitorexit</span><br><span class="line">        <span class="number">12</span>: aload_2</span><br><span class="line">        <span class="number">13</span>: athrow</span><br><span class="line">        <span class="number">14</span>: <span class="keyword">return</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>代码中存在monitorenter（监视器锁进入），这个解释如下：<br>每个对象有一个监视器锁（monitor）。当monitor被占用时就会处于锁定状态，线程执行monitorenter指令时尝试获取monitor的所有权，过程如下：</p>
+<ul>
+<li>如果monitor的进入数为0，则该线程进入monitor，然后将进入数设置为1，该线程即为monitor的所有者。</li>
+<li>如果线程已经占有该monitor，只是重新进入，则进入monitor的进入数加1。</li>
+<li>如果其他线程已经占用了monitor，则该线程进入阻塞状态，直到monitor的进入数为0，再重新尝试获取monitor的所有权。</li>
+</ul>
+<p>monitorexit（监视器锁退出）：执行monitorexit的线程必须是objectref所对应的monitor的所有者。指令执行时，monitor的进入数减1，如果减1后进入数为0，那线程退出monitor，不再是这个monitor的所有者。其他被这个monitor阻塞的线程可以尝试去获取这个 monitor 的所有权。</p>
+<p>所以Synchronized的语义底层是通过一个monitor的对象来完成，其实wait&#x2F;notify等方法也依赖于monitor对象，这就是为什么只有在同步的块或者方法中才能调用wait&#x2F;notify等方法，否则会抛出java.lang.IllegalMonitorStateException的异常的原因。</p>
+<p>第二个方法显示如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">synchronized</span> <span class="keyword">void</span> <span class="title function_">method1</span><span class="params">()</span>;</span><br><span class="line">  descriptor: ()V</span><br><span class="line">  flags: ACC_PUBLIC, ACC_SYNCHRONIZED</span><br><span class="line">  Code:</span><br><span class="line">    stack=<span class="number">0</span>, locals=<span class="number">1</span>, args_size=<span class="number">1</span></span><br><span class="line">       <span class="number">0</span>: <span class="keyword">return</span></span><br><span class="line">    LineNumberTable:</span><br><span class="line">      line <span class="number">6</span>: <span class="number">0</span></span><br><span class="line">    LocalVariableTable:</span><br><span class="line">      Start  Length  Slot  Name   Signature</span><br><span class="line">          <span class="number">0</span>       <span class="number">1</span>     <span class="number">0</span>  <span class="built_in">this</span>   Lcom/whh/SynchronizedDemo;</span><br></pre></td></tr></table></figure>
+<p>在反编译后的代码中有ACC_PUBLIC（该方法为PUBLIC）ACC_SYNCHRONIZED（该方法为同步方法），JVM就是根据该标示符来实现方法的同步的：当方法调用时，调用指令将会检查方法的 ACC_SYNCHRONIZED 访问标志是否被设置，如果设置了，执行线程将先获取monitor，获取成功之后才能执行方法体，方法执行完后再释放monitor。在方法执行期间，其他任何线程都无法再获得同一个monitor对象。 其实本质上没有区别，只是方法的同步是一种隐式的方式来实现，无需通过字节码来完成。</p>
+<p>第三个方法反编译与第二个类似只是多个ACC_STATIC（静态方法）描述。</p>
+<h3 id="锁的升级"><a href="#锁的升级" class="headerlink" title="锁的升级"></a>锁的升级</h3><p>synchronized内部依赖于monitor，而monitor依赖于操作系统Mutex Lock线程之间锁的切换成本非常高，所以synchronized在jdk1.6以前效率非常低，在jdk1.6以后，为了减少获取锁释放锁带来性能消耗，引入了偏向锁、轻量级锁。之后锁有了4种状态：无锁状态&lt;偏向锁&lt;轻量级锁&lt;重量级锁。状态会随着竞争逐渐升级，但锁（偏向锁可能会变为无锁暂停）不会降级，目的是为了提高释放锁的效率。</p>
+<p>HotSpot虚拟机中，对象在内存中存储的布局可以分为三块区域：<strong>对象头（Header）</strong>、<strong>实例数据（Instance Data）</strong>和<strong>对齐填充（Padding）</strong>。HotSpot虚拟机的对象头(Object Header)包括两部分信息，第一部分用于存储对象自身的运行时数据， 如哈希码（HashCode）、GC分代年龄、锁状态标志、线程持有的锁、偏向线程ID、偏向时间戳等等，这部分数据的长度在32位和64位的虚拟机（暂 不考虑开启压缩指针的场景）中分别为32个和64个Bits，官方称它为<strong>Mark Word</strong>。<br>在32位JDK中存储如下：<br><img src="/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%882.04.12.png"></p>
+<h4 id="偏向锁"><a href="#偏向锁" class="headerlink" title="偏向锁"></a>偏向锁</h4><p>在很多情况下，锁并没有线程竞争，经常由同一个线程获取，HotSpot作者为了让线程获取锁的代价更低而引入了偏向锁。可以通过JVM参数关闭偏向锁：XX:-UseBiasedLocking&#x3D;false，程序会默认进入轻量级锁。</p>
+<p>偏向锁获取流程图如下：<br><img src="/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%885.56.54.png"><br>判断是否为偏向锁，如果为偏向锁，判断对象头的Mark Word里线程是否指向当前线程。如果不是需要采用CAS竞争锁，获取失败表示有竞争，当竞争达到全局安全点（safepoint）时，升级锁为轻量级锁。</p>
+<p>偏向锁释放：<br>偏向锁默认是不会释放，需要等到出现竞争时才会释放，当有其他线程尝试竞争偏向锁时，持有偏向锁的线程才会被释放。偏向锁释放，需要等待全局安全点（该点上没有正在执行的字节码）。先暂停拥有偏向锁的线程，检查线程是否活着，处于不活动状态，设置对象为无锁状态；如果线程仍然活着，拥有偏向锁的栈会被执行遍历偏向对象的锁记录，之后设置对象头的Mark Word要么查询偏向于其他线程，要么恢复到无锁或者升级为轻量级锁，最后唤醒暂停的线程（可以先看轻量级锁）。</p>
+<ul>
+<li>这里释放应该是，通过出现竞争时，有判断逻辑处理当前锁是否需要重新变为无锁、重偏向锁、升级为轻量级锁。</li>
+</ul>
+<p>锁转换：<br><img src="/images/old/20171213%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-13%E4%B8%8B%E5%8D%883.52.56.png"></p>
+<p><strong>偏向锁主要是为了优化同一线程频繁访问锁。</strong></p>
+<h4 id="轻量级锁"><a href="#轻量级锁" class="headerlink" title="轻量级锁"></a>轻量级锁</h4><p>轻量级锁加锁过程：</p>
+<ol>
+<li>在代码进入同步块的时候，如果同步对象锁状态为无锁状态（锁标志位为“01”状态，是否为偏向锁为“0”），虚拟机首先将在当前线程的栈帧中建立一个名为锁记录（Lock Record）的空间，用于存储锁对象目前的Mark Word的拷贝，官方称之为 Displaced Mark Word。</li>
+<li>拷贝对象头中的Mark Word复制到锁记录中</li>
+<li>拷贝成功后，虚拟机将使用CAS操作尝试将对象的Mark Word更新为指向Lock Record的指针，并将Lock Record里的owner指针指向object mark word。</li>
+<li>更新成功，者当前线程拥有该对象的锁。设置Mark Word锁标志为00.</li>
+<li>CAS多次更新不成功，虚拟机检查对象Mark Word是否指向当前线程的栈帧，如果是表示当前线程已经获取了对象的锁，进入同步块执行。如果不是表示存在线程竞争，轻量级锁变为重量级锁，锁标志变为10。Mark Work中存储的是指向重量级锁的指针，后面等待锁的线程会进入阻塞状态。当前线程会使用CAS来获取锁，目的是为了不让线程阻塞。</li>
+</ol>
+<p>轻量级锁解锁过程：</p>
+<ol>
+<li>通过CAS把线程中复制的Displaced Mark Word对象替换为当前的Mark Word</li>
+<li>替换成功，同步完成结束</li>
+<li>替换失败，说明有其他线程尝试获取锁，锁已经变为重量级锁，需要释放锁的同时唤醒其他被挂起的线程。</li>
+</ol>
+<p>轻量级锁升级为重量级锁，是为了避免资源消耗。轻量级锁没有太多空间存储额外的状态，太多线程自旋太消耗CPU资源。可参考<span class="exturl" data-url="aHR0cHM6Ly93d3cuemhpaHUuY29tL3F1ZXN0aW9uLzQxOTMwODc3L2Fuc3dlci8xMzY2OTkzMTE=">https://www.zhihu.com/question/41930877/answer/136699311<i class="fa fa-external-link-alt"></i></span></p>
+<h4 id="重量级锁"><a href="#重量级锁" class="headerlink" title="重量级锁"></a>重量级锁</h4><p>重量级锁依赖monitor，当一个线程进入同步代码块，其他线程会被阻塞在外，当线程执行完毕后释放锁，同时唤醒其他等待线程。</p>
+<p>锁之间图解：<br><img src="/images/old/20171213v2-9db4211af1be81785f6cc51a58ae6054_r.jpg"></p>
+<h4 id="锁比较"><a href="#锁比较" class="headerlink" title="锁比较"></a>锁比较</h4><table>
+<thead>
+<tr>
+<th>锁</th>
+<th align="left">优点</th>
+<th align="left">缺点</th>
+<th align="left">场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>偏向锁</td>
+<td align="left">资源消耗少，同步方法月非同步方法差距不大</td>
+<td align="left">如果存在线程竞争，锁撤销消耗资源</td>
+<td align="left">单一线程访问</td>
+</tr>
+<tr>
+<td>轻量级锁</td>
+<td align="left">线程竞争响应时间快</td>
+<td align="left">如果一直得不到锁，CPU自旋消耗资源</td>
+<td align="left">同步代码块执行速度快，线程交替执行，竞争少</td>
+</tr>
+<tr>
+<td>重量级锁</td>
+<td align="left">无自旋，CPU消耗少</td>
+<td align="left">线程阻塞，响应慢</td>
+<td align="left">追求吞吐量，代码块执行速度长</td>
+</tr>
+</tbody></table>
+<h3 id="虚拟机其他优化"><a href="#虚拟机其他优化" class="headerlink" title="虚拟机其他优化"></a>虚拟机其他优化</h3><p>适应性自旋（Adaptive Spinning）：从轻量级锁获取的流程中我们知道，当线程在获取轻量级锁的过程中执行CAS操作失败时，是要通过自旋来获取重量级锁的。问题在于，自旋是需要消耗CPU的，如果一直获取不到锁的话，那该线程就一直处在自旋状态，白白浪费CPU资源。解决这个问题最简单的办法就是指定自旋的次数，例如让其循环10次，如果还没获取到锁就进入阻塞状态。但是JDK采用了更聪明的方式——适应性自旋，简单来说就是线程如果自旋成功了，则下次自旋的次数会更多，如果自旋失败了，则自旋的次数就会减少。</p>
+<p>锁粗化（Lock Coarsening）：锁粗化的概念应该比较好理解，就是将多次连接在一起的加锁、解锁操作合并为一次，将多个连续的锁扩展成一个范围更大的锁。举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">StringBufferTest</span> &#123;</span><br><span class="line">    <span class="type">StringBuffer</span> <span class="variable">stringBuffer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">append</span><span class="params">()</span>&#123;</span><br><span class="line">        stringBuffer.append(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">        stringBuffer.append(<span class="string">&quot;b&quot;</span>);</span><br><span class="line">        stringBuffer.append(<span class="string">&quot;c&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>锁消除（Lock Elimination）：锁消除即删除不必要的加锁操作。根据代码逃逸技术，如果判断到一段代码中，堆上的数据不会逃逸出当前线程，那么可以认为这段代码是线程安全的，不必要加锁。看下面这段程序：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//禁用了偏向锁</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">SynchronizedTest02</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">SynchronizedTest02</span> <span class="variable">test02</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">SynchronizedTest02</span>();</span><br><span class="line">        <span class="comment">//启动预热</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">10000</span>; i++) &#123;</span><br><span class="line">            i++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="type">long</span> <span class="variable">start</span> <span class="operator">=</span> System.currentTimeMillis();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt; <span class="number">100000000</span>; i++) &#123;</span><br><span class="line">            test02.append(<span class="string">&quot;abc&quot;</span>, <span class="string">&quot;def&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(<span class="string">&quot;Time=&quot;</span> + (System.currentTimeMillis() - start));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">append</span><span class="params">(String str1, String str2)</span> &#123;</span><br><span class="line">        <span class="type">StringBuffer</span> <span class="variable">sb</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">StringBuffer</span>();</span><br><span class="line">        sb.append(str1).append(str2);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>参考：</p>
+<ul>
+<li><span class="exturl" data-url="aHR0cDovL3d3dy5jbmJsb2dzLmNvbS9wYWRkaXgvcC81NDA1Njc4Lmh0bWw=">http://www.cnblogs.com/paddix/p/5405678.html<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhpaHUuY29tL3F1ZXN0aW9uLzU3Nzc0MTYyL2Fuc3dlci8xNTQyOTgwNDQ=">https://www.zhihu.com/question/57774162/answer/154298044<i class="fa fa-external-link-alt"></i></span></li>
+<li><span class="exturl" data-url="aHR0cHM6Ly93d3cuemhpaHUuY29tL3F1ZXN0aW9uLzUzODI2MTE0L2Fuc3dlci8yMzYzNjMxMjY=">https://www.zhihu.com/question/53826114/answer/236363126<i class="fa fa-external-link-alt"></i></span></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag"># 多线程</a>
+              <a href="/tags/%E5%90%8C%E6%AD%A5/" rel="tag"># 同步</a>
+              <a href="/tags/synchronized/" rel="tag"># synchronized</a>
+              <a href="/tags/volatile/" rel="tag"># volatile</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/12/11/Java%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/" rel="prev" title="Java线程基础">
+                  <i class="fa fa-angle-left"></i> Java线程基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/12/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="next" title="Java内存模型">
+                  Java内存模型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

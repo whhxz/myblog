@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在程序中经常会出现各种错误，在Java中可以通过异常进行展现出来。在处理异常时，常用的关键字有：try、catch、finally、throw、throws；try：通过会出现异常的代码块可以放入try代码块中，用于监听代码块中的是否会出现异常。catch：通常用于捕获try代码块中出现的异常，用于发生异常捕获后做相关操作。finally：用于try代码块执行完毕后，必须执行的地方，比如出现IOE">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础-异常">
+<meta property="og:url" content="http://blog.whhxz.com/2018/03/27/Java%E5%9F%BA%E7%A1%80-%E5%BC%82%E5%B8%B8/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="在程序中经常会出现各种错误，在Java中可以通过异常进行展现出来。在处理异常时，常用的关键字有：try、catch、finally、throw、throws；try：通过会出现异常的代码块可以放入try代码块中，用于监听代码块中的是否会出现异常。catch：通常用于捕获try代码块中出现的异常，用于发生异常捕获后做相关操作。finally：用于try代码块执行完毕后，必须执行的地方，比如出现IOE">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20180328%E5%BC%82%E5%B8%B8%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E5%9B%BE.jpg">
+<meta property="article:published_time" content="2018-03-27T12:34:58.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.212Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="异常">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20180328%E5%BC%82%E5%B8%B8%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E5%9B%BE.jpg">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2018/03/27/Java%E5%9F%BA%E7%A1%80-%E5%BC%82%E5%B8%B8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2018/03/27/Java%E5%9F%BA%E7%A1%80-%E5%BC%82%E5%B8%B8/","path":"2018/03/27/Java基础-异常/","title":"Java基础-异常"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java基础-异常 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%82%E5%B8%B8%E6%B5%81%E7%A8%8B"><span class="nav-number">1.</span> <span class="nav-text">异常流程</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/27/Java%E5%9F%BA%E7%A1%80-%E5%BC%82%E5%B8%B8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java基础-异常 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java基础-异常
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-27 20:34:58" itemprop="dateCreated datePublished" datetime="2018-03-27T20:34:58+08:00">2018-03-27</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">Java基础</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在程序中经常会出现各种错误，在Java中可以通过异常进行展现出来。<br>在处理异常时，常用的关键字有：try、catch、finally、throw、throws；<br>try：通过会出现异常的代码块可以放入try代码块中，用于监听代码块中的是否会出现异常。<br>catch：通常用于捕获try代码块中出现的异常，用于发生异常捕获后做相关操作。<br>finally：用于try代码块执行完毕后，必须执行的地方，比如出现IOException后用于关闭连接，就算出现异常，finally也会执行。<br>throw：用于程序手动抛出异常。<br>throws：用于方法后，标识方法可能会出现异常。</p>
+<p>在Java中异常分为两大类：Error、Exception。<br>Error：用来表示编译时和系统错误，出现这种错误时一般比较严重，一般有JVM抛出。<br>Exception：由程序本身可以处理的异常。</p>
+<p>异常又可以分为：可检测异常、非检测异常<br>可检测异常：正确的程序在运行中，很容易出现的、情理可容的异常状况。编译器在编译代码时会检测该异常。一旦出现该异常，必须进行处理，也就是要么try…catch，要么throw抛出异常到上一层，由上层处理，如果一直上抛，最终会抛出到JVM层，最终导致JVM停止。除RuntimeException及其子类以外都是该异常，典型的如IOException。<br>非检测异常：这种异常并不会直接被编译器所检测，RuntimeException及其子类和Error。</p>
+<span id="more"></span>
+<p>除去Error，只看Exception分为运行时异常和非运行时异常：<br>运行时异常：和非检测异常一样，只是排除Error，都是RuntimeException及其子类。<br>非运行时异常：除RuntimeException及其子类以外的异常。</p>
+<p>常见的异常关系继承图如下：<br><img src="/images/old/20180328%E5%BC%82%E5%B8%B8%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB%E5%9B%BE.jpg"></p>
+<h1 id="异常流程"><a href="#异常流程" class="headerlink" title="异常流程"></a>异常流程</h1><p>编写代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(ex());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">ex</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>/<span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">           <span class="comment">// return 1;</span></span><br><span class="line">			<span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>javap -v -l -p -c Main.class</code>反编译后只看部分代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">public static int ex();</span><br><span class="line">descriptor: ()I</span><br><span class="line">flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">Code:</span><br><span class="line">    stack=3, locals=2, args_size=0</span><br><span class="line">    0: iconst_1</span><br><span class="line">    1: iconst_0</span><br><span class="line">    2: idiv</span><br><span class="line">    3: istore_0</span><br><span class="line">    4: iconst_0</span><br><span class="line">    5: ireturn</span><br><span class="line">    6: astore_0</span><br><span class="line">    7: new           #6                  // class java/lang/RuntimeException</span><br><span class="line">    10: dup</span><br><span class="line">    11: ldc           #7                  // String aaa</span><br><span class="line">    13: invokespecial #8                  // Method java/lang/RuntimeException.&quot;&lt;init&gt;&quot;:(Ljava/lang/String;)V</span><br><span class="line">    16: athrow</span><br><span class="line">    17: astore_1</span><br><span class="line">    18: iconst_0</span><br><span class="line">    19: ireturn</span><br><span class="line">    Exception table:</span><br><span class="line">        from    to  target type</span><br><span class="line">            0     4     6   Class java/lang/Exception</span><br><span class="line">            0     4    17   any</span><br><span class="line">            6    18    17   any</span><br><span class="line">    LineNumberTable:</span><br><span class="line">    line 8: 0</span><br><span class="line">    line 13: 4</span><br><span class="line">    line 9: 6</span><br><span class="line">    line 11: 7</span><br><span class="line">    line 13: 17</span><br><span class="line">    StackMapTable: number_of_entries = 2</span><br><span class="line">    frame_type = 70 /* same_locals_1_stack_item */</span><br><span class="line">        stack = [ class java/lang/Exception ]</span><br><span class="line">    frame_type = 74 /* same_locals_1_stack_item */</span><br><span class="line">        stack = [ class java/lang/Throwable ]</span><br></pre></td></tr></table></figure>
+<p>上述代码中可以看Exception table中 <code>0~4</code>行如果抛出了<code>java/lang/Exception</code>异常，那么转跳到第6行，<code>0~4</code>如果发生了其他异常转跳到17行，如果<code>6~18</code>行发生其他异常转跳17行。</p>
+<p>上述代码中try包含的代码块就是反编译后<code>0~4</code>行，转到第6行为catch异常代码，其中我们是throw一个异常，其实就是创建一个异常对象，然后执行<code>athrow</code>命令，之后去异常表里面查找是否存在异常处理，之后转跳到17行，继续执行然后返回。</p>
+<p>这里就可以看出上述代码，并不会抛出<code>RuntimeException</code>，直接返回finlly中的值。</p>
+<p>如果修改代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        System.out.println(ex());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="type">int</span> <span class="title function_">ex</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">1</span>/<span class="number">0</span>;</span><br><span class="line">        &#125;<span class="keyword">catch</span> (Exception e)&#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">RuntimeException</span>(<span class="string">&quot;aaa&quot;</span>);</span><br><span class="line">        &#125;<span class="keyword">finally</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;finally&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>反编译后得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">public static int ex();</span><br><span class="line">descriptor: ()I</span><br><span class="line">flags: ACC_PUBLIC, ACC_STATIC</span><br><span class="line">Code:</span><br><span class="line">    stack=3, locals=2, args_size=0</span><br><span class="line">    0: iconst_1</span><br><span class="line">    1: iconst_0</span><br><span class="line">    2: idiv</span><br><span class="line">    3: istore_0</span><br><span class="line">    4: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">    7: ldc           #5                  // String finally</span><br><span class="line">    9: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">    12: goto          37</span><br><span class="line">    15: astore_0</span><br><span class="line">    16: new           #8                  // class java/lang/RuntimeException</span><br><span class="line">    19: dup</span><br><span class="line">    20: ldc           #9                  // String aaa</span><br><span class="line">    22: invokespecial #10                 // Method java/lang/RuntimeException.&quot;&lt;init&gt;&quot;:(Ljava/lang/String;)V</span><br><span class="line">    25: athrow</span><br><span class="line">    26: astore_1</span><br><span class="line">    27: getstatic     #2                  // Field java/lang/System.out:Ljava/io/PrintStream;</span><br><span class="line">    30: ldc           #5                  // String finally</span><br><span class="line">    32: invokevirtual #6                  // Method java/io/PrintStream.println:(Ljava/lang/String;)V</span><br><span class="line">    35: aload_1</span><br><span class="line">    36: athrow</span><br><span class="line">    37: iconst_1</span><br><span class="line">    38: ireturn</span><br><span class="line">    Exception table:</span><br><span class="line">        from    to  target type</span><br><span class="line">        0     4    15   Class java/lang/Exception</span><br><span class="line">        0     4    26   any</span><br><span class="line">        15    27    26   any</span><br></pre></td></tr></table></figure>
+<p>反编译后<code>0~4</code>中如果出现异常转跳到15，如果<code>15~27</code>中出现异常转跳26，在<code>15~27</code>为catch中语句，创建RuntimeException对象，然后<code>athrow</code>抛出异常，转跳到26，执行finally语句。之后代码继续执行，可以看到在36处有个<code>athrow</code>，但是在异常表中并没有该处异常处理，所以异常会被抛出。</p>
+<p>在java中通过<code>方法调用栈</code>来跟踪线程调用一系列方法调用过程，改栈堆保存了每个调用方法的本地信息（比如方法的局部变量）。每个线程都有一个独立的方法调用栈。每当一个新方法被调用时，Java虚拟机把描述该方法的栈结构置入栈顶，位于栈顶的方法为正在执行的方法。方法执行完毕后该方法会被弹出栈顶。如果在方法中出现异常，且异常表中没有该异常处理，在异常抛出后，虚拟机会从方法栈中弹出该方法，然后在前一个调用方法处查询是否有该异常处理，如果一直没有就会一直追溯到调用栈底部，这时会如下处理：<br>1、调用异常对象的printStackTrace()方法，打印来自方法调用栈的异常信息。<br>2、如果该线程不是主线程，那么终止这个线程，其他线程继续正常运行。如果该线程是主线程（即方法调用栈的底部为main()方法），那么整个应用程序被终止。</p>
+<ul>
+<li><code>Thread.currentThread().getStackTrace()</code>可以打印当前方法调用栈。</li>
+</ul>
+<p>更多异常知识：<br><span class="exturl" data-url="aHR0cHM6Ly93d3cuaWJtLmNvbS9kZXZlbG9wZXJ3b3Jrcy9jbi9qYXZhL2otbG8tZXhjZXB0aW9uLW1pc2RpcmVjdGlvbi8=">Java 异常处理的误区和经验总结<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly93d3cuaWJtLmNvbS9kZXZlbG9wZXJ3b3Jrcy9jbi9qYXZhL2otbG8tZXhjZXB0aW9uL2luZGV4Lmh0bWw=">Java 异常处理及其应用<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTA0MTI3MTkvYXJ0aWNsZS9kZXRhaWxzLzUwMDQzODY1">从字节码的角度来看try-catch-finally和return的执行顺序<i class="fa fa-external-link-alt"></i></span><br><span class="exturl" data-url="aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2RueHlod3gvYXJ0aWNsZS9kZXRhaWxzLzY5NzUwODc=">java学习笔记《面向对象编程》——异常处理<i class="fa fa-external-link-alt"></i></span></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag"># 基础</a>
+              <a href="/tags/%E5%BC%82%E5%B8%B8/" rel="tag"># 异常</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/27/Java%E5%9F%BA%E7%A1%80-%E6%B5%8B%E8%AF%95/" rel="prev" title="Java基础-测试">
+                  <i class="fa fa-angle-left"></i> Java基础-测试
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/28/Java%E8%BF%9B%E9%98%B6-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="Java进阶-网络编程（一）">
+                  Java进阶-网络编程（一） <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

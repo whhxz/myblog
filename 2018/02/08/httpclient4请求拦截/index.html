@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="最近在准备写一个分布式调用链记录，记录用请求开始到请求各个系统直到结束。不同系统间调用方式不一样，现在第一步先拦截http请求，获取请求参数以及返回值，并做日志记录。使用http请求中，可能使用了各种框架，暂时先处理Apache httpclient。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="httpclient4请求拦截">
+<meta property="og:url" content="http://blog.whhxz.com/2018/02/08/httpclient4%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="最近在准备写一个分布式调用链记录，记录用请求开始到请求各个系统直到结束。不同系统间调用方式不一样，现在第一步先拦截http请求，获取请求参数以及返回值，并做日志记录。使用http请求中，可能使用了各种框架，暂时先处理Apache httpclient。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-02-08T01:23:27.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.211Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="Apache httpclient4">
+<meta property="article:tag" content="调用链">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2018/02/08/httpclient4%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2018/02/08/httpclient4%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA/","path":"2018/02/08/httpclient4请求拦截/","title":"httpclient4请求拦截"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>httpclient4请求拦截 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%A6%E6%88%AAHttpRequestExecutor"><span class="nav-number">1.</span> <span class="nav-text">拦截HttpRequestExecutor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DefaultBHttpClientConnection%E4%BF%AE%E6%94%B9"><span class="nav-number">2.</span> <span class="nav-text">DefaultBHttpClientConnection修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BHttpConnectionBase%E4%BF%AE%E6%94%B9"><span class="nav-number">3.</span> <span class="nav-text">BHttpConnectionBase修改</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/02/08/httpclient4%E8%AF%B7%E6%B1%82%E6%8B%A6%E6%88%AA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="httpclient4请求拦截 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          httpclient4请求拦截
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-02-08 09:23:27" itemprop="dateCreated datePublished" datetime="2018-02-08T09:23:27+08:00">2018-02-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F%E8%B0%83%E7%94%A8%E9%93%BE/" itemprop="url" rel="index"><span itemprop="name">分布式调用链</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>最近在准备写一个分布式调用链记录，记录用请求开始到请求各个系统直到结束。不同系统间调用方式不一样，现在第一步先拦截http请求，获取请求参数以及返回值，并做日志记录。<br>使用http请求中，可能使用了各种框架，暂时先处理Apache httpclient。</p>
+<span id="more"></span>
+<h3 id="拦截HttpRequestExecutor"><a href="#拦截HttpRequestExecutor" class="headerlink" title="拦截HttpRequestExecutor"></a>拦截HttpRequestExecutor</h3><p>在使用httpclient时，最终都会调用到HttpRequestExecutor.execute提交请求，可以对execute进行拦截处理，在execute方法前后插入获取请求和返回值。</p>
+<p>1、在启动加载HttpRequestExecutor时，通过javassist修改class<br>2、在方法前后插入指定方法<br>3、方法前获取请求数据URL等，header中插入traceId标示<br>4、方法后插入获取返回值</p>
+<p>因为execute中存在参数HttpRequest，所以设置头部信息比较方便，但是如果想获取请求参数比较麻烦。</p>
+<h3 id="DefaultBHttpClientConnection修改"><a href="#DefaultBHttpClientConnection修改" class="headerlink" title="DefaultBHttpClientConnection修改"></a>DefaultBHttpClientConnection修改</h3><p>在execute中获取请求参数需要强制转换对象为子类，可能出现未知的子类。所以通过修改DefaultBHttpClientConnection的class在sendRequestEntity前插入一段代码，用于获取请求参数。<br>例子如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">sendRequestEntity</span><span class="params">(Object target, Object[] args)</span>&#123;</span><br><span class="line">    <span class="type">HttpEntityEnclosingRequest</span> <span class="variable">request</span> <span class="operator">=</span> (HttpEntityEnclosingRequest)args[<span class="number">0</span>];</span><br><span class="line">    <span class="type">HttpEntity</span> <span class="variable">entity</span> <span class="operator">=</span> request.getEntity();</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (entity != <span class="literal">null</span>)&#123;</span><br><span class="line">            <span class="type">InputStream</span> <span class="variable">content</span> <span class="operator">=</span> entity.getContent();</span><br><span class="line">            <span class="keyword">if</span> (content.markSupported())&#123;</span><br><span class="line">                <span class="type">int</span> <span class="variable">contentLength</span> <span class="operator">=</span> (<span class="type">int</span>) entity.getContentLength();</span><br><span class="line">                <span class="keyword">final</span> <span class="type">ByteArrayBuffer</span> <span class="variable">buffer</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ByteArrayBuffer</span>(contentLength);</span><br><span class="line"><span class="comment">//                    content.mark(contentLength);</span></span><br><span class="line">                content.read(buffer.buffer(), <span class="number">0</span>, contentLength);</span><br><span class="line"><span class="comment">//                    content.reset();</span></span><br><span class="line">                System.out.println(<span class="string">&quot;~~~~~~~~~~~~~~~~&quot;</span>);</span><br><span class="line">                System.out.println(<span class="keyword">new</span> <span class="title class_">String</span>(buffer.buffer()));</span><br><span class="line">                System.out.println(<span class="string">&quot;~~~~~~~~~~~~~~~~&quot;</span>);</span><br><span class="line"></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">        e.printStackTrace();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在例子中，因为该请求中使用的是ByteArrayInputStream，所以可以直接读取流中的数据，而不影响数据的发送。<br>这里可能存在一个问题，如果请求中保存的流不是ByteArrayInputStream，可能是其他的，就需要mark后reset，这种对于不支持mark的流就需要使用额外的处理方式了。<br>终极办法是，通过修改sendRequestEntity中prepareOutput方法的调用，在返回的OutputStream中对该流进行封装（装饰设计模式），定义一个OutputStreamWrapper，重写write方法，在write时，保存字节到数组中，同时写入流中。在之后可以通过读取字节中的数据，而不用担心出现之前的那种情况。</p>
+<h3 id="BHttpConnectionBase修改"><a href="#BHttpConnectionBase修改" class="headerlink" title="BHttpConnectionBase修改"></a>BHttpConnectionBase修改</h3><p>因为需要获取返回值，在第一步骤中execute是可以获取返回的HttpResponse，但是在读取HttpResponse中的数据后，使最终调用改接口的地方无法获取返回值，因为在返回的事InputStream中，只能读取一次，拦截时获取了返回值，就会导致实际调用方无法获取返回值。<br>这时就需要修改BHttpConnectionBase中prepareInput方法调用createInputStream时，返回的是一个支持重复读的流。修改如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">CtMethod</span> <span class="variable">prepareInput</span> <span class="operator">=</span> ctClass.getDeclaredMethod(<span class="string">&quot;prepareInput&quot;</span>);</span><br><span class="line">prepareInput.instrument(<span class="keyword">new</span> <span class="title class_">ExprEditor</span>() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">edit</span><span class="params">(MethodCall m)</span> <span class="keyword">throws</span> CannotCompileException &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;createInputStream&quot;</span>.equals(m.getMethodName())) &#123;</span><br><span class="line">            m.replace(<span class="string">&quot;&#123;$_ = new java.io.BufferedInputStream($proceed($$));&#125;&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>通过获取prepareInput，之后修改createInputStream，包装返回的BufferedInputStream，在之后execute中获取返回值时，通过mark、reset来读取流，同时解决了IO无法重复读的问题。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Apache-httpclient4/" rel="tag"># Apache httpclient4</a>
+              <a href="/tags/%E8%B0%83%E7%94%A8%E9%93%BE/" rel="tag"># 调用链</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/01/30/Java%E5%9F%BA%E7%A1%80-IO%E6%A8%A1%E5%9E%8B/" rel="prev" title="Java基础-IO模型">
+                  <i class="fa fa-angle-left"></i> Java基础-IO模型
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/02/22/Spring%E9%A1%B9%E7%9B%AE%E4%B8%AD%E9%9B%86%E6%88%90feign/" rel="next" title="Spring项目中集成feign">
+                  Spring项目中集成feign <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

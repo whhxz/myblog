@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在编译Java文件生成Class文件最终都需要加载到虚拟机中才能使用。虚拟机把Class文件加载到内存，并对数据进行校验、转换解析、初始化，最终形成可以被虚拟机直接使用的Java类型。 类从被加载到卸载，生命周期如下：加载 —&gt; 验证 —&gt; 准备 —&gt; 解析 —&gt; 初始化 —&gt; 使用 —&gt; 卸载 其中验证、准备、解析三个节点称为连接。  加载：找到Class加载">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础-类加载">
+<meta property="og:url" content="http://blog.whhxz.com/2018/04/24/Java%E5%9F%BA%E7%A1%80-%E7%B1%BB%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="在编译Java文件生成Class文件最终都需要加载到虚拟机中才能使用。虚拟机把Class文件加载到内存，并对数据进行校验、转换解析、初始化，最终形成可以被虚拟机直接使用的Java类型。 类从被加载到卸载，生命周期如下：加载 —&gt; 验证 —&gt; 准备 —&gt; 解析 —&gt; 初始化 —&gt; 使用 —&gt; 卸载 其中验证、准备、解析三个节点称为连接。  加载：找到Class加载">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20180424%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72018-04-24%E4%B8%8A%E5%8D%8810.46.26.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/2018042420160925001518808.png">
+<meta property="article:published_time" content="2018-04-24T01:49:43.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.213Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="JVM">
+<meta property="article:tag" content="类加载">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20180424%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72018-04-24%E4%B8%8A%E5%8D%8810.46.26.png">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2018/04/24/Java%E5%9F%BA%E7%A1%80-%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2018/04/24/Java%E5%9F%BA%E7%A1%80-%E7%B1%BB%E5%8A%A0%E8%BD%BD/","path":"2018/04/24/Java基础-类加载/","title":"Java基础-类加载"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java基础-类加载 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.</span> <span class="nav-text">类加载器</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bootstrap%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.1.</span> <span class="nav-text">Bootstrap类加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Extension%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.2.</span> <span class="nav-text">Extension类加载器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#System%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">System类加载器</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE%E6%A8%A1%E5%BC%8F"><span class="nav-number">2.</span> <span class="nav-text">双亲委派模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%B8%8A%E4%B8%8B%E6%96%87%E7%B1%BB%E5%8A%A0%E8%BD%BD%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">线程上下文类加载器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Tomcat%E7%B1%BB%E5%8A%A0%E8%BD%BD"><span class="nav-number">4.</span> <span class="nav-text">Tomcat类加载</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/04/24/Java%E5%9F%BA%E7%A1%80-%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java基础-类加载 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java基础-类加载
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-04-24 09:49:43" itemprop="dateCreated datePublished" datetime="2018-04-24T09:49:43+08:00">2018-04-24</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">Java基础</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在编译Java文件生成Class文件最终都需要加载到虚拟机中才能使用。虚拟机把Class文件加载到内存，并对数据进行校验、转换解析、初始化，最终形成可以被虚拟机直接使用的Java类型。</p>
+<p>类从被加载到卸载，生命周期如下：<br>加载 —&gt; 验证 —&gt; 准备 —&gt; 解析 —&gt; 初始化 —&gt; 使用 —&gt; 卸载</p>
+<p>其中验证、准备、解析三个节点称为连接。</p>
+<ul>
+<li>加载：找到Class加载到内存中，生成一个代表改类的Class对象（不同的虚拟机实现可不一样）。</li>
+<li>验证：校验Class中字节流符合当前虚拟机要求，主要包括文件格式验证、元数据验证、字节码验证、符号引用验证（NoSuchFieldError，NoSuchMethodError）。</li>
+<li>准备：为类变量分配内存初始化变量的初始值（只是赋值初始值，并不是赋值准确的值，如static a&#x3D;1，此处static&#x3D;0，之后初始化在设置static&#x3D;1）此处不包含final修饰的static，因为final修饰的static在编译时就会分配。</li>
+<li>解析：主要将常量池中符号引用（用于描述所引用的目标，目标不一定已经加载到内存中）替换为直接引用的过程。虚拟机要求在执行anewarray、checkcast、getfield、getstatic、instanceof、invokeinterface、invokespecial、invokestatic、invokevirtual、multianewarray、new、putfield、putstatic这13操作符之前对所使用的符号引用进行解析即可。</li>
+<li>初始化：类加载最后阶段，如果类具有父类，向上初始化，执行静态代码块已经初始化静态属性。</li>
+</ul>
+<p>上述中加载、验证、准备、初始化、卸载是确定的顺序，解析并不一定在上述所在的顺序，在有些情况下，解析可以在初始化之后，这是为了支持Java运行时绑定。</p>
+<span id="more"></span>
+
+<h3 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h3><p>类加载器只是用来实现类的加载动作，其他的验证、准备、解析、初始化都是有虚拟机内部完成。<br>自定义类加载器如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Person</span> &#123;</span><br><span class="line">    String name;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">ClassLoader</span> <span class="variable">classLoader</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ClassLoader</span>() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="keyword">public</span> Class&lt;?&gt; loadClass(String name) <span class="keyword">throws</span> ClassNotFoundException &#123;</span><br><span class="line">                <span class="type">String</span> <span class="variable">fileName</span> <span class="operator">=</span> name.substring(name.lastIndexOf(<span class="string">&quot;.&quot;</span>) + <span class="number">1</span>) + <span class="string">&quot;.class&quot;</span>;</span><br><span class="line">                <span class="type">InputStream</span> <span class="variable">in</span> <span class="operator">=</span> getClass().getResourceAsStream(fileName);</span><br><span class="line">                <span class="keyword">if</span> (in == <span class="literal">null</span>) &#123;</span><br><span class="line">                    <span class="keyword">return</span> <span class="built_in">super</span>.loadClass(name);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">try</span> &#123;</span><br><span class="line">                    <span class="type">byte</span>[] bytes = <span class="keyword">new</span> <span class="title class_">byte</span>[in.available()];</span><br><span class="line">                    in.read(bytes);</span><br><span class="line">                    <span class="keyword">return</span> defineClass(name, bytes, <span class="number">0</span>, bytes.length);</span><br><span class="line">                &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">                    e.printStackTrace();</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">super</span>.loadClass(name);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        Class&lt;?&gt; clazz = classLoader.loadClass(<span class="string">&quot;com.whh.netty.Person&quot;</span>);</span><br><span class="line">        System.out.println(clazz);<span class="comment">//com.whh.netty.Person</span></span><br><span class="line">        System.out.println(clazz == Person.class);<span class="comment">//false</span></span><br><span class="line">        System.out.printf(<span class="string">&quot;clazz class loader: %s\n&quot;</span>, clazz.getClassLoader());<span class="comment">//clazz class loader: com.whh.netty.Main$1@372f7a8d</span></span><br><span class="line">        System.out.printf(<span class="string">&quot;Person class loader: %s\n&quot;</span>, Person.class.getClassLoader());<span class="comment">//Person class loader: sun.misc.Launcher$AppClassLoader@14dad5dc</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述中使用自定义类加载器生成的class和直接使用该类并不相等，因为是有不同的类加载器所加载。</p>
+<p>在JVM中提供了3种类加载器：Bootstrap类加载器、Extension类加载器、System类加载器。</p>
+<h4 id="Bootstrap类加载器"><a href="#Bootstrap类加载器" class="headerlink" title="Bootstrap类加载器"></a>Bootstrap类加载器</h4><p>Bootstrap类加载器主要用于加载JVM自身需要的类，改类加载器主要使用C++实现，是JVM自身的一部分。服装架加载<code>$JAVA_HOME/lib</code>下核心类库或者<code>-Xbootclasspath</code>参数指定路径下的jar包。为了安全起见Bootstrap类加载器值加载包名为java、javax、sun等开头的类。</p>
+<h4 id="Extension类加载器"><a href="#Extension类加载器" class="headerlink" title="Extension类加载器"></a>Extension类加载器</h4><p><code>sun.misc.Launcher.ExtClassLoader</code>是Extension类加载器的实现类，负责加载<code>$JAVA_HOME/lib/ext</code>目录下或者由<code>-Djava.ext.dir</code>指定路径中的包。继承关系如下：<br><img src="/images/old/20180424%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72018-04-24%E4%B8%8A%E5%8D%8810.46.26.png"></p>
+<h4 id="System类加载器"><a href="#System类加载器" class="headerlink" title="System类加载器"></a>System类加载器</h4><p><code>sun.misc.Launcher.AppClassLoader</code>是System类加载器的实现类，负责加载类<code>java-classpath</code>或<code>-D java.class.path</code>指定路径下的类。通过<code>ClassLoader.getSystemClassLoader()</code>可以获取该类加载器.</p>
+<p>在平常使用时，几乎都是由上述3中类加载器加载类。在JVM中，JVM对class加载是按需加载，使用才会被加载，import并不会加载。</p>
+<h3 id="双亲委派模式"><a href="#双亲委派模式" class="headerlink" title="双亲委派模式"></a>双亲委派模式</h3><p>对于双亲委派模式，如果一个类加载器需要加载一个类，并不是直接加载类，而是由把该请求提交给其父类加载器（此处父类加载器并不是继承关系，是组合关系），如果父类加载器还有父类加载器就一直提交，顶层Bootstrap类加载器，如果其中父类加载器可以完成加载任务，那么就成功返回，如果所有父类加载都无法完成加载，那么由子类完成加载。在使用双亲委派模式下，除了Bootstrap没有父类加载器，其他类加载器都必须有父类加载器。（源码可查看java.lang.ClassLoader#loadClass(java.lang.String, boolean)，先通过父类加载）</p>
+<p>优点在于，Java类随着类加载器一起具备了优先级的层级关系，避免了基础类被随意加载破坏程序的稳定性。</p>
+<p>虚拟机在使用内加载器时会调用<code>loadClassInternal</code>方法，该方法再调用<code>loadClass</code>。所以重写<code>loadClass</code>即可实现自定义类加载器。但是因为双亲委派模式核心就在<code>loadClass</code>中，所以如果想不破坏双亲委派模式就不建议覆盖<code>loadClass</code>方法，可以通过覆盖<code>findClass</code>方法来自定义类加载器。<br>修改之前例子，把重新<code>loadClass</code>修改为重写<code>findClass</code>就会发现，自定义类加载器加载的Person比较返回true。</p>
+<p>在使用自定义类加载器时，通过debug模式下，可以获取父类加载<br>自定义类加载器 –parent-&gt; AppClassLoader<br>AppClassLoader –parent-&gt; ExtClassLoader<br>ExtClassLoader –parent-&gt; null</p>
+<p>上述自定义类加载器可以通过分析<code>java.lang.ClassLoader</code>源码得知。</p>
+<ul>
+<li>在使用双亲委派模式时，如果希望获取两个不同Class对象，一种方法是重写<code>loadClass</code>不使用双亲委派模式，一种是直接使用<code>findClass</code>，绕过双亲委派，一般在热部署的时候使用。</li>
+</ul>
+<h3 id="线程上下文类加载器"><a href="#线程上下文类加载器" class="headerlink" title="线程上下文类加载器"></a>线程上下文类加载器</h3><p>在使用SPI时，Java提供接口，由第三方实现接口，如JDBC、JNDI等，Java提供的接口存在于<code>rt.jar</code>中，由<code>Bootstrap类加载器</code>加载，第三方包通常放在classpath中，由<code>System类加载器</code>加载。如果有<code>rt.jar</code>中SPI调用子类实现方法，双亲委派模式的原因，无法使用<code>System类加载器</code>加载的类。</p>
+<p>在平常使用jdbc时代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span><span class="keyword">throws</span> Exception &#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">url</span> <span class="operator">=</span> <span class="string">&quot;jdbc:mysql://localhost:3306/test&quot;</span>;</span><br><span class="line">        <span class="type">Connection</span> <span class="variable">conn</span> <span class="operator">=</span> java.sql.DriverManager.getConnection(url, <span class="string">&quot;root&quot;</span>, <span class="string">&quot;password&quot;</span>);</span><br><span class="line">        <span class="type">PreparedStatement</span> <span class="variable">preparedStatement</span> <span class="operator">=</span> conn.prepareStatement(<span class="string">&quot;select * from item where status = ?&quot;</span>);</span><br><span class="line">        preparedStatement.setInt(<span class="number">1</span>, <span class="number">1</span>);</span><br><span class="line">        <span class="type">ResultSet</span> <span class="variable">resultSet</span> <span class="operator">=</span> preparedStatement.executeQuery();</span><br><span class="line">        <span class="keyword">while</span> (resultSet.next())&#123;</span><br><span class="line">            System.out.println(resultSet.getString(<span class="string">&quot;sku_code&quot;</span>));</span><br><span class="line">        &#125;</span><br><span class="line">        conn.close();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述代码中没有和以前使用<code>Class.forName(&quot;com.mysql.jdbc.Driver&quot;)</code>，因为<code>DriverManager</code>中使用SPI注册了Mysql驱动，而且就是使用了线程上下文类加载器实现。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//java.sql.DriverManager</span></span><br><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">    loadInitialDrivers();</span><br><span class="line">    println(<span class="string">&quot;JDBC DriverManager initialized&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//加载driver</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">loadInitialDrivers</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    AccessController.doPrivileged(<span class="keyword">new</span> <span class="title class_">PrivilegedAction</span>&lt;Void&gt;() &#123;</span><br><span class="line">        <span class="keyword">public</span> Void <span class="title function_">run</span><span class="params">()</span> &#123;</span><br><span class="line">            <span class="comment">//创建serviceLoader</span></span><br><span class="line">            ServiceLoader&lt;Driver&gt; loadedDrivers = ServiceLoader.load(Driver.class);</span><br><span class="line">            Iterator&lt;Driver&gt; driversIterator = loadedDrivers.iterator();</span><br><span class="line">            <span class="keyword">try</span>&#123;</span><br><span class="line">                <span class="keyword">while</span>(driversIterator.hasNext()) &#123;</span><br><span class="line">                    driversIterator.next();</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">catch</span>(Throwable t) &#123;</span><br><span class="line">            <span class="comment">// Do nothing</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//java.util.ServiceLoader#load(java.lang.Class&lt;S&gt;)</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> &lt;S&gt; ServiceLoader&lt;S&gt; <span class="title function_">load</span><span class="params">(Class&lt;S&gt; service)</span> &#123;</span><br><span class="line">    <span class="comment">//获取线程中的classload（sun.misc.Launcher.AppClassLoader），并创建值，这里设置的classLoader在后续会使用到</span></span><br><span class="line">    <span class="type">ClassLoader</span> <span class="variable">cl</span> <span class="operator">=</span> Thread.currentThread().getContextClassLoader();</span><br><span class="line">    <span class="keyword">return</span> ServiceLoader.load(service, cl);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//java.util.ServiceLoader.LazyIterator#hasNextService</span></span><br><span class="line"><span class="keyword">private</span> <span class="type">boolean</span> <span class="title function_">hasNextService</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="comment">//</span></span><br><span class="line">    <span class="keyword">if</span> (nextName != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (configs == <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//得的Driver路径： META-INF/services/java.sql.Driver</span></span><br><span class="line">            <span class="comment">//在mysql driver 5.1.40版本中该文件：</span></span><br><span class="line">            <span class="comment">/*</span></span><br><span class="line"><span class="comment">             *  com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="comment">             *  com.mysql.fabric.jdbc.FabricMySQLDriver</span></span><br><span class="line"><span class="comment">             */</span></span><br><span class="line">            <span class="type">String</span> <span class="variable">fullName</span> <span class="operator">=</span> PREFIX + service.getName();</span><br><span class="line">            <span class="keyword">if</span> (loader == <span class="literal">null</span>)</span><br><span class="line">                configs = ClassLoader.getSystemResources(fullName);</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                configs = loader.getResources(fullName);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException x) &#123;</span><br><span class="line">            fail(service, <span class="string">&quot;Error locating configuration files&quot;</span>, x);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//存储上述文件中值</span></span><br><span class="line">    <span class="keyword">while</span> ((pending == <span class="literal">null</span>) || !pending.hasNext()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!configs.hasMoreElements()) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        pending = parse(service, configs.nextElement());</span><br><span class="line">    &#125;</span><br><span class="line">    nextName = pending.next();</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//java.util.ServiceLoader.LazyIterator#nextService</span></span><br><span class="line"><span class="keyword">private</span> S <span class="title function_">nextService</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (!hasNextService())</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">NoSuchElementException</span>();</span><br><span class="line">    <span class="comment">//com.mysql.jdbc.Driver、com.mysql.fabric.jdbc.FabricMySQLDriver</span></span><br><span class="line">    <span class="type">String</span> <span class="variable">cn</span> <span class="operator">=</span> nextName;</span><br><span class="line">    nextName = <span class="literal">null</span>;</span><br><span class="line">    Class&lt;?&gt; c = <span class="literal">null</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//通过之前设置的sun.misc.Launcher.AppClassLoader获取class</span></span><br><span class="line">        <span class="comment">//因为这里使用Class.forName，所以在最初使用的时候，就不需要手动加载</span></span><br><span class="line">        <span class="comment">//注册Driver到DriverManager中</span></span><br><span class="line">        c = Class.forName(cn, <span class="literal">false</span>, loader);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ClassNotFoundException x) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">                <span class="string">&quot;Provider &quot;</span> + cn + <span class="string">&quot; not found&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!service.isAssignableFrom(c)) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">                <span class="string">&quot;Provider &quot;</span> + cn  + <span class="string">&quot; not a subtype&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="type">S</span> <span class="variable">p</span> <span class="operator">=</span> service.cast(c.newInstance());</span><br><span class="line">        providers.put(cn, p);</span><br><span class="line">        <span class="keyword">return</span> p;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable x) &#123;</span><br><span class="line">        fail(service,</span><br><span class="line">                <span class="string">&quot;Provider &quot;</span> + cn + <span class="string">&quot; could not be instantiated&quot;</span>,</span><br><span class="line">                x);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="title class_">Error</span>();          <span class="comment">// This cannot happen</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述代码中<code>java.util.ServiceLoader.LazyIterator#nextService</code>在<code>rt.jar</code>中，是由<code>Bootstrap类加载器</code>加载，因为要使用<code>System类加载器</code>中的类，所以通过<code>getContextClassLoader</code>获取<code>sun.misc.Launcher.AppClassLoader</code>来加载<code>classpath</code>中的类。</p>
+<p>在之后<code>connection</code>中，会通过获取<code>DriverManager</code>中注册的<code>registeredDrivers</code>，重新通过当前类<code>调用类的ClassLoader</code>或者当前线程的<code>getContextClassLoader</code>来加载一次<code>Driver</code>同时判断本次加载的<code>Driver</code>和之前注册的<code>Driver</code>是否相同，由同一个类加载器所加载。</p>
+<h3 id="Tomcat类加载"><a href="#Tomcat类加载" class="headerlink" title="Tomcat类加载"></a>Tomcat类加载</h3><p>在tomcat中一般可以部署多个应用，不同应用如果依赖了同一个jar不同版本，这样就需要使用不同的类加载器来隔离应用。同时如果不同应用依赖相同的版本，也可以把依赖的jar放入共有类加载器中。 </p>
+<p>Tomcat服务器类加载器如下：<br><img src="/images/old/2018042420160925001518808.png"></p>
+<p>在Tomcat中需要在conf&#x2F;catalina.properties中配置<code>server.loader</code>和<code>share.loader</code>后才会建立<code>CatalinaClassLoader</code>和<code>SharedClassLoader</code>，否则使用<code>CommonClassLoader</code>代替。因为默认配置中没有所以合并后变成了<code>lib</code>目录，如果需要可以建立、<code>common</code>、<code>server</code>、<code>shared</code>目录分别对应<code>CommonClassLoader</code>、<code>CatalinaClassLoader</code>、<code>SharedClassLoader</code>。</p>
+<p>如果项目依赖于Spring，应用放入<code>webapps</code>中，依赖的jar包在<code>WEB-INF/lib</code>下。这时依赖的jar是由<code>WebappClassLoader</code>加载，不同的依赖由不同的<code>WebappClassLoader</code>加载，这样直接做到了应用的隔离。</p>
+<p>如果依赖的Spring在common、server等目录下，那么Spring隔离方式如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//org.springframework.web.context.ContextLoader#initWebApplicationContext</span></span><br><span class="line"><span class="keyword">public</span> WebApplicationContext <span class="title function_">initWebApplicationContext</span><span class="params">(ServletContext servletContext)</span> &#123;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">    <span class="comment">//直接获取当前线程中的ClassLoader</span></span><br><span class="line">    <span class="type">ClassLoader</span> <span class="variable">ccl</span> <span class="operator">=</span> Thread.currentThread().getContextClassLoader();</span><br><span class="line">    <span class="comment">//如果当前线程中的classLoader和ContextLoader的classLoader一致，表示spring依赖在各自的目录中</span></span><br><span class="line">    <span class="keyword">if</span> (ccl == ContextLoader.class.getClassLoader()) &#123;</span><br><span class="line">        currentContext = <span class="built_in">this</span>.context;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//如果不一致，那么吧当前线程的classLoader和当前context放入map中保存</span></span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (ccl != <span class="literal">null</span>) &#123;</span><br><span class="line">        currentContextPerThread.put(ccl, <span class="built_in">this</span>.context);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//...</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//org.springframework.web.context.ContextLoader#getCurrentWebApplicationContext</span></span><br><span class="line"><span class="comment">//获取当前context</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> WebApplicationContext <span class="title function_">getCurrentWebApplicationContext</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="type">ClassLoader</span> <span class="variable">ccl</span> <span class="operator">=</span> Thread.currentThread().getContextClassLoader();</span><br><span class="line">    <span class="keyword">if</span> (ccl != <span class="literal">null</span>) &#123;</span><br><span class="line">        <span class="comment">//先从之前保存的map中获取context</span></span><br><span class="line">        <span class="type">WebApplicationContext</span> <span class="variable">ccpt</span> <span class="operator">=</span> currentContextPerThread.get(ccl);</span><br><span class="line">        <span class="keyword">if</span> (ccpt != <span class="literal">null</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> ccpt;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> currentContext;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于Spring而言，Spring中类加载器是通过当前线程中ClassLoader和ContextLoader.class.getClassLoader()比较来判断，是否属于同一个类加载器。</p>
+<p>参考：</p>
+<ul>
+<li>深入理解Java虚拟机</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/JVM/" rel="tag"># JVM</a>
+              <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/" rel="tag"># 类加载</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/04/23/docker%E9%83%A8%E7%BD%B2%E9%A1%B9%E7%9B%AE/" rel="prev" title="docker部署项目">
+                  <i class="fa fa-angle-left"></i> docker部署项目
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/05/04/%E7%AE%97%E6%B3%95%E5%9B%BE%E8%A7%A3-%E5%B8%B8%E7%94%A8%E6%8E%92%E5%BA%8F/" rel="next" title="算法图解-常用排序">
+                  算法图解-常用排序 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

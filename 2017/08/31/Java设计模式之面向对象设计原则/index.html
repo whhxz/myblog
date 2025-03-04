@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Java设计模式 面向对象设计原则：  单一职责原则：一个类只负责一个功能领域中的相应职责 开闭原则：软件实体应对扩展开放，而对修改关闭 里式代换原则：所有引用基类对象的地方能够透明地使用其子类的对象 依赖倒转原则：抽象不应该依赖于细节，细节应该依赖于抽象 接口隔离原则：使用多个专门的接口，而不使用单一的总接口 合成复用原则：尽量使用对象组合，而不是继承来达到复用的目的 迪米特法则：一个软件实体应">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java设计模式之面向对象设计原则">
+<meta property="og:url" content="http://blog.whhxz.com/2017/08/31/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="Java设计模式 面向对象设计原则：  单一职责原则：一个类只负责一个功能领域中的相应职责 开闭原则：软件实体应对扩展开放，而对修改关闭 里式代换原则：所有引用基类对象的地方能够透明地使用其子类的对象 依赖倒转原则：抽象不应该依赖于细节，细节应该依赖于抽象 接口隔离原则：使用多个专门的接口，而不使用单一的总接口 合成复用原则：尽量使用对象组合，而不是继承来达到复用的目的 迪米特法则：一个软件实体应">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%888.33.33.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8810.52.32.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.40.30.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.46.40.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%8812.00.36.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%883.24.01.png">
+<meta property="article:published_time" content="2017-08-31T08:07:21.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.206Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="Java">
+<meta property="article:tag" content="设计模式">
+<meta property="article:tag" content="面向对象设计原则">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%888.33.33.png">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2017/08/31/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2017/08/31/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/","path":"2017/08/31/Java设计模式之面向对象设计原则/","title":"Java设计模式之面向对象设计原则"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java设计模式之面向对象设计原则 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F"><span class="nav-number">1.</span> <span class="nav-text">Java设计模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">面向对象设计原则：</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8D%95%E4%B8%80%E8%81%8C%E8%B4%A3%E5%8E%9F%E5%88%99%EF%BC%88Single-Responsibility-Principle-SRP%EF%BC%89%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">单一职责原则（Single Responsibility Principle, SRP）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%80%E9%97%AD%E5%8E%9F%E5%88%99%EF%BC%88Open-Closed-Principle-OCP%EF%BC%89%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">开闭原则（Open-Closed Principle, OCP）：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8C%E6%B0%8F%E4%BB%A3%E6%8D%A2%E5%8E%9F%E5%88%99%EF%BC%88Liskov-Substitution-Principle-LSP%EF%BC%89"><span class="nav-number">1.1.3.</span> <span class="nav-text">里氏代换原则（Liskov Substitution Principle, LSP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BE%9D%E8%B5%96%E5%80%92%E8%BD%AC%E5%8E%9F%E5%88%99%EF%BC%88Dependence-Inversion-Principle-DIP%EF%BC%89"><span class="nav-number">1.1.4.</span> <span class="nav-text">依赖倒转原则（Dependence Inversion Principle, DIP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8E%A5%E5%8F%A3%E9%9A%94%E7%A6%BB%E5%8E%9F%E5%88%99%EF%BC%88Interface-Segregation-Principle-ISP%EF%BC%89"><span class="nav-number">1.1.5.</span> <span class="nav-text">接口隔离原则（Interface Segregation Principle, ISP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%88%E6%88%90%E5%A4%8D%E7%94%A8%E5%8E%9F%E5%88%99%EF%BC%88Composite-Reuse-Principle-CRP%EF%BC%89"><span class="nav-number">1.1.6.</span> <span class="nav-text">合成复用原则（Composite Reuse Principle, CRP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%AA%E7%B1%B3%E7%89%B9%E6%B3%95%E5%88%99%EF%BC%88Law-of-Demeter-LOD%EF%BC%89"><span class="nav-number">1.1.7.</span> <span class="nav-text">迪米特法则（Law of Demeter, LOD）</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/08/31/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java设计模式之面向对象设计原则 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java设计模式之面向对象设计原则
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-08-31 16:07:21" itemprop="dateCreated datePublished" datetime="2017-08-31T16:07:21+08:00">2017-08-31</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" itemprop="url" rel="index"><span itemprop="name">设计模式</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h2 id="Java设计模式"><a href="#Java设计模式" class="headerlink" title="Java设计模式"></a>Java设计模式</h2><p><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%888.33.33.png"></p>
+<h3 id="面向对象设计原则："><a href="#面向对象设计原则：" class="headerlink" title="面向对象设计原则："></a>面向对象设计原则：</h3><blockquote>
+<ul>
+<li>单一职责原则：一个类只负责一个功能领域中的相应职责</li>
+<li>开闭原则：软件实体应对扩展开放，而对修改关闭</li>
+<li>里式代换原则：所有引用基类对象的地方能够透明地使用其子类的对象</li>
+<li>依赖倒转原则：抽象不应该依赖于细节，细节应该依赖于抽象</li>
+<li>接口隔离原则：使用多个专门的接口，而不使用单一的总接口</li>
+<li>合成复用原则：尽量使用对象组合，而不是继承来达到复用的目的</li>
+<li>迪米特法则：一个软件实体应当尽可能少地与其他实体发生相互作用</li>
+</ul>
+</blockquote>
+<h4 id="单一职责原则（Single-Responsibility-Principle-SRP）："><a href="#单一职责原则（Single-Responsibility-Principle-SRP）：" class="headerlink" title="单一职责原则（Single Responsibility Principle, SRP）："></a>单一职责原则（Single Responsibility Principle, SRP）：</h4><blockquote>
+<p>单一职责原则是最简单的面向对象设计原则，它用于控制类的粒度大小。一个类只负责一个功能领域中的相应职责。</p>
+</blockquote>
+<span id="more"></span>
+<p><strong>问题</strong> ：在系统一个类负责了多个功能，展示数据，处理逻辑，查询数据库，连接数据库。当需求发生变化时，逻辑变更，可能会导致其他功能发生故障。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActivityService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showAllAcitivty</span><span class="params">()</span>&#123;</span><br><span class="line">        queryActivity();</span><br><span class="line">        <span class="comment">//处理其他相关业务逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> Connection <span class="title function_">getConnection</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//连接数据库</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Object&gt; <span class="title function_">queryActivity</span><span class="params">()</span>&#123;</span><br><span class="line">        getConnection();</span><br><span class="line">        <span class="comment">//查询数据</span></span><br><span class="line">        <span class="comment">//封装数据</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UML类图如下：<br><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8810.52.32.png"><br>这里改类承担太多功能，需要从新改进，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActivityService</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">showAllAcitivty</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="keyword">new</span> <span class="title class_">ActivityDao</span>().queryActivity();</span><br><span class="line">        <span class="comment">//处理其他相关业务逻辑</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ActivityDao</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> List&lt;Object&gt; <span class="title function_">queryActivity</span><span class="params">()</span>&#123;</span><br><span class="line">        DBUtils.getConnection();</span><br><span class="line">        <span class="comment">//查询数据</span></span><br><span class="line">        <span class="comment">//封装数据</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">new</span> <span class="title class_">ArrayList</span>&lt;&gt;();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">DBUtils</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title function_">getConnection</span><span class="params">()</span>&#123;</span><br><span class="line">        <span class="comment">//连接数据库</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UML类图如下：<br><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.40.30.png"><br><strong>注意</strong>：在使用单一职责原则时，在拆分功能时，不要拆分太细，以免出现太多类。</p>
+<h4 id="开闭原则（Open-Closed-Principle-OCP）："><a href="#开闭原则（Open-Closed-Principle-OCP）：" class="headerlink" title="开闭原则（Open-Closed Principle, OCP）："></a>开闭原则（Open-Closed Principle, OCP）：</h4><blockquote>
+<p>一个软件实体应当对扩展开放，对修改关闭。即软件实体应尽量在不修改原有代码的情况下进行扩展。开闭原则是面向对象的可复用设计的第一块基石，它是最重要的面向对象设计原则。在开闭原则的定义中，软件实体可以指一个软件模块、一个由多个类组成的局部结构或一个独立的类。</p>
+</blockquote>
+<p>问题：现在需要依据不同的情况画不同的图，有饼图、条形图，项目后期有需求增加，需要增加折线图，这样就需要重新修改代码。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChartDisplay</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        display(<span class="string">&quot;bar&quot;</span>);</span><br><span class="line">        display(<span class="string">&quot;pie&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//画图</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">(String type)</span>&#123;</span><br><span class="line">        <span class="comment">//如果每次增加一种类型都需要修改源码，新增判断</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="string">&quot;bar&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">BarChart</span>().display();</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (<span class="string">&quot;pie&quot;</span>.equals(type))&#123;</span><br><span class="line">            <span class="keyword">new</span> <span class="title class_">PieChart</span>().display();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BarChart</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;画条形图&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PieChart</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;画饼图&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UML类图如下：<br><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8A%E5%8D%8811.46.40.png"><br>这里不符合开闭原则，需要代码重构，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//新增一个画画抽象类</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <span class="title class_">AbstractChart</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">abstract</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//具体子类实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">BarChart</span> <span class="keyword">extends</span> <span class="title class_">AbstractChart</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;画条形图&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//具体子类实现</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">PieChart</span> <span class="keyword">extends</span> <span class="title class_">AbstractChart</span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;画饼图&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">ChartDisplay</span> &#123;</span><br><span class="line">    AbstractChart chart;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">setChart</span><span class="params">(AbstractChart chart)</span>&#123;</span><br><span class="line">        <span class="built_in">this</span>.chart = chart;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">display</span><span class="params">()</span>&#123;</span><br><span class="line">        chart.display();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> &#123;</span><br><span class="line">        <span class="type">ChartDisplay</span> <span class="variable">chartDisplay</span> <span class="operator">=</span> <span class="keyword">new</span> <span class="title class_">ChartDisplay</span>();</span><br><span class="line">        <span class="comment">//这里setChart可以通过读取配置文件获取</span></span><br><span class="line">        chartDisplay.setChart(<span class="keyword">new</span> <span class="title class_">BarChart</span>());</span><br><span class="line">        chartDisplay.display();</span><br><span class="line">        <span class="comment">//这里setChart可以通过读取配置文件获取</span></span><br><span class="line">        chartDisplay.setChart(<span class="keyword">new</span> <span class="title class_">PieChart</span>());</span><br><span class="line">        chartDisplay.display();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>UML类图如下：<br><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%8812.00.36.png"><br>在改进方法后，在添加新的画图，只要添加一个新子类就可以实现。</p>
+<p><strong>注</strong>：在修改xml和properties等配置文件时，因为无需重新编译源代码，即可认为是符合开闭原则。</p>
+<h4 id="里氏代换原则（Liskov-Substitution-Principle-LSP）"><a href="#里氏代换原则（Liskov-Substitution-Principle-LSP）" class="headerlink" title="里氏代换原则（Liskov Substitution Principle, LSP）"></a>里氏代换原则（Liskov Substitution Principle, LSP）</h4><blockquote>
+<p>如果对每一个类型为 T1的对象 o1，都有类型为 T2 的对象o2，使得以 T1定义的所有程序 P 在所有的对象 o1 都代换成 o2 时，程序 P 的行为没有发生变化，那么类型 T2 是类型 T1 的子类型。所有引用基类的地方必须能透明地使用其子类的对象。也可以理解为：子类可以扩展父类的功能，但不能改变父类原有的功能。</p>
+</blockquote>
+<p>这个不举例子，在使用java继承的时候，如果不覆盖父类方法就符合里氏代换原则。在使用过程中，如果可以尽量不要覆盖父类方法，可以使用重载，添加一个比父类更加宽松的行参。或者重新定义一个新方法。或者使用抽象编程。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(ArrayList&lt;String&gt; params )</span>&#123;</span><br><span class="line">        System.out.println(<span class="built_in">this</span>.getClass().getSimpleName() + <span class="string">&quot;.insert&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">select</span><span class="params">()</span>&#123;</span><br><span class="line">        System.out.println(<span class="built_in">this</span>.getClass().getSimpleName() + <span class="string">&quot;.select&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Child</span> <span class="keyword">extends</span> <span class="title class_">Father</span> &#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">insert</span><span class="params">(List&lt;String&gt; params)</span>&#123;</span><br><span class="line">        System.out.println(<span class="built_in">this</span>.getClass().getSimpleName() + <span class="string">&quot;.insert&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">select</span><span class="params">()</span>&#123;</span><br><span class="line">          System.out.println(<span class="built_in">this</span>.getClass().getSimpleName() + <span class="string">&quot;.select&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Excemple</span>&#123;</span><br><span class="line">    <span class="comment">//在传递子类过来时，会执行子类的方法，不符合该原则</span></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">void</span> <span class="title function_">select</span><span class="params">(Father father)</span>&#123;</span><br><span class="line">        father.select();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="依赖倒转原则（Dependence-Inversion-Principle-DIP）"><a href="#依赖倒转原则（Dependence-Inversion-Principle-DIP）" class="headerlink" title="依赖倒转原则（Dependence Inversion Principle, DIP）"></a>依赖倒转原则（Dependence Inversion Principle, DIP）</h4><blockquote>
+<p>高层模块不应该依赖低层模块，二者都应该依赖其抽象；抽象不应该依赖细节；细节应该依赖抽象。换言之，要针对接口编程，而不是针对实现编程。</p>
+</blockquote>
+<p>例子可以看之前开闭原则中，ChartDisplay.setChart传入的是抽象类，而不是具体的某一个实现类。</p>
+<h4 id="接口隔离原则（Interface-Segregation-Principle-ISP）"><a href="#接口隔离原则（Interface-Segregation-Principle-ISP）" class="headerlink" title="接口隔离原则（Interface Segregation Principle, ISP）"></a>接口隔离原则（Interface Segregation Principle, ISP）</h4><blockquote>
+<p>使用多个专门的接口，而不使用单一的总接口，即客户端不应该依赖那些它不需要的接口。根据接口隔离原则，当一个接口太大时，我们需要将它分割成一些更细小的接口，使用该接口的客户端仅需知道与之相关的方法即可。每一个接口应该承担一种相对独立的角色，不干不该干的事，该干的事都要干。</p>
+</blockquote>
+<p>Spring中XmlWebApplication的继承关系图：<br><img src="/images/old/20170831%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-08-31%E4%B8%8B%E5%8D%883.24.01.png"></p>
+<p>很多接口拆分的比较细</p>
+<h4 id="合成复用原则（Composite-Reuse-Principle-CRP）"><a href="#合成复用原则（Composite-Reuse-Principle-CRP）" class="headerlink" title="合成复用原则（Composite Reuse Principle, CRP）"></a>合成复用原则（Composite Reuse Principle, CRP）</h4><blockquote>
+<p>尽量使用对象组合，而不是继承来达到复用的目的。合成复用原则就是在一个新的对象里通过关联关系（包括组合关系和聚合关系）来使用一些已有的对象，使之成为新对象的一部分；新对象通过委派调用已有对象的方法达到复用功能的目的。简言之：复用时要尽量使用组合&#x2F;聚合关系（关联关系），少用继承。</p>
+</blockquote>
+<h4 id="迪米特法则（Law-of-Demeter-LOD）"><a href="#迪米特法则（Law-of-Demeter-LOD）" class="headerlink" title="迪米特法则（Law of Demeter, LOD）"></a>迪米特法则（Law of Demeter, LOD）</h4><blockquote>
+<p>如果一个系统符合迪米特法则，那么当其中某一个模块发生修改时，就会尽量少地影响其他模块，扩展会相对容易，这是对软件实体之间通信的限制，迪米特法则要求限制软件实体之间通信的宽度和深度。迪米特法则可降低系统的耦合度，使类与类之间保持松散的耦合关系。</p>
+</blockquote>
+<p>当一个类与其他类之间依赖关系越多，耦合度越大时，类发生变化将会导致影响面越大、越广。而遵循迪米特法则就是为了尽量降低类与类之间的耦合度。迪米特法则定义不要和“陌生人”说话，只与你的直接朋友通信联系。朋友有：对象本身、类方法的（输入输出）参数、类成员。而出现在局部变量中的类就不是直接的朋友，即“陌生人”。在设计系统的时候，必须无法解耦，可以借用第三方进行转发调用（可使用外观模式Facade）。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" rel="tag"># 设计模式</a>
+              <a href="/tags/%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" rel="tag"># 面向对象设计原则</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/10/Storm%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AStorm%E6%A6%82%E5%BF%B5/" rel="prev" title="Storm学习（三）：Storm概念">
+                  <i class="fa fa-angle-left"></i> Storm学习（三）：Storm概念
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/09/08/%E5%88%9B%E5%BB%BAmaven-archetypes/" rel="next" title="创建maven archetypes">
+                  创建maven archetypes <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

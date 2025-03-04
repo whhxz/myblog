@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="平常基本类型+String是在代码中使用最多的地方。分析下String特别的地方。 字符串替换String的字符串替换有3个方法：replace、replaceFirst、replaceAll replace123public String replace(char oldChar, char newChar)public String replace(CharSequence target, C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java基础-String">
+<meta property="og:url" content="http://blog.whhxz.com/2018/03/22/Java%E5%9F%BA%E7%A1%80-String/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="平常基本类型+String是在代码中使用最多的地方。分析下String特别的地方。 字符串替换String的字符串替换有3个方法：replace、replaceFirst、replaceAll replace123public String replace(char oldChar, char newChar)public String replace(CharSequence target, C">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2018-03-22T02:19:49.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.212Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="基础">
+<meta property="article:tag" content="String">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2018/03/22/Java%E5%9F%BA%E7%A1%80-String/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2018/03/22/Java%E5%9F%BA%E7%A1%80-String/","path":"2018/03/22/Java基础-String/","title":"Java基础-String"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java基础-String | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%9B%BF%E6%8D%A2"><span class="nav-number">1.</span> <span class="nav-text">字符串替换</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#replace"><span class="nav-number">1.1.</span> <span class="nav-text">replace</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replaceAll"><span class="nav-number">1.2.</span> <span class="nav-text">replaceAll</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#replaceFirst"><span class="nav-number">1.3.</span> <span class="nav-text">replaceFirst</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-%E2%80%9C-%E2%80%9D"><span class="nav-number">2.</span> <span class="nav-text">String “+”</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String%E4%B8%8D%E5%8F%AF%E5%8F%98"><span class="nav-number">3.</span> <span class="nav-text">String不可变</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2018/03/22/Java%E5%9F%BA%E7%A1%80-String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java基础-String | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java基础-String
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2018-03-22 10:19:49" itemprop="dateCreated datePublished" datetime="2018-03-22T10:19:49+08:00">2018-03-22</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Java%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">Java基础</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>平常基本类型+String是在代码中使用最多的地方。分析下String特别的地方。</p>
+<h3 id="字符串替换"><a href="#字符串替换" class="headerlink" title="字符串替换"></a>字符串替换</h3><p>String的字符串替换有3个方法：replace、replaceFirst、replaceAll</p>
+<h4 id="replace"><a href="#replace" class="headerlink" title="replace"></a>replace</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">replace</span><span class="params">(<span class="type">char</span> oldChar, <span class="type">char</span> newChar)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> String <span class="title function_">replace</span><span class="params">(CharSequence target, CharSequence replacement)</span></span><br></pre></td></tr></table></figure>
+<p>String.replace有两个重载方法，一个参数是char、一个是CharSequence<br>第一个replace是通过原有String中char数组生成一个新数组，然后把新数组中的oldChar替换为newChar，返回一个新的String</p>
+<ul>
+<li>注：如果oldChar&#x3D;&#x3D;newChar返回的是this。</li>
+</ul>
+<p>第二个relace参数是CharSequence，String是其实现类，所以平常一般传的参数是String（不过StringBuffer、StringBuilder也是该接口实现类）。该replace实现虽然是通过Pattern，但是在使用Pattern的时候，设置了<code>Pattern.LITERAL和Matcher.quoteReplacement</code>，所以转义是不起效的。</p>
+<p>所以对于replace而言，就是 <strong>替换所有</strong> 符合的字符，无转义，无正则表达式（设置Pattern转义失效）。</p>
+<span id="more"></span>
+<h4 id="replaceAll"><a href="#replaceAll" class="headerlink" title="replaceAll"></a>replaceAll</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">replaceAll</span><span class="params">(String regex, String replacement)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Pattern.compile(regex).matcher(<span class="built_in">this</span>).replaceAll(replacement);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>replaceAll就是纯粹的通过正则表达式替换</p>
+<h4 id="replaceFirst"><a href="#replaceFirst" class="headerlink" title="replaceFirst"></a>replaceFirst</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> String <span class="title function_">replaceFirst</span><span class="params">(String regex, String replacement)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> Pattern.compile(regex).matcher(<span class="built_in">this</span>).replaceFirst(replacement);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>再使用replace或者replaceAll的时候，是替换所有匹配的字符串，如果不需要匹配全部，可以通过replaceFirst尝试值替换第一个。不过replaceFirst的匹配模式也是通过正则表达式。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//示例</span></span><br><span class="line"><span class="type">String</span> <span class="variable">str</span> <span class="operator">=</span> <span class="string">&quot;com.whh.String&quot;</span>;</span><br><span class="line"></span><br><span class="line">System.out.println(str.replace(<span class="string">&#x27;.&#x27;</span>, <span class="string">&#x27;/&#x27;</span>));<span class="comment">//  com/whh/String</span></span><br><span class="line">System.out.println(str.replace(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;$0&quot;</span>));<span class="comment">// com$0whh$0String</span></span><br><span class="line">System.out.println(str.replaceAll(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;$0&quot;</span>));<span class="comment">//  com.whh.String</span></span><br><span class="line">System.out.println(str.replaceFirst(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;$0&quot;</span>));<span class="comment">//  com.whh.String</span></span><br><span class="line">System.out.println(str.replace(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;/&quot;</span>));<span class="comment">//  com/whh/String</span></span><br><span class="line">System.out.println(str.replaceAll(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;/&quot;</span>));<span class="comment">// //////////////</span></span><br><span class="line">System.out.println(str.replaceFirst(<span class="string">&quot;.&quot;</span>, <span class="string">&quot;/&quot;</span>));<span class="comment">// /om.whh.String</span></span><br></pre></td></tr></table></figure>
+
+<p>参考：<span class="exturl" data-url="aHR0cHM6Ly9teS5vc2NoaW5hLm5ldC91LzgxNjU3Ni9ibG9nLzM2OTY0Mw==">java字符串的替换replace、replaceAll、replaceFirst的区别详解<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="String-“-”"><a href="#String-“-”" class="headerlink" title="String “+”"></a>String “+”</h3><p>在Java中是不支持运算符重载的，但是在平常使用过程中拼接字符串时，我们都是通过<code>+</code>来对字符串做相关操作，这是一种错觉。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//例子</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;com&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;.&quot;</span>;</span><br><span class="line">        <span class="type">String</span> <span class="variable">name</span> <span class="operator">=</span> a + b + <span class="string">&quot;whh&quot;</span> + b + <span class="string">&quot;test&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上述代码中使用的<code>+</code>拼接的字符串，之后通过<code>javac</code>编译代码生成class文件，通过命令<code>javap -c Main.class</code>对class进行反汇编。得到如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">Compiled from <span class="string">&quot;Main.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">Main</span><span class="params">()</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: invokespecial #<span class="number">1</span>                  <span class="comment">// Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String[])</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: ldc           #<span class="number">2</span>                  <span class="comment">// String com</span></span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       <span class="number">3</span>: ldc           #<span class="number">3</span>                  <span class="comment">// String .</span></span><br><span class="line">       <span class="number">5</span>: astore_2</span><br><span class="line">       <span class="number">6</span>: <span class="keyword">new</span>           #<span class="number">4</span>                  <span class="comment">// class java/lang/StringBuilder</span></span><br><span class="line">       <span class="number">9</span>: dup</span><br><span class="line">      <span class="number">10</span>: invokespecial #<span class="number">5</span>                  <span class="comment">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">      <span class="number">13</span>: aload_1</span><br><span class="line">      <span class="number">14</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">17</span>: aload_2</span><br><span class="line">      <span class="number">18</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">21</span>: ldc           #<span class="number">7</span>                  <span class="comment">// String whh</span></span><br><span class="line">      <span class="number">23</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">26</span>: aload_2</span><br><span class="line">      <span class="number">27</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">30</span>: ldc           #<span class="number">8</span>                  <span class="comment">// String test</span></span><br><span class="line">      <span class="number">32</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">35</span>: invokevirtual #<span class="number">9</span>                  <span class="comment">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span><br><span class="line">      <span class="number">38</span>: astore_3</span><br><span class="line">      <span class="number">39</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上述返回编译后可以看到编译成Class后实际是通过StringBuilder来进行拼接的字符串。<br>如果代码修改为如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span>&#123;</span><br><span class="line">        <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;com&quot;</span>;</span><br><span class="line">    		<span class="keyword">for</span> (<span class="type">int</span> <span class="variable">i</span> <span class="operator">=</span> <span class="number">0</span>; i &lt;=<span class="number">10</span>; i++)&#123;</span><br><span class="line">    			a += a;</span><br><span class="line">    		&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在for循环中拼接字符串，通过反编译可以得到：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">Compiled from <span class="string">&quot;Main.java&quot;</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title class_">Main</span> &#123;</span><br><span class="line">  <span class="keyword">public</span> <span class="title function_">Main</span><span class="params">()</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: aload_0</span><br><span class="line">       <span class="number">1</span>: invokespecial #<span class="number">1</span>                  <span class="comment">// Method java/lang/Object.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">       <span class="number">4</span>: <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(java.lang.String[])</span>;</span><br><span class="line">    Code:</span><br><span class="line">       <span class="number">0</span>: ldc           #<span class="number">2</span>                  <span class="comment">// String com</span></span><br><span class="line">       <span class="number">2</span>: astore_1</span><br><span class="line">       <span class="number">3</span>: iconst_0</span><br><span class="line">       <span class="number">4</span>: istore_2</span><br><span class="line">       <span class="number">5</span>: iload_2</span><br><span class="line">       <span class="number">6</span>: bipush        <span class="number">10</span></span><br><span class="line">       <span class="number">8</span>: if_icmpgt     <span class="number">36</span></span><br><span class="line">      <span class="number">11</span>: <span class="keyword">new</span>           #<span class="number">3</span>                  <span class="comment">// class java/lang/StringBuilder</span></span><br><span class="line">      <span class="number">14</span>: dup</span><br><span class="line">      <span class="number">15</span>: invokespecial #<span class="number">4</span>                  <span class="comment">// Method java/lang/StringBuilder.&quot;&lt;init&gt;&quot;:()V</span></span><br><span class="line">      <span class="number">18</span>: aload_1</span><br><span class="line">      <span class="number">19</span>: invokevirtual #<span class="number">5</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">22</span>: aload_1</span><br><span class="line">      <span class="number">23</span>: invokevirtual #<span class="number">5</span>                  <span class="comment">// Method java/lang/StringBuilder.append:(Ljava/lang/String;)Ljava/lang/StringBuilder;</span></span><br><span class="line">      <span class="number">26</span>: invokevirtual #<span class="number">6</span>                  <span class="comment">// Method java/lang/StringBuilder.toString:()Ljava/lang/String;</span></span><br><span class="line">      <span class="number">29</span>: astore_1</span><br><span class="line">      <span class="number">30</span>: iinc          <span class="number">2</span>, <span class="number">1</span></span><br><span class="line">      <span class="number">33</span>: <span class="keyword">goto</span>          <span class="number">5</span></span><br><span class="line">      <span class="number">36</span>: <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看Code标记33，goto5，这里表示for循环，在Code标记11地方会创建一个StringBuilder，也就是每次for循环都会创建一个StringBuilder对象，比较浪费，可以通过在for循环外卖创建StringBuilder后在for循环内通过append拼接字符串。</p>
+<p>参考：<span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvZGV4dHJhZF9paGFja2VyL2FydGljbGUvZGV0YWlscy81MzA1NTcwOQ==">Java 深究字符串String类(1)之运算符”+”重载<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="String不可变"><a href="#String不可变" class="headerlink" title="String不可变"></a>String不可变</h3><p>在String中通过char[]表达一个字符串，char数组被final修饰，这也表示了单String被初始化后char数组就不能在被修改。而且String类也是final修饰，表示该类不可被继承。<br>正常情况下不可以修改，不过因为final修饰的是数组，数组引用不可修改，但是数组的值却可以修改，可以通过反射修改char数组中的值。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception &#123;</span><br><span class="line">    Set&lt;String&gt; set = <span class="keyword">new</span> <span class="title class_">HashSet</span>&lt;&gt;();</span><br><span class="line">    <span class="type">String</span> <span class="variable">a</span> <span class="operator">=</span> <span class="string">&quot;whh&quot;</span>;</span><br><span class="line">    <span class="type">String</span> <span class="variable">b</span> <span class="operator">=</span> <span class="string">&quot;www&quot;</span>;</span><br><span class="line">    set.add(a);</span><br><span class="line">    set.add(b);</span><br><span class="line">    <span class="type">Field</span> <span class="variable">value</span> <span class="operator">=</span> String.class.getDeclaredField(<span class="string">&quot;value&quot;</span>);</span><br><span class="line">    value.setAccessible(<span class="literal">true</span>);</span><br><span class="line">    <span class="type">char</span>[] chars = (<span class="type">char</span>[]) value.get(b);</span><br><span class="line">    Array.set(chars, <span class="number">1</span>, <span class="string">&#x27;h&#x27;</span>);</span><br><span class="line">    Array.set(chars, <span class="number">2</span>, <span class="string">&#x27;h&#x27;</span>);</span><br><span class="line">    value.setAccessible(<span class="literal">false</span>);</span><br><span class="line">    <span class="keyword">for</span> (String s : set) &#123;</span><br><span class="line">        System.out.printf(<span class="string">&quot;%s hash is %d\n&quot;</span>, s, s.hashCode());</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//whh hash is 117687</span></span><br><span class="line">    <span class="comment">//whh hash is 118167</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过反射修改String内char数组的值，最终输出的字符串一样，但是其hashCode不一样。</p>
+<p>把String设计为不可变有几大优点：<br>1、在Java内存中存在一块常量池，<code>String a = &quot;whh&quot;;new String(&quot;whh&quot;).intern()</code>这种创建的对象会存入常量池中，当再次创建一个相同的对象时，会直接指向常量池中的地址，因为String在使用过程中非常频繁，可以通过常量池复用相同的字符串。<br>2、在String创建完毕后，该字符串的hash在创建时就已经计算完毕，方便直接使用，特别是Set中特别有用。如果String可变，在使用Set时，如果先存入<code>&quot;aaa&quot;, &quot;bbb&quot;</code>，之后修改<code>&quot;aaa&quot;</code>对象为<code>&quot;bbb&quot;</code>，因为String可变，所以在Set中现在是<code>&quot;bbb&quot;, &quot;bbb&quot;</code>，出现了重复数据。<br>3、并发安全，因为String不可变，所有可以在多线程中共享。</p>
+<p>注：String.intern是如果常量池存在着返回常量池中的对象，如果常量池不存在则把当前对象放入常量池（在常量池判断存在时类似equals比较）。</p>
+<p>在平常使用<code>String a=&quot;whh&quot;</code>时，创建的String存在与常量池中，如果使用<code>new String(&quot;whh&quot;)</code>，因为使用了<code>new</code>关键字，所以会告诉JVM在堆中开辟一块内存，用于存放创建的对象，所以在使用<code>==</code>时比较的事内存地址，一个在堆中一个在常量池中所以不会相等。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%9F%BA%E7%A1%80/" rel="tag"># 基础</a>
+              <a href="/tags/String/" rel="tag"># String</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2018/03/19/Mysql%E4%BC%98%E5%8C%96%E6%80%9D%E8%B7%AF/" rel="prev" title="Mysql优化思路">
+                  <i class="fa fa-angle-left"></i> Mysql优化思路
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2018/03/22/Java%E5%9F%BA%E7%A1%80-%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B/" rel="next" title="Java基础-基本类型">
+                  Java基础-基本类型 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

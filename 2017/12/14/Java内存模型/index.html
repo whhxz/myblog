@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。 在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java内存模型">
+<meta property="og:url" content="http://blog.whhxz.com/2017/12/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。 在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8810.21.02.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8810.29.08.png">
+<meta property="og:image" content="http://blog.whhxz.com/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8811.56.09.png">
+<meta property="article:published_time" content="2017-12-14T01:33:49.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.210Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="多线程">
+<meta property="article:tag" content="同步">
+<meta property="article:tag" content="JMM">
+<meta property="article:tag" content="内存模型">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://blog.whhxz.com/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8810.21.02.png">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2017/12/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2017/12/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/","path":"2017/12/14/Java内存模型/","title":"Java内存模型"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Java内存模型 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BA%A4%E4%BA%92"><span class="nav-number">1.</span> <span class="nav-text">内存交互</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8E%9F%E5%AD%90%E6%80%A7%E3%80%81%E5%8F%AF%E8%A7%81%E6%80%A7%E3%80%81%E6%9C%89%E5%BA%8F%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">原子性、可见性、有序性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#hanpens-before"><span class="nav-number">3.</span> <span class="nav-text">hanpens-before</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E5%B1%8F%E9%9A%9C"><span class="nav-number">4.</span> <span class="nav-text">内存屏障</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/12/14/Java%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Java内存模型 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Java内存模型
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-12-14 09:33:49" itemprop="dateCreated datePublished" datetime="2017-12-14T09:33:49+08:00">2017-12-14</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%A4%9A%E7%BA%BF%E7%A8%8B%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">多线程学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在物理机中，为了加快处理器与内存交互速度，在处理器中引入了高速缓存，将运算需要使用到的数据复制到缓存中，运算结束后再从缓存同步到内存中。这样在多线程处理数据时，可能会导致不同处理器中缓存数据不一致，这个时候引入了缓存一致性协议，这样能保证一个处理器修改了数据，其他处理也能看到最新的数据。</p>
+<p>在Java虚拟机规范中定义了一种Java内存模型（Java Memory Model， JMM）来屏蔽各种硬件和操作系统的内存访问差异，让Java程序在不同平台都能达到一致的内存访问效果。（JDK1.5之后内存模型才相对完善）</p>
+<p>在Java中，所有实例域、静态域和数组元素存储在堆内存中，堆内存在线程之间共享（代指实例域，静态域和数组元素）。局部变量（Local variables），方法定义参数（java语言规范称之为formal method parameters）和异常处理器参数（exception handler parameters）不会在线程之间共享，它们不会有内存可见性问题，也不受内存模型的影响。</p>
+<p>Java内存模型规定了共享变量存储在主内存中，每条线程都有自己的工作内存（线程本地内存），工作内存中存储被该线程使用到的变量的主内存的副本（不是整个对象的内存复制，对象的引用、线程访问的字段）。如图：<br><img src="/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8810.21.02.png"></p>
+<span id="more"></span>
+<p>在该图中，如果线程A修改了本地变量，然后把本地变量更新到主内存中，然后线程B把主内存中变量同步到本地内存中。<br>内存图：<br><img src="/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8810.29.08.png"><br><img src="/images/old/20171214%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A72017-12-14%E4%B8%8A%E5%8D%8811.56.09.png"></p>
+<p>这样就引出两个问题：</p>
+<ol>
+<li>线程A修改了本地变量，怎么同步到主内存中</li>
+<li>线程B怎么同步主内存数据到本地内存中</li>
+</ol>
+<h3 id="内存交互"><a href="#内存交互" class="headerlink" title="内存交互"></a>内存交互</h3><p>对于工作内存与主内存之间交互协议，Java内存模型定义了8种操作来完成，虚拟机实现时，必须保证每种操作都是原子（对于double、long，允许 load、store、read、write操作在某些平台上例外）。</p>
+<table>
+<thead>
+<tr>
+<th>-</th>
+<th align="left">作用域</th>
+<th align="left">用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lock（锁定）</td>
+<td align="left">主内存变量</td>
+<td align="left">把一个变量标识为一条线程独占</td>
+</tr>
+<tr>
+<td>unlock（解锁）</td>
+<td align="left">主内存的变量</td>
+<td align="left">把一个处于锁定状态的变量释放，释放后的变量才可以被别的变量锁定</td>
+</tr>
+<tr>
+<td>read（读取）</td>
+<td align="left">主内存的变量</td>
+<td align="left">把一个变量值从主内存中传输到线程的工作内存中，以便后续load使用</td>
+</tr>
+<tr>
+<td>load（载入）</td>
+<td align="left">工作内存变量</td>
+<td align="left">把read操作从主内存中得到的变量放入工作内存变量副本中</td>
+</tr>
+<tr>
+<td>use（使用）</td>
+<td align="left">工作内存变量</td>
+<td align="left">把工作内存中变量传递到执行引擎，当虚拟机遇到需要使用该变量值的字节码指令时，会执行该操作</td>
+</tr>
+<tr>
+<td>assign（赋值）</td>
+<td align="left">工作内存变量</td>
+<td align="left">把执行引擎接收到的值，赋值给工作内存的变量，当虚拟机遇到一个给变量赋值的字节码指令时执行该操作</td>
+</tr>
+<tr>
+<td>store（存储）</td>
+<td align="left">工作内存变量</td>
+<td align="left">把工作内存中的变量值传送到主内存中，以便随后write使用</td>
+</tr>
+<tr>
+<td>write（写入）</td>
+<td align="left">主内存变量</td>
+<td align="left">把store操作从工作内存中获取的变量写入到主内存中</td>
+</tr>
+</tbody></table>
+<p>Java中定义了改8种操作，如果把主内存中数据复制到工作内存中，必须顺序执行read–&gt;load（并不一定连续，中间可插入其他指令），同时还规定了必须满足以下规则。</p>
+<ul>
+<li>read、load、store、write不能单独出现，不能read后没有load，store后没有write。</li>
+<li>不能丢弃assign</li>
+<li>不能没有assign操作，之后同步工作内存到主内存</li>
+<li>新变量只能在主内存中出现，不允许在工作内存中使用未初始化变量（未执行load、assign），也就是必须先load或者assign、才能操作use或者store</li>
+<li>一个变量同一时间只能一个线程进行lock，lock可以被同一线程多次执行，多次执行lock后需要多次执行unlock才解锁</li>
+<li>未lock不能unlock，不允许unlock其他线程锁定的变量</li>
+<li>对变量unlock之前，必须先把改变量同步到主内存中。</li>
+</ul>
+<p>对于long和double（64位数据类型），虚拟机允许没有没volatile修饰的变量读写操作（load、store、read、write）拆分为2次32位操作来进行（非原子性协议）。虽然Java内存模型允许不把long和double的读写实现为原子操作，但允许虚拟机把改操作实现为原子操作，当前个平台几乎都是作为原子操作实现。</p>
+<h3 id="原子性、可见性、有序性"><a href="#原子性、可见性、有序性" class="headerlink" title="原子性、可见性、有序性"></a>原子性、可见性、有序性</h3><p>Java内存模型在并发过程中主要围绕原子性、可见性、有序性：</p>
+<ul>
+<li>原子性：由内存模型直接保证原子性，所以常用的读写是具备原子性，如果需要大范围原子性，需要使用到lock、unlock，用户无法直接使用lock和unlock，但是提供了字节码指令monitorenter、monitorexit，隐式使用lock、unlock，synchronized编译后就是使用的该字节码指令。</li>
+<li>可见性：当一个线程修改了共享变量的值，其他线程能够立即得知这个修改。Java内存模型是通过在变量修改后将新值同步回主内存中，在变量读取前，从主内存中刷新变量值这种依赖主内存作为传递媒介的方式来实现可见性。Java中除了volatile外还有synchronized和final实现可见性，synchronized通过unlock前必须同步到主内存中实现。final实现的关键字在构造器中一旦初始化完成，并且构造器没有把this应用传递出去，那么其他线程中就能看见final字段的值(具体可搜索final可见性、JSR-133final增强)。</li>
+<li>有序性：一个线程观察其他线程中的指令执行顺序，由于指令重排序的存在，该观察结果一般杂乱无序。但是在本线程内观察，所有操作都是有序的。volatile和synchronized两个关键字保证了线程之间操作的有序性。</li>
+</ul>
+<h3 id="hanpens-before"><a href="#hanpens-before" class="headerlink" title="hanpens-before"></a>hanpens-before</h3><p>编译器和处理器为了优化程序性能，可能会对指令顺序重排序，在单线程下，重排序并不会影响运行结果，但是再多线程下，重排序会导致各种问题出现。为了避免这种问题，JMM使用了hanpens-before这一规则。<br>happens-before规则对于会改变查询执行结果的重排序（指单线程和正确同步的多线程），禁止编译器和处理器重排序。对于不会改变执行结果的重排序，并不禁止。<br>其他概念参考：<span class="exturl" data-url="aHR0cDovL2Jsb2cuY3Nkbi5uZXQvbnNfY29kZS9hcnRpY2xlL2RldGFpbHMvMTczNDgzMTM=">http://blog.csdn.net/ns_code/article/details/17348313<i class="fa fa-external-link-alt"></i></span></p>
+<h3 id="内存屏障"><a href="#内存屏障" class="headerlink" title="内存屏障"></a>内存屏障</h3><p>可参考：<span class="exturl" data-url="aHR0cDovL2dlZS5jcy5vc3dlZ28uZWR1L2RsL2ptbS9jb29rYm9vay5odG1s">http://gee.cs.oswego.edu/dl/jmm/cookbook.html<i class="fa fa-external-link-alt"></i></span></p>
+<p>并不是非常理解这一部分：<br>相关资料：<span class="exturl" data-url="aHR0cDovL3d3dy5jcy51bWQuZWR1L35wdWdoL2phdmEvbWVtb3J5TW9kZWwv">http://www.cs.umd.edu/~pugh/java/memoryModel/<i class="fa fa-external-link-alt"></i></span></p>
+<p>参考：<span class="exturl" data-url="aHR0cDovL3d3dy5pbmZvcS5jb20vY24vYXJ0aWNsZXMvamF2YS1tZW1vcnktbW9kZWwtMQ==">http://www.infoq.com/cn/articles/java-memory-model-1<i class="fa fa-external-link-alt"></i></span><br>参考：《深入Java虚拟机》</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" rel="tag"># 多线程</a>
+              <a href="/tags/%E5%90%8C%E6%AD%A5/" rel="tag"># 同步</a>
+              <a href="/tags/JMM/" rel="tag"># JMM</a>
+              <a href="/tags/%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B/" rel="tag"># 内存模型</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/12/13/Java%E5%B9%B6%E5%8F%91%E5%90%8C%E6%AD%A5%E5%9F%BA%E7%A1%80/" rel="prev" title="Java并发同步基础">
+                  <i class="fa fa-angle-left"></i> Java并发同步基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/12/18/Java%E9%94%81/" rel="next" title="Java锁">
+                  Java锁 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>

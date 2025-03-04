@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"blog.whhxz.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":true,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="对于Storm，其核心概念有包括：   Stream 数据流 Spout 数据流 Bolt 处理数据 Tuple 数据单元 Task 运行Spout或Bolt中的线程 Worker 是运行这些线程中的进程 Stream Grouping 规定了Bolt接受何种数据类型作为输入 Topology 是Stream Grouping连接起来的Spout和Bolt节点网络   Tuple元组 Tuple">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Storm学习（三）：Storm概念">
+<meta property="og:url" content="http://blog.whhxz.com/2017/08/10/Storm%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AStorm%E6%A6%82%E5%BF%B5/index.html">
+<meta property="og:site_name" content="WHH">
+<meta property="og:description" content="对于Storm，其核心概念有包括：   Stream 数据流 Spout 数据流 Bolt 处理数据 Tuple 数据单元 Task 运行Spout或Bolt中的线程 Worker 是运行这些线程中的进程 Stream Grouping 规定了Bolt接受何种数据类型作为输入 Topology 是Stream Grouping连接起来的Spout和Bolt节点网络   Tuple元组 Tuple">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2017-08-10T08:00:22.000Z">
+<meta property="article:modified_time" content="2025-03-04T08:10:43.206Z">
+<meta property="article:author" content="WHH">
+<meta property="article:tag" content="Storm">
+<meta property="article:tag" content="Storm概念">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://blog.whhxz.com/2017/08/10/Storm%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AStorm%E6%A6%82%E5%BF%B5/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://blog.whhxz.com/2017/08/10/Storm%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AStorm%E6%A6%82%E5%BF%B5/","path":"2017/08/10/Storm学习（三）：Storm概念/","title":"Storm学习（三）：Storm概念"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Storm学习（三）：Storm概念 | WHH</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">WHH</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">MY BLOG</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#Tuple%E5%85%83%E7%BB%84"><span class="nav-number">1.</span> <span class="nav-text">Tuple元组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Spout%E6%95%B0%E6%8D%AE%E6%BA%90"><span class="nav-number">2.</span> <span class="nav-text">Spout数据源</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bolt"><span class="nav-number">3.</span> <span class="nav-text">Bolt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Topology"><span class="nav-number">4.</span> <span class="nav-text">Topology</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology%E8%BF%90%E8%A1%8C%E6%B5%81%E7%A8%8B"><span class="nav-number">4.1.</span> <span class="nav-text">Topology运行流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology%E6%96%B9%E6%B3%95%E8%B0%83%E7%94%A8%E6%B5%81%E7%A8%8B"><span class="nav-number">4.2.</span> <span class="nav-text">Topology方法调用流程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Topology%E6%89%A7%E8%A1%8C%E5%8D%95%E5%85%83%E6%A6%82%E5%BF%B5"><span class="nav-number">4.3.</span> <span class="nav-text">Topology执行单元概念</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream%E6%B6%88%E6%81%AF%E6%B5%81"><span class="nav-number">5.</span> <span class="nav-text">Stream消息流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stream-Grouping%E6%B6%88%E6%81%AF%E6%B5%81%E7%BB%84"><span class="nav-number">6.</span> <span class="nav-text">Stream Grouping消息流组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8B%E5%8A%A1"><span class="nav-number">7.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A8%A1%E5%9E%8B"><span class="nav-number">8.</span> <span class="nav-text">数据流模型</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="WHH"
+      src="/images/avatar.bmp">
+  <p class="site-author-name" itemprop="name">WHH</p>
+  <div class="site-description" itemprop="description">I BELIEVE I CAN DO</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">119</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">58</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">216</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <span class="exturl" data-url="aHR0cHM6Ly9naXRodWIuY29tL3doaHh6" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;whhxz"><i class="fab fa-github fa-fw"></i>GitHub</span>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://blog.whhxz.com/2017/08/10/Storm%E5%AD%A6%E4%B9%A0%EF%BC%88%E4%B8%89%EF%BC%89%EF%BC%9AStorm%E6%A6%82%E5%BF%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.bmp">
+      <meta itemprop="name" content="WHH">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="WHH">
+      <meta itemprop="description" content="I BELIEVE I CAN DO">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Storm学习（三）：Storm概念 | WHH">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Storm学习（三）：Storm概念
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2017-08-10 16:00:22" itemprop="dateCreated datePublished" datetime="2017-08-10T16:00:22+08:00">2017-08-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-04 16:10:43" itemprop="dateModified" datetime="2025-03-04T16:10:43+08:00">2025-03-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Storm%E5%AD%A6%E4%B9%A0/" itemprop="url" rel="index"><span itemprop="name">Storm学习</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>对于Storm，其核心概念有包括：</p>
+<blockquote>
+<ul>
+<li>Stream 数据流</li>
+<li>Spout 数据流</li>
+<li>Bolt 处理数据</li>
+<li>Tuple 数据单元</li>
+<li>Task 运行Spout或Bolt中的线程</li>
+<li>Worker 是运行这些线程中的进程</li>
+<li>Stream Grouping 规定了Bolt接受何种数据类型作为输入</li>
+<li>Topology 是Stream Grouping连接起来的Spout和Bolt节点网络</li>
+</ul>
+</blockquote>
+<h3 id="Tuple元组"><a href="#Tuple元组" class="headerlink" title="Tuple元组"></a>Tuple元组</h3><blockquote>
+<p>Tuple 是Storm中使用的最基本单元、数据模型和元组。Tuple就是一个值列表，Tuple默认值类型有：integer、float、double、long、short、string、byte、binary[byte[]]。如果需要使用其他类型，需要序列化该类型。</p>
+</blockquote>
+<span id="more"></span>
+<p>Tuple可以理解为键值对，键为declareOutputFields中的Fields，值为emit发送的Values。<br>Tuple由Spout中的nextTuple来获取下一个Tuple，通过emit将生成的Tuple发送出去。</p>
+<h3 id="Spout数据源"><a href="#Spout数据源" class="headerlink" title="Spout数据源"></a>Spout数据源</h3><p>Spout最源头的接口为IComponent，由Spout发出的Tuple，可以是可靠的，可以是不可靠的。可靠的Tuple会保证被Storm成功处理。处理失败后会重新发送。一个Spout可以发射多个流。在使用Spout时可以实现IRichSpout或者继承BaseRichSpout。<br>在Spout.declareOutputFields声明发送的Tuple包含的字段。</p>
+<h3 id="Bolt"><a href="#Bolt" class="headerlink" title="Bolt"></a>Bolt</h3><p>Bolt属于被动处理，元组输入Bolt，然后产生新的Tuple。<br>Bolt流程如下：<br>创建Bolt -&gt; 序列化Bolt -&gt; 提交集群开启Worker进程处理 -&gt; 反序列化Bolt -&gt; 调用prepare处理Tuple</p>
+<p>在Bolt处理完成后，如果Tuple是可靠的，需要调用ack，反馈调用成功。在使用IBasicBolt时，会自动调用ack，在BasicBoltExecutor.execute中可以看到调用完成后会调用ack。</p>
+<p>在使用Bolt中，常用类为BaseRichBolt、BaseBasicBolt，对于BaseBasicBolt继承IBasicBolt，同样处理完成后会自动调ack。BaseRichBot在处理完成后，如果Tuple是可靠的，需要手动调用ack。在可靠Tuple中，如果不是调用ack，因为Storm会一直追踪每个Tuple，需要中内存，长时间运行会导致OOM。</p>
+<p>在方法declareOutputFields中声明当前Bolt发送的字段。同样使用declareStream方法来定义流，之后使用emit选择需要发送的流。</p>
+<p>在Bolt使用emit时，可以通过传递参数streamId，来控制新的Tuple是否后旧的Tuple属于同一颗Tuple树。</p>
+<h3 id="Topology"><a href="#Topology" class="headerlink" title="Topology"></a>Topology</h3><p>在Storm中Topology是指类似于网络拓扑图的一种虚拟结构。一个拓扑图有Spout和Bolt组成，Spout和Bolt之间通过流分组连接起来。在启动Topology时，TopologyBuilder实际上是封装了Topology的Thrift接口，Topology实际上是Thrift定义的一个结构，Nimbus实际上运行的是一个Thrift服务器，用于接受用户提交的结构。因为使用Thrift实现，用户可以使用其他语言建立Topology。在提交Topology给Nimbus时，也会提交Topology代码。Nimbus负责分发代码和给Topology分配工作进程.如果一个工作进程挂掉后,Nimbus节点会重新分配到其他节点。</p>
+<h4 id="Topology运行流程"><a href="#Topology运行流程" class="headerlink" title="Topology运行流程"></a>Topology运行流程</h4><p>1、提交Topology后，Storm会把代码存放发到Nimbus节点的inbox目录下；之后把当前配置生成stormconf.ser文件放到Nimbus节点的stormdis目录中，改目录中还有序列化后的Topology文件。<br>2、设定Topology关联的Spout和Bolt，可以同时随着Spout和Bolt的Executor和Task数量，一个默认Topology的Task总和与Executor一致。之后根据Worker的数量，将这些Task分配到不同的Worder上执行。<br>3、分配任务后，Nimbus节点将任务信息提交到ZooKeeper集群，同时在ZooKeeper集群中有Workerbeats，这里存储了当前Topology所有Worker心跳<br>4、Supervisor节点轮询ZooKeeper集群，在ZooKeeper中assignments中保存了所有Topology任务分配信息、代码存储目录、任务之间关联关系等，Supervisor通过轮询改节点领取自己任务，启动Worker进程运行<br>5、Topology运行后，不断通过Spout来发生流，除非手动结束Topology。</p>
+<h4 id="Topology方法调用流程"><a href="#Topology方法调用流程" class="headerlink" title="Topology方法调用流程"></a>Topology方法调用流程</h4><p>1、在Spout或者Bolt中，declareOutputFields方法和构造方法只被调用一次<br>2、open和prepare调用多次，次数由设置运行组件的Task线程数量。<br>3、nextTuple和execute一直运行。<br>4、提交Topology后，Storm创建Spout&#x2F;Bolt实例并进行序列化，之后将序列化组件发送给所有任务节点，在每个任务节点进行反序列化。<br>5、组件之间通信使用ZeroMQ</p>
+<h4 id="Topology执行单元概念"><a href="#Topology执行单元概念" class="headerlink" title="Topology执行单元概念"></a>Topology执行单元概念</h4><blockquote>
+<ul>
+<li>Worker对Topology中每个组件运行一个或者多个Executor线程来提供Task的执行服务，一个Supervisor中有多个worker，一个worker属于一个特定的Topology</li>
+<li>Executor属于Worker进程内线程</li>
+<li>Task，实际处理数据。在Topology生命周期中Task数量不会发生变化。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>worker 在yaml中的topology.workers属性设置，或者config中setNumWorkers<br>Executor 在setBolt或者setSpout中设置<br>Task 默认和Executor一致，在TopologyBuilder.setNumTasks设置<br>停止Topology storm kill sopologyName</p>
+</blockquote>
+<h3 id="Stream消息流"><a href="#Stream消息流" class="headerlink" title="Stream消息流"></a>Stream消息流</h3><p>stream消息流是一个抽象概念，主要是消息中的Tuple。</p>
+<h3 id="Stream-Grouping消息流组"><a href="#Stream-Grouping消息流组" class="headerlink" title="Stream Grouping消息流组"></a>Stream Grouping消息流组</h3><p>Stream Grouping消息流组定义一个流如何分配Tuple到Bolt。Storm包含6中流分组类型。<br>1、随机分组：随机分发Tuple到Bolt任务，保证每个任务获取相同的Tople。<br>2、字段分组：指定字段分割数据流并分组，相同的字段分到相同的Bolt，不同字段分配到不同的Bolt。<br>3、全部分组：对于每个Tuple来说，所有Bolt都会收到，所有Tuple复制到Bolt的所有任务上，需谨慎使用。<br>4、全局分组：全部流都分配到Bolt的同一个任务，就是分配到ID最小的Task上。<br>5、无分组：目前等效于随机分组<br>6、直接分组：Tuple生产者决定Tuple消费者任务接收。改分组仅被声明为direct stream的流使用。Tuple必须通过emitDirect直接发射。</p>
+<h3 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h3><p>事务为了解决Tuple在处理失败后重新发送提出.事务拓扑是指Storm以并行和顺序混合的方式处理Tuple，为了实现对消息的精确处理。<br>事务拓扑的目的是满足对消息处理有着极其严格要求的场景，要求结果完全精确。可以通过修改transactional.zookeeper中server和port指定其他ZooKeeper。</p>
+<h3 id="数据流模型"><a href="#数据流模型" class="headerlink" title="数据流模型"></a>数据流模型</h3><p>数据流处理如下<br>定义数据 -&gt; 定义数据处理 -&gt; 定义数据节点处理 -&gt; 定义数据处理任务实例 -&gt; 读取数据源头产生的数据 -&gt; 节点上运行任务实例 -&gt; 下一个节点运行任务实例 -&gt; … -&gt; 输出结果</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Storm/" rel="tag"># Storm</a>
+              <a href="/tags/Storm%E6%A6%82%E5%BF%B5/" rel="tag"># Storm概念</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2017/08/09/SpringBoot%E9%9B%86%E6%88%90swagger/" rel="prev" title="SpringBoot集成swagger">
+                  <i class="fa fa-angle-left"></i> SpringBoot集成swagger
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2017/08/31/Java%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B9%8B%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/" rel="next" title="Java设计模式之面向对象设计原则">
+                  Java设计模式之面向对象设计原则 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="user"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">WHH</span>
+  </div>
+  <div class="powered-by">由 <span class="exturl" data-url="aHR0cHM6Ly9oZXhvLmlv">Hexo</span> & <span class="exturl" data-url="aHR0cHM6Ly90aGVtZS1uZXh0LmpzLm9yZw==">NexT.Gemini</span> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/hexo-generator-searchdb@1.4.1/dist/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
