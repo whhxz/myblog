@@ -54,6 +54,8 @@ public Object invoke(Object[] argv) throws Throwable {
 * 设置自定义重试次数。
 * 使用okhttp替换`apache httpclient`。
 
+> 使用`okhttp`添加配置`feign.httpclient.enabled=false`，避免第三方依赖了`feign-httpclient`，如果确认没有依赖可以不需要
+添加`feign.okhttp.enabled=true`启动okhttp
 
 
 [Apache HttpClient Interim Error: NoHttpResponseException]: https://stackoverflow.com/questions/10558791/apache-httpclient-interim-error-nohttpresponseexception
